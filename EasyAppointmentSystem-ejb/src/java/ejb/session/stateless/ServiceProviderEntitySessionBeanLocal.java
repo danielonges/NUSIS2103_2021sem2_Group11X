@@ -4,7 +4,7 @@ import entity.ServiceProviderEntity;
 
 public interface ServiceProviderEntitySessionBeanLocal {
     
-    public Long createServiceProviderEntity(ServiceProviderEntity newServiceProviderEntity);
+    public void createServiceProviderEntity(ServiceProviderEntity newServiceProviderEntity);
 
     public ServiceProviderEntity retrieveServiceProviderEntityByProviderId(Long providerId);
     
