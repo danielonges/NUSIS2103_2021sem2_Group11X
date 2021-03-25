@@ -20,11 +20,10 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     private EntityManager em;
     
     @Override
-    public Long createServiceProviderEntity(ServiceProviderEntity newServiceProviderEntity) {
+    public void createServiceProviderEntity(ServiceProviderEntity newServiceProviderEntity) {
         em.persist(newServiceProviderEntity);
         em.flush();
         
-        return newServiceProviderEntity.getProviderId();
     }
     
     @Override

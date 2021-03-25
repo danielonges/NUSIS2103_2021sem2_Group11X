@@ -16,47 +16,27 @@ import javax.persistence.Id;
  * @author danielonges
  */
 @Entity
-public class ServiceProviderEntity implements Serializable {
+public class ServiceProviderEntity extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long providerId;
+    private String businessRegNum;
+    private String businessCategory;
+    private Enum status;
+    private int overallRating;
+    
 
     public ServiceProviderEntity() {
     }
 
-    public Long getProviderId() {
-        return providerId;
-    }
-
-    public void setProviderId(Long providerId) {
-        this.providerId = providerId;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (providerId != null ? providerId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the providerId fields are not set
-        if (!(object instanceof ServiceProviderEntity)) {
-            return false;
-        }
-        ServiceProviderEntity other = (ServiceProviderEntity) object;
-        if ((this.providerId == null && other.providerId != null) || (this.providerId != null && !this.providerId.equals(other.providerId))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.ServiceProviderEntity[ id=" + providerId + " ]";
+    public ServiceProviderEntity(String name, String address, String city, String email, String password,String businessRegNum, String businessCategory, Enum status, int overallRating) {
+        super(name, address, city, email, password);
+        this.businessRegNum = businessRegNum;
+        this.businessCategory = businessCategory;
+        this.status = status;
+        this.overallRating = overallRating;
     }
     
+    
+
+  
 }
