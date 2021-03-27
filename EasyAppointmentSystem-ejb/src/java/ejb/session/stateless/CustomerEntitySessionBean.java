@@ -20,11 +20,10 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     private EntityManager em;
     
     @Override
-    public Long createCustomerEntity(CustomerEntity newCustomerEntity) {
+    public void createCustomerEntity(CustomerEntity newCustomerEntity) {
         em.persist(newCustomerEntity);
         em.flush();
         
-        return newCustomerEntity.getCustomerId();
     }
     
     @Override
