@@ -1,17 +1,37 @@
 package easyappointmentsystemclient;
 
+import ejb.session.stateless.AdminEntitySessionBeanRemote;
+import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
+import ejb.session.stateless.CustomerEntitySessionBeanRemote;
+import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
+import javax.ejb.EJB;
+
 /**
  *
  * @author danielonges
  */
 public class Main {
 
+    @EJB(name = "ServiceProviderEntitySessionBeanRemote")
+    private static ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
+
+    @EJB(name = "CustomerEntitySessionBeanRemote")
+    private static CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
+
+    @EJB(name = "AppointmentEntitySessionBeanRemote")
+    private static AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
+
+    @EJB(name = "AdminEntitySessionBeanRemote")
+    private static AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO: code application logic
-        System.out.println("Hello World!");
+        MainApp mainApp = new MainApp(appointmentEntitySessionBeanRemote, customerEntitySessionBeanRemote,
+                adminEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
+        mainApp.runApp();
+        
     }
     
 }

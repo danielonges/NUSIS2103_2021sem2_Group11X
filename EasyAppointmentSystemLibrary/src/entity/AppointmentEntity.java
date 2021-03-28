@@ -36,18 +36,13 @@ public class AppointmentEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     //timestamp
-    private CustomerEntity cust;
+   
     private Boolean isCompleted;
-    private Long serviceProviderId;
+    
 
-    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
+    @ManyToOne(optional = false)
     private CustomerEntity customer;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
-    private AdminEntity admin;
-
     
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
@@ -58,26 +53,18 @@ public class AppointmentEntity implements Serializable {
     public AppointmentEntity() {
     }
 
-    public AppointmentEntity(Long appointmentId, Long appointmentNo, String businessCategory, Integer Rating, Date date, CustomerEntity cust, Boolean isCompleted, Long serviceProviderId, CustomerEntity customer, AdminEntity admin, ServiceProviderEntity service) {
+    public AppointmentEntity(Long appointmentId, Long appointmentNo, String businessCategory, Integer Rating, Date date, Boolean isCompleted) {
         this.appointmentId = appointmentId;
         this.appointmentNo = appointmentNo;
         this.businessCategory = businessCategory;
         this.Rating = Rating;
         this.date = date;
-        this.cust = cust;
         this.isCompleted = isCompleted;
-        this.serviceProviderId = serviceProviderId;
-        this.customer = customer;
-        this.admin = admin;
-        this.service = service;
+       
+        
     }
     
     
-    
-    
-
-    
-
     public Long getAppointmentId() {
         return appointmentId;
     }
@@ -139,19 +126,6 @@ public class AppointmentEntity implements Serializable {
         this.date = date;
     }
 
-    /**
-     * @return the customer
-     */
-    public CustomerEntity getCust() {
-        return cust;
-    }
-
-    /**
-     * @param cust the customer to set
-     */
-    public void setCust(CustomerEntity cust) {
-        this.cust = cust;
-    }
 
     /**
      * @return the customer
@@ -167,19 +141,6 @@ public class AppointmentEntity implements Serializable {
         this.customer = customer;
     }
 
-    /**
-     * @return the admin
-     */
-    public AdminEntity getAdmin() {
-        return admin;
-    }
-
-    /**
-     * @param admin the admin to set
-     */
-    public void setAdmin(AdminEntity admin) {
-        this.admin = admin;
-    }
 
     /**
      * @return the service
@@ -195,18 +156,6 @@ public class AppointmentEntity implements Serializable {
         this.service = service;
     }
 
-    /**
-     * @return the serviceProviderId
-     */
-    public Long getServiceProviderId() {
-        return serviceProviderId;
-    }
 
-    /**
-     * @param serviceProviderId the serviceProviderId to set
-     */
-    public void setServiceProviderId(Long serviceProviderId) {
-        this.serviceProviderId = serviceProviderId;
-    }
 
 }

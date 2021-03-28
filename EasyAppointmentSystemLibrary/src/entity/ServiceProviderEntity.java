@@ -33,11 +33,9 @@ public class ServiceProviderEntity extends UserEntity implements Serializable {
     private AppointmentEntity appointment;
     
     
-    
-    
+   
     @OneToMany(mappedBy = "service")
     private List<AppointmentEntity> appointmentEntitys;
-    
     
     
 

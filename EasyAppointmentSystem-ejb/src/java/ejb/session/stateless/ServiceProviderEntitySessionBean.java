@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.ServiceProviderEntity;
 import exception.InvalidLoginException;
 import exception.ServiceProviderNotFoundException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Local;
@@ -80,14 +81,18 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         }
     }
     
+    public List<ServiceProviderEntity> retrieveListOfServiceProviders() throws ServiceProviderNotFoundException{
+        
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s", ServiceProviderEntity.class);
+        
+        try {
+        return (List<ServiceProviderEntity>) query.getResultList();
+    } catch (NoResultException | NonUniqueResultException ex) {
+            throw new ServiceProviderNotFoundException("Service Providers does not exist!");
+        }
     
     
     
     
-    
-    
-    
-    
-    
-    
+}
 }

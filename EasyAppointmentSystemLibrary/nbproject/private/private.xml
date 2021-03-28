@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/leele/git/NUSIS2103_2021sem2_Group11X/EasyAppointmentSystemLibrary/src/ejb/session/stateless/ServiceProviderEntitySessionBeanRemote.java</file>
+            <file>file:/C:/Users/leele/git/NUSIS2103_2021sem2_Group11X/EasyAppointmentSystemLibrary/src/entity/CustomerEntity.java</file>
+            <file>file:/C:/Users/leele/git/NUSIS2103_2021sem2_Group11X/EasyAppointmentSystemLibrary/src/entity/AppointmentEntity.java</file>
+            <file>file:/C:/Users/leele/git/NUSIS2103_2021sem2_Group11X/EasyAppointmentSystemLibrary/src/entity/AdminEntity.java</file>
+            <file>file:/C:/Users/leele/git/NUSIS2103_2021sem2_Group11X/EasyAppointmentSystemLibrary/src/entity/ServiceProviderEntity.java</file>
         </group>
     </open-files>
 </project-private>
