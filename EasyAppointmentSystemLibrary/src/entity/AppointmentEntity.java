@@ -14,8 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -35,8 +33,7 @@ public class AppointmentEntity implements Serializable {
     private Integer Rating;// (between 1 to 5)
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    //timestamp
-   
+    //timestamp   
     private Boolean isCompleted;
     
 

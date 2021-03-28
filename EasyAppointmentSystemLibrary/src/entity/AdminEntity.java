@@ -24,11 +24,13 @@ public class AdminEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminId;
+    private String name;
     private String username;
     private String password;
-    private String name;
     
-    @OneToMany(mappedBy = "admin")
+    
+   
+    @OneToMany
     private List<AppointmentEntity> appointmentEntitys;    
    
     @OneToMany
@@ -39,6 +41,14 @@ public class AdminEntity implements Serializable {
 
     public AdminEntity() {
     }
+
+    public AdminEntity(String name, String username, String password) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+    }
+    
+    
 
     public Long getAdminId() {
         return adminId;

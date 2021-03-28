@@ -121,7 +121,11 @@ public class ServiceProviderEntity extends UserEntity implements Serializable {
         this.status = status;
     }
     
-    
+    @Override
+    public String toString() {
+        return getId() + " | " + getName() + " | " + this.businessCategory + " | " + this.businessRegNum + " | " + getCity() 
+                + " | " + getAddress() + " | " + getEmail() + " | " + getPhone();
+    }
 
   
 }
