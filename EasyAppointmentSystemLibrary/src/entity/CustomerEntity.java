@@ -22,6 +22,7 @@ public class CustomerEntity extends UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String identityNum;
+    
    
     public CustomerEntity() {
     }
@@ -31,9 +32,4 @@ public class CustomerEntity extends UserEntity implements Serializable {
         this.identityNum = identityNum;
     }
 
-    
-    
-
-
-    
 }
