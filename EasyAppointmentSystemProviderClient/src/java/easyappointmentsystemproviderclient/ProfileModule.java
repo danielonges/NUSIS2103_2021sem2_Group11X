@@ -1,0 +1,119 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package easyappointmentsystemproviderclient;
+
+import ejb.session.stateless.AdminEntitySessionBeanRemote;
+import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
+import ejb.session.stateless.CustomerEntitySessionBeanRemote;
+import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
+import entity.ServiceProviderEntity;
+import java.util.Scanner;
+
+/**
+ *
+ * @author meleenoob
+ */
+public class ProfileModule {
+
+    private AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
+    private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
+    private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
+    private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
+    private ServiceProviderEntity currentServiceProviderEntity;
+
+    public ProfileModule() {
+    }
+
+    public ProfileModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote) {
+        this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
+        this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
+        this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
+        this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
+    }
+
+    public void viewProfile() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("*** Service provider terminal :: View Profile ***\n");
+        System.out.println("Name: " + currentServiceProviderEntity.getName());
+        System.out.println("Business Category: " + currentServiceProviderEntity.getBusinessCategory());
+        System.out.println("Business Registration Number: " + currentServiceProviderEntity.getBusinessRegNum());
+        System.out.println("City: " + currentServiceProviderEntity.getCity());
+        System.out.println("Business Address: " + currentServiceProviderEntity.getAddress());
+        System.out.println("Email Address: " + currentServiceProviderEntity.getEmail());
+        System.out.println("Phone Number: " + currentServiceProviderEntity.getPhone());
+        System.out.println("Password: " + currentServiceProviderEntity.getPassword());
+        System.out.println("Overall Rating: " + currentServiceProviderEntity.getOverallRating());
+        System.out.println("Status: " + currentServiceProviderEntity.getStatus() + "\n");
+
+    }
+
+    void editProfile() {
+        Scanner scanner = new Scanner(System.in);
+        Integer response = 9;
+
+        while (true) {
+            System.out.println("*** Service provider terminal :: Edit Profile ***\n");
+            System.out.println("1: Edit city");
+            System.out.println("2: Edit Business Address");
+            System.out.println("3: Edit Email Address");
+            System.out.println("4: Edit Phone Number");
+            System.out.println("5: Edit Password");
+            System.out.println("Enter 0 to go back to the previous menu+\n");
+            response = 9;
+
+            OUTER:
+            while (response < 0 || response > 5) {
+                System.out.print("> ");
+                response = scanner.nextInt();
+                switch (response) {
+                    case 1:
+                        System.out.println("Enter new city: ");
+                        String newCity = scanner.nextLine().trim();
+                        currentServiceProviderEntity.setCity(newCity);
+                        System.out.println("changed successfully!");
+                        break;
+                    case 2:
+                        System.out.println("Enter new business address");
+                        String newBusinessAddress = scanner.nextLine().trim();
+                        currentServiceProviderEntity.setAddress(newBusinessAddress);
+                        System.out.println("changed successfully!");
+                        break;
+                    case 3:
+                        System.out.println("Enter new email address");
+                        String newEmailAddress = scanner.nextLine().trim();
+                        currentServiceProviderEntity.setEmail(newEmailAddress);
+                        System.out.println("changed successfully!");
+                        break;
+                    case 4:
+                        System.out.println("Enter new phone number");
+                        String newPhoneNumber = scanner.nextLine().trim();
+                        currentServiceProviderEntity.setPhone(newPhoneNumber);
+                        System.out.println("changed successfully!");
+                        break;
+                    case 5:
+                        System.out.println("Enter new password");
+                        String newPassword = scanner.nextLine().trim();
+                        currentServiceProviderEntity.setPassword(newPassword);
+                        System.out.println("changed successfully!");
+                        break;
+                    case 0:
+                        break OUTER;
+                    default:
+                        System.out.println("Invalid option, please try again!\n");
+                        break;
+                }
+            }
+            if (response == 0) {
+                break;
+            }
+
+        }
+
+    }
+    
+    
+    
+}

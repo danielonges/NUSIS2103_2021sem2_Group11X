@@ -6,10 +6,18 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -22,10 +30,41 @@ public class AppointmentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
+    private Long appointmentNo;
+    private String businessCategory;
+    private Integer Rating;// (between 1 to 5)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
+    //timestamp
+   
+    private Boolean isCompleted;
+    
+
+    @JoinColumn(nullable = false)
+    @ManyToOne(optional = false)
+    private CustomerEntity customer;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
+    private ServiceProviderEntity service;
+    
+    
 
     public AppointmentEntity() {
     }
 
+    public AppointmentEntity(Long appointmentId, Long appointmentNo, String businessCategory, Integer Rating, Date date, Boolean isCompleted) {
+        this.appointmentId = appointmentId;
+        this.appointmentNo = appointmentNo;
+        this.businessCategory = businessCategory;
+        this.Rating = Rating;
+        this.date = date;
+        this.isCompleted = isCompleted;
+       
+        
+    }
+    
+    
     public Long getAppointmentId() {
         return appointmentId;
     }
@@ -37,7 +76,7 @@ public class AppointmentEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (appointmentId != null ? appointmentId.hashCode() : 0);
+        hash += (getAppointmentId() != null ? getAppointmentId().hashCode() : 0);
         return hash;
     }
 
@@ -48,7 +87,7 @@ public class AppointmentEntity implements Serializable {
             return false;
         }
         AppointmentEntity other = (AppointmentEntity) object;
-        if ((this.appointmentId == null && other.appointmentId != null) || (this.appointmentId != null && !this.appointmentId.equals(other.appointmentId))) {
+        if ((this.getAppointmentId() == null && other.getAppointmentId() != null) || (this.getAppointmentId() != null && !this.appointmentId.equals(other.appointmentId))) {
             return false;
         }
         return true;
@@ -56,7 +95,67 @@ public class AppointmentEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.AppointmentEntity[ id=" + appointmentId + " ]";
+        return "entity.AppointmentEntity[ id=" + getAppointmentId() + " ]";
     }
-    
+
+    /**
+     * @return the Rating
+     */
+    public Integer getRating() {
+        return Rating;
+    }
+
+    /**
+     * @param Rating the Rating to set
+     */
+    public void setRating(Integer Rating) {
+        this.Rating = Rating;
+    }
+
+    /**
+     * @return the date
+     */
+    public Date getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+
+    /**
+     * @return the customer
+     */
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @param customer the customer to set
+     */
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
+    }
+
+
+    /**
+     * @return the service
+     */
+    public ServiceProviderEntity getService() {
+        return service;
+    }
+
+    /**
+     * @param service the service to set
+     */
+    public void setService(ServiceProviderEntity service) {
+        this.service = service;
+    }
+
+
+
 }
