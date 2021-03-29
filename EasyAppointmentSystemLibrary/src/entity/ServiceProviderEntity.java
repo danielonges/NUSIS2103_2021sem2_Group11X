@@ -7,7 +7,10 @@ package entity;
 
 import enumeration.Status;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,109 +24,175 @@ import javax.persistence.OneToMany;
  * @author danielonges
  */
 @Entity
-public class ServiceProviderEntity extends UserEntity implements Serializable {
+public class ServiceProviderEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long providerId;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String address;
+    @Column(nullable = false)
+    private String city;
+    @Column(nullable = false, unique = true)
+    private String email;
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false, unique = true)
     private String businessRegNum;
+    @Column(nullable = false)
     private String businessCategory;
     @Enumerated (EnumType.STRING)
     private Status status;
     private int overallRating;
+    @Column(nullable = false, unique = true)
     private String phone;
-    private AppointmentEntity appointment;
     
-    
-    
+    @OneToMany(mappedBy = "serviceProvider")
+    private List<AppointmentEntity> appointments;
 
     public ServiceProviderEntity() {
-        
+        appointments = new ArrayList<>();
     }
 
-    public ServiceProviderEntity(String name, String address, String city, String email, String password,String businessRegNum, String businessCategory, Status status, int overallRating,String phone) {
-        super(name, address, city, email, password);
-        
+    public ServiceProviderEntity(String name, String address, String city, String email, String password, String businessRegNum, String businessCategory, Status status, int overallRating, String phone) {
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.email = email;
+        this.password = password;
         this.businessRegNum = businessRegNum;
         this.businessCategory = businessCategory;
         this.status = status;
         this.overallRating = overallRating;
         this.phone = phone;
+        status = Status.PENDING;
+        overallRating = 0;
+        appointments = new ArrayList<>();
     }
 
-    /**
-     * @return the businessRegNum
-     */
+    public Long getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(Long providerId) {
+        this.providerId = providerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getBusinessRegNum() {
         return businessRegNum;
     }
 
-    /**
-     * @param businessRegNum the businessRegNum to set
-     */
     public void setBusinessRegNum(String businessRegNum) {
         this.businessRegNum = businessRegNum;
     }
 
-    /**
-     * @return the businessCategory
-     */
     public String getBusinessCategory() {
         return businessCategory;
     }
 
-    /**
-     * @param businessCategory the businessCategory to set
-     */
     public void setBusinessCategory(String businessCategory) {
         this.businessCategory = businessCategory;
     }
 
-    /**
-     * @return the overallRating
-     */
-    public int getOverallRating() {
-        return overallRating;
-    }
-
-    /**
-     * @param overallRating the overallRating to set
-     */
-    public void setOverallRating(int overallRating) {
-        this.overallRating = overallRating;
-    }
-
-    /**
-     * @return the phone
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * @param phone the phone to set
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    /**
-     * @return the status
-     */
     public Status getStatus() {
         return status;
     }
 
-    /**
-     * @param status the status to set
-     */
     public void setStatus(Status status) {
         this.status = status;
     }
-    
-    @Override
-    public String toString() {
-        return getId() + " | " + getName() + " | " + this.businessCategory + " | " + this.businessRegNum + " | " + getCity() 
-                + " | " + getAddress() + " | " + getEmail() + " | " + getPhone();
+
+    public int getOverallRating() {
+        return overallRating;
     }
 
-  
+    public void setOverallRating(int overallRating) {
+        this.overallRating = overallRating;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<AppointmentEntity> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<AppointmentEntity> appointments) {
+        this.appointments = appointments;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (providerId != null ? providerId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ServiceProviderEntity other = (ServiceProviderEntity) obj;
+        if (!Objects.equals(this.providerId, other.providerId)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }

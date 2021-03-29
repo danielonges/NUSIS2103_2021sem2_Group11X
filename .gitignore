@@ -31,9 +31,17 @@ EasyAppointmentSystem-war/nbproject/private/
 EasyAppointmentSystem-war/build/
 EasyAppointmentSystem-war/dist/
 
-EasyAppointmentSystemClient/nbproject/private/
-EasyAppointmentSystemClient/build/
-EasyAppointmentSystemClient/dist/
+EasyAppointmentSystemAdminClient/nbproject/private/
+EasyAppointmentSystemAdminClient/build/
+EasyAppointmentSystemAdminClient/dist/
+
+EasyAppointmentSystemProviderClient/nbproject/private/
+EasyAppointmentSystemProviderClient/build/
+EasyAppointmentSystemProviderClient/dist/
+
+EasyAppointmentSystemCustomerClient/nbproject/private/
+EasyAppointmentSystemCustomerClient/build/
+EasyAppointmentSystemCustomerClient/dist/
 
 EasyAppointmentSystemLibrary/nbproject/private/
 EasyAppointmentSystemLibrary/build/
