@@ -36,18 +36,14 @@ public class AppointmentEntity implements Serializable {
     //timestamp   
     private Boolean isCompleted;
     
-
+    @ManyToOne (optional = false)
     @JoinColumn(nullable = false)
-    @ManyToOne(optional = false)
-    private CustomerEntity customer;
-    
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
-    private ServiceProviderEntity service;
+    private UserEntity userEntity;
     
     
 
     public AppointmentEntity() {
+        
     }
 
     public AppointmentEntity(Long appointmentId, Long appointmentNo, String businessCategory, Integer Rating, Date date, Boolean isCompleted) {
@@ -92,7 +88,7 @@ public class AppointmentEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.AppointmentEntity[ id=" + getAppointmentId() + " ]";
+        return this.userEntity + " | " + this.date + " | " + this.date.getTime() + " | " + this.appointmentId;
     }
 
     /**
@@ -123,35 +119,62 @@ public class AppointmentEntity implements Serializable {
         this.date = date;
     }
 
-
     /**
-     * @return the customer
+     * @return the appointmentNo
      */
-    public CustomerEntity getCustomer() {
-        return customer;
+    public Long getAppointmentNo() {
+        return appointmentNo;
     }
 
     /**
-     * @param customer the customer to set
+     * @param appointmentNo the appointmentNo to set
      */
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
-    }
-
-
-    /**
-     * @return the service
-     */
-    public ServiceProviderEntity getService() {
-        return service;
+    public void setAppointmentNo(Long appointmentNo) {
+        this.appointmentNo = appointmentNo;
     }
 
     /**
-     * @param service the service to set
+     * @return the businessCategory
      */
-    public void setService(ServiceProviderEntity service) {
-        this.service = service;
+    public String getBusinessCategory() {
+        return businessCategory;
     }
+
+    /**
+     * @param businessCategory the businessCategory to set
+     */
+    public void setBusinessCategory(String businessCategory) {
+        this.businessCategory = businessCategory;
+    }
+
+    /**
+     * @return the isCompleted
+     */
+    public Boolean getIsCompleted() {
+        return isCompleted;
+    }
+
+    /**
+     * @param isCompleted the isCompleted to set
+     */
+    public void setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+    /**
+     * @return the userEntity
+     */
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    /**
+     * @param userEntity the userEntity to set
+     */
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
 
 
 

@@ -6,12 +6,15 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -31,12 +34,16 @@ public class UserEntity implements Serializable {
     private String city;
     private String email;
     private String password;
+    
+    @OneToMany(mappedBy = "userEntity")
+    private List<AppointmentEntity> appointmentEntitys;
 
     public UserEntity() {
+        this.appointmentEntitys = new ArrayList<>();
     }
 
     public UserEntity(String name, String address, String city, String email, String password) {
-        
+        this();
         this.name = name;
         this.address = address;
         this.city = city;
@@ -147,6 +154,20 @@ public class UserEntity implements Serializable {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the appointmentEntitys
+     */
+    public List<AppointmentEntity> getAppointmentEntitys() {
+        return appointmentEntitys;
+    }
+
+    /**
+     * @param appointmentEntitys the appointmentEntitys to set
+     */
+    public void setAppointmentEntitys(List<AppointmentEntity> appointmentEntitys) {
+        this.appointmentEntitys = appointmentEntitys;
     }
     
 }
