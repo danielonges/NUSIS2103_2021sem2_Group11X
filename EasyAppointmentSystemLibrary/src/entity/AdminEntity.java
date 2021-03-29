@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,21 +25,24 @@ public class AdminEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminId;
+    private String name;
     private String username;
     private String password;
-    private String name;
     
-    @OneToMany(mappedBy = "admin")
-    private List<AppointmentEntity> appointmentEntitys;    
-   
-    @OneToMany
-    private List<CustomerEntity> customerEntitys;
-    
-    @OneToMany
-    private List<ServiceProviderEntity> serviceProviderEntitys;
+
 
     public AdminEntity() {
+       
     }
+
+    public AdminEntity(String name, String username, String password) {
+        
+        this.name = name;
+        this.username = username;
+        this.password = password;
+    }
+    
+    
 
     public Long getAdminId() {
         return adminId;
@@ -115,46 +119,6 @@ public class AdminEntity implements Serializable {
         this.name = name;
     }
 
-    /**
-     * @return the appointmentEntitys
-     */
-    public List<AppointmentEntity> getAppointmentEntitys() {
-        return appointmentEntitys;
-    }
-
-    /**
-     * @param appointmentEntitys the appointmentEntitys to set
-     */
-    public void setAppointmentEntitys(List<AppointmentEntity> appointmentEntitys) {
-        this.appointmentEntitys = appointmentEntitys;
-    }
-
-    /**
-     * @return the customerEntitys
-     */
-    public List<CustomerEntity> getCustomerEntitys() {
-        return customerEntitys;
-    }
-
-    /**
-     * @param customerEntitys the customerEntitys to set
-     */
-    public void setCustomerEntitys(List<CustomerEntity> customerEntitys) {
-        this.customerEntitys = customerEntitys;
-    }
-
-    /**
-     * @return the serviceProviderEntitys
-     */
-    public List<ServiceProviderEntity> getServiceProviderEntitys() {
-        return serviceProviderEntitys;
-    }
-
-    /**
-     * @param serviceProviderEntitys the serviceProviderEntitys to set
-     */
-    public void setServiceProviderEntitys(List<ServiceProviderEntity> serviceProviderEntitys) {
-        this.serviceProviderEntitys = serviceProviderEntitys;
-    }
+   
     
 }

@@ -47,7 +47,7 @@ public class AppointmentModule {
         System.out.println("");
         for (AppointmentEntity appointment : appointmentEntities) {
             System.out.println("Name     | Date     | Time  | Appointment No. ");
-            System.out.println(appointment.getCustomer() + " | " + appointment.getDate() + " | " + appointment.getDate().getTime() + " | " + appointment.getAppointmentId());
+            System.out.println(appointment);
         }
         while (true) {
             System.out.println("Enter 0 to go back to the previous menu");
@@ -70,7 +70,7 @@ public class AppointmentModule {
         System.out.println("");
         for (AppointmentEntity appointment : appointmentEntities) {
             System.out.println("Name     | Date     | Time  | Appointment No. ");
-            System.out.println(appointment.getCustomer() + " | " + appointment.getDate() + " | " + appointment.getDate().getTime() + " | " + appointment.getAppointmentId());
+            System.out.println(appointment);
         }
         while (true) {
             System.out.println("Enter 0 to go back to the previous menu");

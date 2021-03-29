@@ -33,17 +33,15 @@ public class ServiceProviderEntity extends UserEntity implements Serializable {
     private AppointmentEntity appointment;
     
     
-   
-    @OneToMany(mappedBy = "service")
-    private List<AppointmentEntity> appointmentEntitys;
-    
     
 
     public ServiceProviderEntity() {
+        
     }
 
     public ServiceProviderEntity(String name, String address, String city, String email, String password,String businessRegNum, String businessCategory, Status status, int overallRating,String phone) {
         super(name, address, city, email, password);
+        
         this.businessRegNum = businessRegNum;
         this.businessCategory = businessCategory;
         this.status = status;
@@ -121,7 +119,11 @@ public class ServiceProviderEntity extends UserEntity implements Serializable {
         this.status = status;
     }
     
-    
+    @Override
+    public String toString() {
+        return getId() + " | " + getName() + " | " + this.businessCategory + " | " + this.businessRegNum + " | " + getCity() 
+                + " | " + getAddress() + " | " + getEmail() + " | " + getPhone();
+    }
 
   
 }

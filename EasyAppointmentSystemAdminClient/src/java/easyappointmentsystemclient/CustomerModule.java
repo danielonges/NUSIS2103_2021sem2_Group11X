@@ -9,6 +9,9 @@ import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
+import entity.AppointmentEntity;
+import exception.AppointmentNotFoundException;
+import java.util.List;
 
 /**
  *
@@ -27,8 +30,16 @@ public class CustomerModule {
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
     }
 
-    void viewAppointments() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void viewAppointments() {
+        try{
+       List<AppointmentEntity> appointments = appointmentEntitySessionBeanRemote.retrieveListOfAppointments();
+       for(AppointmentEntity value: appointments ) {
+           System.out.println(value.toString());
+       }
+        }catch (AppointmentNotFoundException ex){
+               System.out.println("Service Providers does not exist!");
+               }
+    }
     }
     
-}
+

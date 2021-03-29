@@ -24,9 +24,7 @@ public class CustomerEntity extends UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     private String identityNum;
     
-    @OneToMany(mappedBy = "customer")
-    private List<AppointmentEntity> appointmentEntitys;
-  
+
    
     public CustomerEntity() {
     }
