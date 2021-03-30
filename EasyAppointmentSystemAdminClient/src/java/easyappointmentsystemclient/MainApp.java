@@ -110,6 +110,7 @@ public class MainApp {
             System.out.println("9: Logout\n");
             response = 0;
             OUTER:
+            // dan: should it be response > 9?
             while (response < 1 || response > 5) {
                 System.out.print("> ");
                 response = scanner.nextInt();
