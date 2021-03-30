@@ -2,6 +2,7 @@ package ejb.session.stateless;
 
 import entity.AppointmentEntity;
 import exception.AppointmentNotFoundException;
+import exception.DeleteAppointmentException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,14 +52,14 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
     }
 
     @Override
-    public void deleteAppointmentEntity(Long appointmentId) {
+    public void deleteAppointmentEntity(Long appointmentId) throws AppointmentNotFoundException{
         AppointmentEntity appointmentEntity = null;
         try {
             appointmentEntity = retrieveAppointmentEntityByAppointmentId(appointmentId);
+            em.remove(appointmentEntity);
         } catch (AppointmentNotFoundException ex) {
-            Logger.getLogger(AppointmentEntitySessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        em.remove(appointmentEntity);
+            //throw new DeleteAppointmentException("unable to delete!");
+        }    
     }
 
     @Override

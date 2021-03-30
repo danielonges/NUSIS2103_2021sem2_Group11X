@@ -5,6 +5,8 @@
  */
 package ejb.session.stateless;
 
+import entity.BusinessCategoryEntity;
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -13,5 +15,9 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface BusinessCategorySessionBeanRemote {
-    
+
+    public Long createBusinessCategoryEntity(BusinessCategoryEntity newBusinessCategoryEntity);
+
+    public List<BusinessCategoryEntity> retrieveAllBusinessCategories();
+
 }

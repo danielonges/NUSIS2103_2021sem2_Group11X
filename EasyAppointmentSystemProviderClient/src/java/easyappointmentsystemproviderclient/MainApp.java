@@ -7,8 +7,10 @@ package easyappointmentsystemproviderclient;
 
 import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
+import ejb.session.stateless.BusinessCategorySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
+import entity.BusinessCategoryEntity;
 import entity.ServiceProviderEntity;
 import exception.AppointmentNotFoundException;
 import exception.InputInvalidException;
@@ -16,7 +18,10 @@ import exception.InvalidLoginException;
 import exception.InvalidRegistrationException;
 import exception.ServiceProviderEmailExistException;
 import exception.UnknownPersistenceException;
+import java.util.List;
 import java.util.Scanner;
+import util.enumeration.Status;
+import static util.enumeration.Status.APPROVE;
 //import util.exception.InvalidRegistrationException;
 
 /**
@@ -29,6 +34,7 @@ public class MainApp {
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
+    private BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote;
     private ServiceProviderEntity currentServiceProviderEntity;
     private ProfileModule profileModule;
     private AppointmentModule appointmentModule;
@@ -36,13 +42,13 @@ public class MainApp {
     public MainApp() {
     }
 
-    public MainApp(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote) {
+    public MainApp(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
+        this.businessCategorySessionBeanRemote = businessCategorySessionBeanRemote;
     }
-
 
     public void runApp() throws InvalidLoginException, AppointmentNotFoundException {
         Scanner scanner = new Scanner(System.in);
@@ -92,7 +98,8 @@ public class MainApp {
     private void doRegister() throws InvalidRegistrationException {
         Scanner scanner = new Scanner(System.in);
         String name = "";
-        Integer businessCat = 0;
+        Integer businessCategoryId = 0;
+        String businessCategory = "";
         String businessRegistrationNum = "";
         String city = "";
         String phone = "";
@@ -102,23 +109,17 @@ public class MainApp {
         System.out.println("*** Service Provider Terminal :: Registration Operation ***\n");
         System.out.print("Enter Name> ");
         name = scanner.nextLine().trim();
-        System.out.println("1  Health | 2 Fashion | 3 Education ");
-        System.out.print("Enter Business Category> ");
-        businessCat = scanner.nextInt();
-        String category = "";
-        switch (businessCat) {
-            case 1:
-                category = "Health";
-                break;
-            case 2:
-                category = "Fashion";
-                break;
-            case 3:
-                category = "Education";
-                break;
-            default:
-                break;
+        List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
+        int sizeOfBusinessCategoryList = businessCategoryEntities.size();
+        for (int i = 0; i < sizeOfBusinessCategoryList - 1; i++) {
+            System.out.printf( businessCategoryEntities.get(i).getId().toString() + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
         }
+        System.out.println(businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getId().toString() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
+        System.out.print("Enter Business Category> ");
+        businessCategoryId = scanner.nextInt();
+        scanner.nextLine();
+        businessCategoryId--; //the actual index in the list
+        businessCategory = businessCategoryEntities.get(businessCategoryId).getCategory();
         System.out.print("Enter Business Registration Number> ");
         businessRegistrationNum = scanner.nextLine().trim();
         System.out.print("Enter City> ");
@@ -134,10 +135,11 @@ public class MainApp {
         if (email.length() > 0 && password.length() > 0) {
             ServiceProviderEntity newServiceProviderEntity = new ServiceProviderEntity();
             newServiceProviderEntity.setName(name);
-            newServiceProviderEntity.setBusinessCategory(category);
+            newServiceProviderEntity.setBusinessCategory(businessCategory);
             newServiceProviderEntity.setBusinessRegNum(businessRegistrationNum);
             newServiceProviderEntity.setCity(city);
             newServiceProviderEntity.setPhone(phone);
+            newServiceProviderEntity.setStatus(Status.APPROVE);//change to approve for testing, default:PENDING
             newServiceProviderEntity.setAddress(businessAddress);
             newServiceProviderEntity.setEmail(email);
             newServiceProviderEntity.setPassword(password);
@@ -169,7 +171,6 @@ public class MainApp {
         email = scanner.nextLine().trim();
         System.out.print("Enter password> ");
         password = scanner.nextLine().trim();
-
         if (email.length() > 0 && password.length() > 0) {
             currentServiceProviderEntity = serviceProviderEntitySessionBeanRemote.ServiceProviderLogin(email, password);
         } else {

@@ -5,6 +5,8 @@
  */
 package ejb.session.stateless;
 
+import entity.BusinessCategoryEntity;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +15,9 @@ import javax.ejb.Local;
  */
 @Local
 public interface BusinessCategorySessionBeanLocal {
+
+    public Long createBusinessCategoryEntity(BusinessCategoryEntity newBusinessCategoryEntity);
+
+    public List<BusinessCategoryEntity> retrieveAllBusinessCategories();
     
 }

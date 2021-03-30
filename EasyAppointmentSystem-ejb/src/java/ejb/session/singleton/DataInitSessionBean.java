@@ -6,7 +6,9 @@
 package ejb.session.singleton;
 
 import ejb.session.stateless.AdminEntitySessionBeanLocal;
+import ejb.session.stateless.BusinessCategorySessionBeanLocal;
 import entity.AdminEntity;
+import entity.BusinessCategoryEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -25,6 +27,9 @@ import javax.persistence.PersistenceContext;
 
 public class DataInitSessionBean {
 
+    @EJB(name = "BusinessCategorySessionBeanLocal")
+    private BusinessCategorySessionBeanLocal businessCategorySessionBeanLocal;
+
     @PersistenceContext(unitName = "EasyAppointmentSystem-ejbPU")
     private EntityManager em;
 
@@ -37,6 +42,13 @@ public class DataInitSessionBean {
         adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Leonard","leonard@gmail.com","password"));
         adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Zikun","zikun@gmail.com","password"));
         adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Daniel","daniel@gmail.com","password"));
+        
+        }
+        if(em.find(BusinessCategoryEntity.class,1L) == null) {
+            businessCategorySessionBeanLocal.createBusinessCategoryEntity(new BusinessCategoryEntity("Health"));
+            businessCategorySessionBeanLocal.createBusinessCategoryEntity(new BusinessCategoryEntity("Fashion"));
+            businessCategorySessionBeanLocal.createBusinessCategoryEntity(new BusinessCategoryEntity("Education"));
+        }
         }
     }
 
@@ -44,4 +56,4 @@ public class DataInitSessionBean {
     // "Insert Code > Add Business Method")
 
     
-}
+

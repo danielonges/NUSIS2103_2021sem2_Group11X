@@ -79,14 +79,16 @@ public class AppointmentModule {
             if (response == 0L) {
                 break;
             } else {
-                // here add try catch later to handle cases where appointmentId does not exist
-                //currentAppointmentEntity = appointmentEntitySessionBeanRemote.retrieveAppointmentEntityByAppointmentId(response);
-                appointmentEntitySessionBeanRemote.deleteAppointmentEntity(response);
-                System.out.println("Appointment " + response + " has been canceled successfully");
-
+                try {
+                    appointmentEntitySessionBeanRemote.deleteAppointmentEntity(response);
+                    System.out.println("Appointment " + response + " has been canceled successfully");
+                } catch (AppointmentNotFoundException ex) {
+                    System.out.println("Unable to delete!");
+                }
             }
         }
 
     }
 
 }
+

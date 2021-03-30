@@ -5,7 +5,7 @@
  */
 package entity;
 
-import enumeration.Status;
+import util.enumeration.Status;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import static util.enumeration.Status.APPROVE;
+import static util.enumeration.Status.PENDING;
 
 /**
  *
@@ -68,7 +70,7 @@ public class ServiceProviderEntity implements Serializable {
         this.status = status;
         this.overallRating = overallRating;
         this.phone = phone;
-        status = Status.PENDING;
+        this.status = APPROVE;
         overallRating = 0;
         appointments = new ArrayList<>();
     }

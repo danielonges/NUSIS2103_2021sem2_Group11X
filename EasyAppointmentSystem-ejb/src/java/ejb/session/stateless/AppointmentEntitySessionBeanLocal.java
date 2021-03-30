@@ -12,7 +12,7 @@ public interface AppointmentEntitySessionBeanLocal {
     
     public void updateAppointmentEntity(AppointmentEntity appointmentEntity);
     
-    public void deleteAppointmentEntity(Long appointmentId);
+    public void deleteAppointmentEntity(Long appointmentId) throws AppointmentNotFoundException;
 
     public List<AppointmentEntity> retrieveAppointmentsByServiceProviderId(Long serviceProviderId) throws AppointmentNotFoundException;
         

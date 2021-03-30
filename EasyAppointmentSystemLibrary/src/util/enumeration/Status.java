@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package enumeration;
+package util.enumeration;
 
 /**
  *
@@ -11,6 +11,6 @@ package enumeration;
  */
 public enum Status {
     PENDING,
-    CONFIRMED,
-    BLOCKED
+    APPROVE,
+    BLOCK
 }
