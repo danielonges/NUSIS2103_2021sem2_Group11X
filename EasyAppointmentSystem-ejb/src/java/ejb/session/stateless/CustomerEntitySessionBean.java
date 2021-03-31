@@ -1,11 +1,18 @@
 package ejb.session.stateless;
 
+import entity.AppointmentEntity;
 import entity.CustomerEntity;
+import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import util.exception.AppointmentNotFoundException;
+import util.exception.CustomerNotFoundException;
 
 /**
  *
@@ -27,11 +34,15 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     }
     
     @Override
-    public CustomerEntity retrieveCustomerEntityByCustomerId(Long customerId) {
+    public CustomerEntity retrieveCustomerEntityByCustomerId(Long customerId) throws CustomerNotFoundException{
+        try {
         CustomerEntity customerEntity = em.find(CustomerEntity.class, customerId);
-        
+            return customerEntity;
+        } catch (NoResultException ex) {
+            throw new CustomerNotFoundException("Customer not found!");
+        }
         // TODO: implement checking for null
-        return customerEntity;
+        
     }
     
     @Override
@@ -41,8 +52,15 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     }
     
     @Override
-    public void deleteCustomerEntity(Long customerId) {
+    public void deleteCustomerEntity(Long customerId) throws CustomerNotFoundException{
+        try {
         CustomerEntity customerEntity = retrieveCustomerEntityByCustomerId(customerId);
         em.remove(customerEntity);
+        } catch (CustomerNotFoundException ex) {
+            throw new CustomerNotFoundException("Customer not found!");
+        }
     }
+    
+  
+    
 }

@@ -70,7 +70,7 @@ public class ServiceProviderEntity implements Serializable {
         this.status = status;
         this.overallRating = overallRating;
         this.phone = phone;
-        this.status = APPROVE;
+        this.status = Status.APPROVE;
         overallRating = 0;
         appointments = new ArrayList<>();
     }
@@ -194,6 +194,12 @@ public class ServiceProviderEntity implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return this.providerId + " | " + this.name + " | " + this.businessCategory + " | " + this.businessRegNum + " | "
+                + this.city + " | " + this.address + " | " + this.email + " | " + this.phone;
     }
     
     

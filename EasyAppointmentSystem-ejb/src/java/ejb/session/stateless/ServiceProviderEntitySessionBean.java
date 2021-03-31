@@ -14,6 +14,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.enumeration.Status;
 import static util.enumeration.Status.APPROVE;
 
 /**
@@ -35,11 +36,15 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     }
 
     @Override
-    public ServiceProviderEntity retrieveServiceProviderEntityByProviderId(Long providerId) {
+    public ServiceProviderEntity retrieveServiceProviderEntityByProviderId(Long providerId) throws ServiceProviderNotFoundException {
+        try {
         ServiceProviderEntity serviceProviderEntity = em.find(ServiceProviderEntity.class, providerId);
-
-        // TODO: implement checking for null
         return serviceProviderEntity;
+        } catch (NoResultException ex) {
+            throw new ServiceProviderNotFoundException("Service provider not found!");
+        }
+        // TODO: implement checking for null
+        
     }
 
     @Override
@@ -49,9 +54,13 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     }
 
     @Override
-    public void deleteServiceProviderEntity(Long providerId) {
+    public void deleteServiceProviderEntity(Long providerId) throws ServiceProviderNotFoundException {
+        try {
         ServiceProviderEntity serviceProviderEntity = retrieveServiceProviderEntityByProviderId(providerId);
         em.remove(serviceProviderEntity);
+        } catch (ServiceProviderNotFoundException ex) {
+            throw new ServiceProviderNotFoundException("Service provider not found!");
+        }
     }
 
     @Override
@@ -80,6 +89,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         }
     }
 
+    @Override
     public List<ServiceProviderEntity> retrieveListOfServiceProviders() throws ServiceProviderNotFoundException {
 
         Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s", ServiceProviderEntity.class);
@@ -90,5 +100,17 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
             throw new ServiceProviderNotFoundException("Service Providers does not exist!");
         }
 
+    }
+    
+    public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException {
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s where s.status = :status");
+        query.setParameter("status", Status.PENDING);
+        
+        try{
+            return (List<ServiceProviderEntity>) query.getResultList();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new ServiceProviderNotFoundException("Service Providers does not exist!");
+        }
+        
     }
 }

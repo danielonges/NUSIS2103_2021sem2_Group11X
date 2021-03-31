@@ -39,6 +39,7 @@ public class AppointmentEntity implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private CustomerEntity customer;
+    
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)  
     private ServiceProviderEntity serviceProvider;
@@ -48,10 +49,10 @@ public class AppointmentEntity implements Serializable {
 
     public AppointmentEntity(Long appointmentNo, String businessCategory, Date date, CustomerEntity customerEntity, ServiceProviderEntity serviceProviderEntity) {
         this.appointmentNo = appointmentNo;
-        rating = 0;
+        this.rating = 0;
         this.businessCategory = businessCategory;
         this.date = date;
-        isCompleted = false;
+        this.isCompleted = false;
         this.customer = customerEntity;
         this.serviceProvider = serviceProviderEntity;
     }

@@ -74,15 +74,6 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
         }
     }
     
-    public List<AppointmentEntity> retrieveListOfAppointments() throws AppointmentNotFoundException {
-         Query query = em.createQuery("SELECT s FROM AppointmentEntity s", AppointmentEntity.class);
-        
-        try {
-        return (List<AppointmentEntity>) query.getResultList();
-    } catch (NoResultException | NonUniqueResultException ex) {
-            throw new AppointmentNotFoundException("Appointments does not exist!");
-        }
-    
-    }
+   
 
 }
