@@ -10,7 +10,7 @@ import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AdminEntity;
-import exception.InvalidLoginException;
+import util.exception.InvalidLoginException;
 import java.util.Scanner;
 
 /**

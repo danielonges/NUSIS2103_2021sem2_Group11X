@@ -6,7 +6,6 @@
     <class>entity.AdminEntity</class>
     <class>entity.AppointmentEntity</class>
     <class>entity.ServiceProviderEntity</class>
-    <class>entity.UserEntity</class>
     <class>entity.BusinessCategoryEntity</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>

@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exception;
+package util.exception;
 
 /**
  *
  * @author meleenoob
  */
-public class InvalidLoginException extends Exception {
+public class ServiceProviderEmailExistException extends Exception {
 
-    public InvalidLoginException() {
+    public ServiceProviderEmailExistException() {
     }
 
-    public InvalidLoginException(String msg) {
+    public ServiceProviderEmailExistException(String msg) {
         super(msg);
     }
 

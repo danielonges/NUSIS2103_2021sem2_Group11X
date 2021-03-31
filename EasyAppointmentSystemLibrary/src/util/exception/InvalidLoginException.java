@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exception;
+package util.exception;
 
 /**
  *
  * @author meleenoob
  */
-public class InvalidRegistrationException extends Exception {
+public class InvalidLoginException extends Exception {
 
-    public InvalidRegistrationException() {
+    public InvalidLoginException() {
     }
 
-    public InvalidRegistrationException(String msg) {
+    public InvalidLoginException(String msg) {
         super(msg);
     }
 

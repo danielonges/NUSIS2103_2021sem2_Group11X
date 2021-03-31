@@ -11,7 +11,7 @@ import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.ServiceProviderEntity;
-import exception.AppointmentNotFoundException;
+import util.exception.AppointmentNotFoundException;
 import java.util.List;
 import java.util.Scanner;
 

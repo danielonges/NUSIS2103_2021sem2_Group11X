@@ -1,8 +1,8 @@
 package ejb.session.stateless;
 
 import entity.AppointmentEntity;
-import exception.AppointmentNotFoundException;
-import exception.DeleteAppointmentException;
+import util.exception.AppointmentNotFoundException;
+import util.exception.DeleteAppointmentException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

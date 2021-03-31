@@ -10,8 +10,8 @@ import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.BusinessCategorySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
-import exception.AppointmentNotFoundException;
-import exception.InvalidLoginException;
+import util.exception.AppointmentNotFoundException;
+import util.exception.InvalidLoginException;
 import javax.ejb.EJB;
 
 /**

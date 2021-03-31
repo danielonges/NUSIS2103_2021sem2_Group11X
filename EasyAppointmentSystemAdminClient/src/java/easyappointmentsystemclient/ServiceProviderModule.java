@@ -10,7 +10,7 @@ import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.ServiceProviderEntity;
-import exception.ServiceProviderNotFoundException;
+import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
 
 /**

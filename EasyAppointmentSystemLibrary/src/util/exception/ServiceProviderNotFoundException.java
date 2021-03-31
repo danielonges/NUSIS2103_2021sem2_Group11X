@@ -1,20 +1,21 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exception;
+package util.exception;
 
 /**
  *
  * @author meleenoob
  */
-public class ServiceProviderEmailExistException extends Exception {
+public class ServiceProviderNotFoundException extends Exception {
 
-    public ServiceProviderEmailExistException() {
+    public ServiceProviderNotFoundException() {
     }
 
-    public ServiceProviderEmailExistException(String msg) {
+    public ServiceProviderNotFoundException(String msg) {
         super(msg);
     }
 

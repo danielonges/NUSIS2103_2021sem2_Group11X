@@ -1,8 +1,8 @@
 package ejb.session.stateless;
 
 import entity.ServiceProviderEntity;
-import exception.InvalidLoginException;
-import exception.ServiceProviderNotFoundException;
+import util.exception.InvalidLoginException;
+import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

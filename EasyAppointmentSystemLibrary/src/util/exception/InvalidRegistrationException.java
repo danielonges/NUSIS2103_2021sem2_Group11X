@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exception;
+package util.exception;
 
 /**
  *
  * @author meleenoob
  */
-public class DeleteAppointmentException extends Exception {
+public class InvalidRegistrationException extends Exception {
 
-    public DeleteAppointmentException() {
+    public InvalidRegistrationException() {
     }
 
-    public DeleteAppointmentException(String msg) {
+    public InvalidRegistrationException(String msg) {
         super(msg);
     }
 

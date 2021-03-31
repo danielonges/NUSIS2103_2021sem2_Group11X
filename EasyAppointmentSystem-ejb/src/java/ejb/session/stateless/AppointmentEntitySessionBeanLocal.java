@@ -1,7 +1,7 @@
 package ejb.session.stateless;
 
 import entity.AppointmentEntity;
-import exception.AppointmentNotFoundException;
+import util.exception.AppointmentNotFoundException;
 import java.util.List;
 
 public interface AppointmentEntitySessionBeanLocal {
