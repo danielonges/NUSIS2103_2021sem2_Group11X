@@ -139,5 +139,7 @@ public class AppointmentEntity implements Serializable {
         }
         return true;
     }
+    
+  
 
 }

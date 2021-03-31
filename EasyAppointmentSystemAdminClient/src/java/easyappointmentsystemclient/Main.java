@@ -2,6 +2,7 @@ package easyappointmentsystemclient;
 
 import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
+import ejb.session.stateless.BusinessCategorySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import javax.ejb.EJB;
@@ -11,6 +12,9 @@ import javax.ejb.EJB;
  * @author danielonges
  */
 public class Main {
+
+    @EJB(name = "BusinessCategorySessionBeanRemote")
+    private static BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote;
 
     @EJB(name = "ServiceProviderEntitySessionBeanRemote")
     private static ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
@@ -29,7 +33,7 @@ public class Main {
      */
     public static void main(String[] args) {
         MainApp mainApp = new MainApp(appointmentEntitySessionBeanRemote, customerEntitySessionBeanRemote,
-                adminEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
+                adminEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote,businessCategorySessionBeanRemote);
         mainApp.runApp();
         
     }

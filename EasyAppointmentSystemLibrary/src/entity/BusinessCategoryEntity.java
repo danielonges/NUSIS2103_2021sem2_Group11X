@@ -66,7 +66,7 @@ public class BusinessCategoryEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.BusinessCategoryEntity[ id=" + id + " ]";
+        return this.category;
     }
 
     /**
