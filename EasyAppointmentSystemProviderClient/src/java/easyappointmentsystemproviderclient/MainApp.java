@@ -96,18 +96,10 @@ public class MainApp {
 
     private void doRegister() throws InvalidRegistrationException {
         Scanner scanner = new Scanner(System.in);
-        String name = "";
-        Integer businessCategoryId = 0;
-        String businessCategory = "";
-        String businessRegistrationNum = "";
-        String city = "";
-        String phone = "";
-        String businessAddress = "";
-        String email = "";
-        String password = "";
+        
         System.out.println("*** Service Provider Terminal :: Registration Operation ***\n");
         System.out.print("Enter Name> ");
-        name = scanner.nextLine().trim();
+        String name = scanner.nextLine().trim();
         List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
         int sizeOfBusinessCategoryList = businessCategoryEntities.size();
         for (int i = 0; i < sizeOfBusinessCategoryList - 1; i++) {
@@ -115,22 +107,22 @@ public class MainApp {
         }
         System.out.println(businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getId().toString() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
         System.out.print("Enter Business Category> ");
-        businessCategoryId = scanner.nextInt();
+        int businessCategoryId = scanner.nextInt();
         scanner.nextLine();
         businessCategoryId--; //the actual index in the list
-        businessCategory = businessCategoryEntities.get(businessCategoryId).getCategory();
+        String businessCategory = businessCategoryEntities.get(businessCategoryId).getCategory();
         System.out.print("Enter Business Registration Number> ");
-        businessRegistrationNum = scanner.nextLine().trim();
+        String businessRegistrationNum = scanner.nextLine().trim();
         System.out.print("Enter City> ");
-        city = scanner.nextLine().trim();
+        String city = scanner.nextLine().trim();
         System.out.print("Enter Phone> ");
-        phone = scanner.nextLine().trim();
+        String phone = scanner.nextLine().trim();
         System.out.print("Enter Business Address> ");
-        businessAddress = scanner.nextLine().trim();
+        String businessAddress = scanner.nextLine().trim();
         System.out.print("Enter Email> ");
-        email = scanner.nextLine().trim();
+        String email = scanner.nextLine().trim();
         System.out.print("Enter Password> ");
-        password = scanner.nextLine().trim();
+        String password = scanner.nextLine().trim();
         if (email.length() > 0 && password.length() > 0) {
             ServiceProviderEntity newServiceProviderEntity = new ServiceProviderEntity();
             newServiceProviderEntity.setName(name);

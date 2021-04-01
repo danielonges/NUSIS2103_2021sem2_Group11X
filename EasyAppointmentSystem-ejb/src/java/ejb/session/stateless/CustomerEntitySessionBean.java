@@ -61,6 +61,14 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
         }
     }
     
+    public List<AppointmentEntity> retrieveCustomerAppointments (Long customerId) throws CustomerNotFoundException {
+        try {
+            CustomerEntity currentCustomerEntity = retrieveCustomerEntityByCustomerId(customerId);
+            return currentCustomerEntity.getAppointments();
+        } catch (CustomerNotFoundException ex) {
+            throw new CustomerNotFoundException("Customer not found!");
+        }
+    }    
   
     
 }
