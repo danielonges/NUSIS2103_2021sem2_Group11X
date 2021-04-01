@@ -39,9 +39,8 @@ public class CustomerModule {
         System.out.print("Enter customer Id> ");
         
         try{
-            Long customerId = sc.nextLong();
-            CustomerEntity currentCustomerEntity = customerEntitySessionBeanRemote.retrieveCustomerEntityByCustomerId(customerId);
-            List<AppointmentEntity> appointments = currentCustomerEntity.getAppointments();
+            Long customerId = sc.nextLong();       
+            List<AppointmentEntity> appointments = customerEntitySessionBeanRemote.retrieveCustomerAppointments(customerId);
             if(appointments.size() >0) {
             for(AppointmentEntity appointment: appointments ) {
                 System.out.println(appointment);

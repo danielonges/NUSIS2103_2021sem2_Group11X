@@ -5,7 +5,7 @@
  */
 package entity;
 
-import util.enumeration.Status;
+import util.enumeration.ServiceProviderStatus;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import static util.enumeration.Status.APPROVE;
-import static util.enumeration.Status.PENDING;
+import static util.enumeration.ServiceProviderStatus.APPROVE;
+import static util.enumeration.ServiceProviderStatus.PENDING;
 
 /**
  *
@@ -47,7 +47,7 @@ public class ServiceProviderEntity implements Serializable {
     @Column(nullable = false)
     private String businessCategory;
     @Enumerated (EnumType.STRING)
-    private Status status;
+    private ServiceProviderStatus status;
     private int overallRating;
     @Column(nullable = false, unique = true)
     private String phone;
@@ -57,9 +57,11 @@ public class ServiceProviderEntity implements Serializable {
 
     public ServiceProviderEntity() {
         appointments = new ArrayList<>();
+        this.overallRating = 0;
+        
     }
 
-    public ServiceProviderEntity(String name, String address, String city, String email, String password, String businessRegNum, String businessCategory, Status status, int overallRating, String phone) {
+    public ServiceProviderEntity(String name, String address, String city, String email, String password, String businessRegNum, String businessCategory, ServiceProviderStatus status, int overallRating, String phone) {
         this.name = name;
         this.address = address;
         this.city = city;
@@ -70,9 +72,9 @@ public class ServiceProviderEntity implements Serializable {
         this.status = status;
         this.overallRating = overallRating;
         this.phone = phone;
-        this.status = Status.APPROVE;
-        overallRating = 0;
-        appointments = new ArrayList<>();
+        this.status = ServiceProviderStatus.APPROVE;
+        this.overallRating = 0;
+        this.appointments = new ArrayList<>();
     }
 
     public Long getProviderId() {
@@ -139,11 +141,11 @@ public class ServiceProviderEntity implements Serializable {
         this.businessCategory = businessCategory;
     }
 
-    public Status getStatus() {
+    public ServiceProviderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(ServiceProviderStatus status) {
         this.status = status;
     }
 

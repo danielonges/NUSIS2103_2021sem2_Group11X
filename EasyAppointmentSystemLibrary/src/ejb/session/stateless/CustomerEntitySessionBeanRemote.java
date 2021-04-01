@@ -16,5 +16,6 @@ public interface CustomerEntitySessionBeanRemote {
     
     public void deleteCustomerEntity(Long customerId) throws CustomerNotFoundException;
     
+    public List<AppointmentEntity> retrieveCustomerAppointments(Long customerId) throws CustomerNotFoundException;
     
 }

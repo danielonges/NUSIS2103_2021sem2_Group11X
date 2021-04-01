@@ -43,9 +43,6 @@ public class AppointmentModule {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Service provider terminal :: View Appointments ***\n");
 
-     //   Long serviceProviderId = currentServiceProviderEntity.getProviderId();
-      //  List<AppointmentEntity> appointmentEntities = appointmentEntitySessionBeanRemote.retrieveAppointmentsByServiceProviderId(serviceProviderId);
-      //  System.out.println("");
         List<AppointmentEntity>  appointmentEntities = currentServiceProviderEntity.getAppointments();
         for (AppointmentEntity appointment : appointmentEntities) {
             System.out.println(appointment);

@@ -64,7 +64,7 @@ public class CustomerEntity implements Serializable {
         this.address = address;
         this.city = city;
         this.email = email;
-        appointments = new ArrayList<>();
+        this.appointments = new ArrayList<>();
     }
 
     public Long getCustomerId() {
