@@ -15,7 +15,7 @@ import java.util.InputMismatchException;
 import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
 import java.util.Scanner;
-import util.enumeration.Status;
+import util.enumeration.ServiceProviderStatus;
 
 /**
  *
@@ -82,7 +82,7 @@ public class ServiceProviderModule {
             System.out.println("Enter service provider  Id> ");
             Long serviceProviderId = sc.nextLong();
             ServiceProviderEntity currentServiceProvider = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
-            currentServiceProvider.setStatus(Status.APPROVE);
+            currentServiceProvider.setStatus(ServiceProviderStatus.APPROVE);
             serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
         } catch (ServiceProviderNotFoundException | InputMismatchException ex) {
             System.out.println("Service Providers does not exist!");

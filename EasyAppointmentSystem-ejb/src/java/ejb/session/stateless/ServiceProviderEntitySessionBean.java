@@ -14,8 +14,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import util.enumeration.Status;
-import static util.enumeration.Status.APPROVE;
+import util.enumeration.ServiceProviderStatus;
+import static util.enumeration.ServiceProviderStatus.APPROVE;
 
 /**
  *
@@ -104,7 +104,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException {
         Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s where s.status = :status");
-        query.setParameter("status", Status.PENDING);
+        query.setParameter("status", ServiceProviderStatus.PENDING);
         
         try{
             return (List<ServiceProviderEntity>) query.getResultList();
