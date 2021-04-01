@@ -31,7 +31,7 @@ public class AppointmentModule {
     public AppointmentModule() {
     }
 
-    public AppointmentModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote,ServiceProviderEntity currentServiceProviderEntity) {
+    public AppointmentModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, ServiceProviderEntity currentServiceProviderEntity) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
@@ -43,12 +43,14 @@ public class AppointmentModule {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Service provider terminal :: View Appointments ***\n");
 
-     //   Long serviceProviderId = currentServiceProviderEntity.getProviderId();
-      //  List<AppointmentEntity> appointmentEntities = appointmentEntitySessionBeanRemote.retrieveAppointmentsByServiceProviderId(serviceProviderId);
-      //  System.out.println("");
-        List<AppointmentEntity>  appointmentEntities = currentServiceProviderEntity.getAppointments();
-        for (AppointmentEntity appointment : appointmentEntities) {
-            System.out.println(appointment);
+        List<AppointmentEntity> appointmentEntities = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity);
+       
+        if (appointmentEntities.isEmpty()) {
+            System.out.println("No current appointments.");
+        } else {
+            for (AppointmentEntity appointment : appointmentEntities) {
+                System.out.println(appointment);
+            }
         }
         while (true) {
             System.out.println("Enter 0 to go back to the previous menu");
@@ -82,7 +84,7 @@ public class AppointmentModule {
             } else {
                 try {
                     appointmentEntitySessionBeanRemote.deleteAppointmentEntity(response);
-                    System.out.println("Appointment " + response + " has been canceled successfully");
+                    System.out.println("Appointment " + response + " has been cancelled successfully");
                 } catch (AppointmentNotFoundException ex) {
                     System.out.println("Unable to delete!");
                 }
@@ -92,4 +94,3 @@ public class AppointmentModule {
     }
 
 }
-
