@@ -135,13 +135,13 @@ public class MainApp {
             newServiceProviderEntity.setEmail(email);
             newServiceProviderEntity.setPassword(password);
             serviceProviderEntitySessionBeanRemote.createServiceProviderEntity(newServiceProviderEntity);
-            System.out.println("You have been registered successfully!+ \n");
-            System.out.println("Enter 0 to go back to the previous menu.+ \n");
+            System.out.println("You have been registered successfully! \n");
+            System.out.println("Enter 0 to go back to the previous menu. \n");
             System.out.print("> ");
             Integer goBack = scanner.nextInt();
             while (goBack < 0 || goBack > 0) {
                 if (goBack != 0) {
-                    System.out.println("Enter 0 to go back to the previous menu.+ \n");
+                    System.out.println("Enter 0 to go back to the previous menu. \n");
                     System.out.print("> ");
                     goBack = scanner.nextInt();
                 } else {

@@ -1,5 +1,6 @@
 package ejb.session.stateless;
 
+import entity.AppointmentEntity;
 import entity.ServiceProviderEntity;
 import util.exception.InvalidLoginException;
 import util.exception.ServiceProviderNotFoundException;
@@ -23,4 +24,6 @@ public interface ServiceProviderEntitySessionBeanLocal {
     public List<ServiceProviderEntity> retrieveListOfServiceProviders() throws ServiceProviderNotFoundException;
 
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException;
+
+    public List<AppointmentEntity> retrieveListOfAppointments(ServiceProviderEntity serviceProviderEntity);
 }

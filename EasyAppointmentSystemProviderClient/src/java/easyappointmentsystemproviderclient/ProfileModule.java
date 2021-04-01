@@ -74,30 +74,35 @@ public class ProfileModule {
                         System.out.print("Enter new city> ");
                         String newCity = scanner.nextLine().trim();
                         currentServiceProviderEntity.setCity(newCity);
+                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                         System.out.println("changed successfully!");
                         break;
                     case 2:
                         System.out.print("Enter new business address> ");
                         String newBusinessAddress = scanner.nextLine().trim();
                         currentServiceProviderEntity.setAddress(newBusinessAddress);
+                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                         System.out.println("changed successfully!");
                         break;
                     case 3:
                         System.out.print("Enter new email address> ");
                         String newEmailAddress = scanner.nextLine().trim();
                         currentServiceProviderEntity.setEmail(newEmailAddress);
+                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                         System.out.println("changed successfully!");
                         break;
                     case 4:
                         System.out.print("Enter new phone number> ");
                         String newPhoneNumber = scanner.nextLine().trim();
                         currentServiceProviderEntity.setPhone(newPhoneNumber);
+                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                         System.out.println("changed successfully!");
                         break;
                     case 5:
                         System.out.print("Enter new password> ");
                         String newPassword = scanner.nextLine().trim();
                         currentServiceProviderEntity.setPassword(newPassword);
+                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                         System.out.println("changed successfully!");
                         break;
                     case 0:

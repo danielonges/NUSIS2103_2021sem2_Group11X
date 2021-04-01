@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,7 +53,8 @@ public class ServiceProviderEntity implements Serializable {
     @Column(nullable = false, unique = true)
     private String phone;
     
-    @OneToMany(mappedBy = "serviceProvider")
+   
+    @OneToMany(mappedBy = "serviceProvider",fetch = FetchType.EAGER)
     private List<AppointmentEntity> appointments;
 
     public ServiceProviderEntity() {
