@@ -1,8 +1,8 @@
 package ejb.session.stateless;
 
-import exception.AdminNotFoundException;
+import util.exception.AdminNotFoundException;
 import entity.AdminEntity;
-import exception.InvalidLoginException;
+import util.exception.InvalidLoginException;
 
 public interface AdminEntitySessionBeanLocal {
     

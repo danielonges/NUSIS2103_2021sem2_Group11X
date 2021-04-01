@@ -1,21 +1,22 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exception;
+package util.exception;
 
 /**
  *
- * @author leele
+ * @author meleenoob
  */
-public class AdminNotFoundException extends Exception {
+public class ServiceProviderNotFoundException extends Exception {
 
-    public AdminNotFoundException() {
+    public ServiceProviderNotFoundException() {
     }
 
-    public AdminNotFoundException(String msg) {
+    public ServiceProviderNotFoundException(String msg) {
         super(msg);
     }
-    
+
 }

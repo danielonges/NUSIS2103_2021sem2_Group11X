@@ -10,8 +10,11 @@ import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AppointmentEntity;
-import exception.AppointmentNotFoundException;
+import entity.CustomerEntity;
+import util.exception.AppointmentNotFoundException;
 import java.util.List;
+import java.util.Scanner;
+import util.exception.CustomerNotFoundException;
 
 /**
  *
@@ -31,14 +34,24 @@ public class CustomerModule {
     }
 
     public void viewAppointments() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("*** Admin terminal :: View Appointments for customers ***");
+        System.out.print("Enter customer Id> ");
+        
         try{
-       List<AppointmentEntity> appointments = appointmentEntitySessionBeanRemote.retrieveListOfAppointments();
-       for(AppointmentEntity value: appointments ) {
-           System.out.println(value.toString());
-       }
-        }catch (AppointmentNotFoundException ex){
-               System.out.println("Service Providers does not exist!");
-               }
+            Long customerId = sc.nextLong();
+            CustomerEntity currentCustomerEntity = customerEntitySessionBeanRemote.retrieveCustomerEntityByCustomerId(customerId);
+            List<AppointmentEntity> appointments = currentCustomerEntity.getAppointments();
+            if(appointments.size() >0) {
+            for(AppointmentEntity appointment: appointments ) {
+                System.out.println(appointment);
+            }
+            } else {
+                System.out.println("No apppointments booked!");
+            }
+        } catch (CustomerNotFoundException ex){
+               System.out.println("Customer does not exist!");
+        }
     }
     }
     

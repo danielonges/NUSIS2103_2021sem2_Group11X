@@ -1,8 +1,8 @@
 package ejb.session.stateless;
 
-import exception.AdminNotFoundException;
+import util.exception.AdminNotFoundException;
 import entity.AdminEntity;
-import exception.InvalidLoginException;
+import util.exception.InvalidLoginException;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;

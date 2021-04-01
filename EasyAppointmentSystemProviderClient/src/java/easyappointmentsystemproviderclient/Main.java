@@ -7,10 +7,11 @@ package easyappointmentsystemproviderclient;
 
 import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
+import ejb.session.stateless.BusinessCategorySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
-import exception.AppointmentNotFoundException;
-import exception.InvalidLoginException;
+import util.exception.AppointmentNotFoundException;
+import util.exception.InvalidLoginException;
 import javax.ejb.EJB;
 
 /**
@@ -18,6 +19,10 @@ import javax.ejb.EJB;
  * @author danielonges
  */
 public class Main {
+
+    @EJB(name = "BusinessCategorySessionBeanRemote")
+    private static BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote;
+    
 
     @EJB(name = "CustomerEntitySessionBeanRemote")
     private static CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
@@ -36,7 +41,7 @@ public class Main {
      */
     public static void main(String[] args) throws InvalidLoginException, AppointmentNotFoundException {
         MainApp mainApp = new MainApp(appointmentEntitySessionBeanRemote, customerEntitySessionBeanRemote,
-                adminEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
+                adminEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote,businessCategorySessionBeanRemote);
         mainApp.runApp();
 
     }

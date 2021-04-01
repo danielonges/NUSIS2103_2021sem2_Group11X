@@ -1,8 +1,9 @@
 package ejb.session.stateless;
 
+import entity.AppointmentEntity;
 import entity.ServiceProviderEntity;
-import exception.InvalidLoginException;
-import exception.ServiceProviderNotFoundException;
+import util.exception.InvalidLoginException;
+import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +15,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.enumeration.ServiceProviderStatus;
+import static util.enumeration.ServiceProviderStatus.APPROVE;
 
 /**
  *
@@ -31,15 +34,18 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     public void createServiceProviderEntity(ServiceProviderEntity newServiceProviderEntity) {
         em.persist(newServiceProviderEntity);
         em.flush();
-
     }
 
     @Override
-    public ServiceProviderEntity retrieveServiceProviderEntityByProviderId(Long providerId) {
-        ServiceProviderEntity serviceProviderEntity = em.find(ServiceProviderEntity.class, providerId);
-
+    public ServiceProviderEntity retrieveServiceProviderEntityByProviderId(Long providerId) throws ServiceProviderNotFoundException {
+        try {
+            ServiceProviderEntity serviceProviderEntity = em.find(ServiceProviderEntity.class, providerId);
+            return serviceProviderEntity;
+        } catch (NoResultException ex) {
+            throw new ServiceProviderNotFoundException("Service provider not found!");
+        }
         // TODO: implement checking for null
-        return serviceProviderEntity;
+
     }
 
     @Override
@@ -49,24 +55,27 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     }
 
     @Override
-    public void deleteServiceProviderEntity(Long providerId) {
-        ServiceProviderEntity serviceProviderEntity = retrieveServiceProviderEntityByProviderId(providerId);
-        em.remove(serviceProviderEntity);
+    public void deleteServiceProviderEntity(Long providerId) throws ServiceProviderNotFoundException {
+        try {
+            ServiceProviderEntity serviceProviderEntity = retrieveServiceProviderEntityByProviderId(providerId);
+            em.remove(serviceProviderEntity);
+        } catch (ServiceProviderNotFoundException ex) {
+            throw new ServiceProviderNotFoundException("Service provider not found!");
+        }
     }
 
     @Override
     public ServiceProviderEntity ServiceProviderLogin(String email, String password) throws InvalidLoginException {
         try {
             ServiceProviderEntity serviceProviderEntity = retrieveServiceProviderByEmail(email);
-            if (serviceProviderEntity.getPassword().equals(password)) {
+            if (serviceProviderEntity.getPassword().equals(password) && serviceProviderEntity.getStatus() == APPROVE) {
                 return serviceProviderEntity;
             } else {
                 throw new InvalidLoginException("Email does not exist or invalid password!");
             }
         } catch (ServiceProviderNotFoundException ex) {
-            Logger.getLogger(ServiceProviderEntitySessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InvalidLoginException("Email does not exist or invalid password!");
         }
-        return null; //not sure if this null is correct
     }
 
     @Override
@@ -80,19 +89,33 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
             throw new ServiceProviderNotFoundException("Service Provider Email " + email + " does not exist!");
         }
     }
-    
-    public List<ServiceProviderEntity> retrieveListOfServiceProviders() throws ServiceProviderNotFoundException{
-        
+
+    @Override
+    public List<ServiceProviderEntity> retrieveListOfServiceProviders() throws ServiceProviderNotFoundException {
+
         Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s", ServiceProviderEntity.class);
-        
+
         try {
-        return (List<ServiceProviderEntity>) query.getResultList();
-    } catch (NoResultException | NonUniqueResultException ex) {
+            return (List<ServiceProviderEntity>) query.getResultList();
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new ServiceProviderNotFoundException("Service Providers does not exist!");
         }
+
+    }
     
-    
-    
-    
-}
+    @Override
+    public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException {
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s where s.status = :status");
+        query.setParameter("status", ServiceProviderStatus.PENDING);
+
+        try {
+            return (List<ServiceProviderEntity>) query.getResultList();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new ServiceProviderNotFoundException("Service Providers does not exist!");
+        }
+    }
+    @Override
+    public List<AppointmentEntity> retrieveListOfAppointments(ServiceProviderEntity serviceProviderEntity) {
+        return serviceProviderEntity.getAppointments();
+    }
 }

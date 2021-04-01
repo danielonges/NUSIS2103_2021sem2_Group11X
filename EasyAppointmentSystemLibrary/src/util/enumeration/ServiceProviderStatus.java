@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package enumeration;
+package util.enumeration;
 
 /**
  *
  * @author leele
  */
-public enum Status {
+public enum ServiceProviderStatus {
     PENDING,
-    CONFIRMED,
-    BLOCKED
+    APPROVE,
+    BLOCK
 }

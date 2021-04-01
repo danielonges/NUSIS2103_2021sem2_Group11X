@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exception;
+package util.exception;
 
 /**
  *
- * @author meleenoob
+ * @author leele
  */
-public class InputInvalidException extends Exception {
+public class AdminNotFoundException extends Exception {
 
-    public InputInvalidException() {
+    public AdminNotFoundException() {
     }
 
-    public InputInvalidException(String msg) {
+    public AdminNotFoundException(String msg) {
         super(msg);
     }
-
+    
 }

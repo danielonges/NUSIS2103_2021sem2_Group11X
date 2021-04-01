@@ -4,18 +4,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exception;
+package util.exception;
 
 /**
  *
  * @author meleenoob
  */
-public class ServiceProviderNotFoundException extends Exception {
+public class UnknownPersistenceException extends Exception {
 
-    public ServiceProviderNotFoundException() {
+    public UnknownPersistenceException() {
     }
 
-    public ServiceProviderNotFoundException(String msg) {
+    public UnknownPersistenceException(String msg) {
         super(msg);
     }
 

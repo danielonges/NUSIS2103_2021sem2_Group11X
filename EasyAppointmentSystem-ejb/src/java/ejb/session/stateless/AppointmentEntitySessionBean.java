@@ -1,7 +1,8 @@
 package ejb.session.stateless;
 
 import entity.AppointmentEntity;
-import exception.AppointmentNotFoundException;
+import util.exception.AppointmentNotFoundException;
+import util.exception.DeleteAppointmentException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,14 +52,14 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
     }
 
     @Override
-    public void deleteAppointmentEntity(Long appointmentId) {
+    public void deleteAppointmentEntity(Long appointmentId) throws AppointmentNotFoundException{
         AppointmentEntity appointmentEntity = null;
         try {
             appointmentEntity = retrieveAppointmentEntityByAppointmentId(appointmentId);
+            em.remove(appointmentEntity);
         } catch (AppointmentNotFoundException ex) {
-            Logger.getLogger(AppointmentEntitySessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        em.remove(appointmentEntity);
+            //throw new DeleteAppointmentException("unable to delete!");
+        }    
     }
 
     @Override
@@ -73,15 +74,6 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
         }
     }
     
-    public List<AppointmentEntity> retrieveListOfAppointments() throws AppointmentNotFoundException {
-         Query query = em.createQuery("SELECT s FROM AppointmentEntity s", AppointmentEntity.class);
-        
-        try {
-        return (List<AppointmentEntity>) query.getResultList();
-    } catch (NoResultException | NonUniqueResultException ex) {
-            throw new AppointmentNotFoundException("Appointments does not exist!");
-        }
-    
-    }
+   
 
 }

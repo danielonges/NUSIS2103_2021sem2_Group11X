@@ -23,6 +23,7 @@ public class BusinessCategoryEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String category;
+    
 
     public BusinessCategoryEntity() {
     }
@@ -65,7 +66,21 @@ public class BusinessCategoryEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.BusinessCategoryEntity[ id=" + id + " ]";
+        return this.category;
+    }
+
+    /**
+     * @return the category
+     */
+    public String getCategory() {
+        return category;
+    }
+
+    /**
+     * @param category the category to set
+     */
+    public void setCategory(String category) {
+        this.category = category;
     }
     
 }

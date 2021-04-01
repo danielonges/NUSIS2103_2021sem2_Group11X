@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,10 +37,11 @@ public class AppointmentEntity implements Serializable {
     //timestamp   
     private Boolean isCompleted;
     
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private CustomerEntity customer;
-    @ManyToOne(optional = false)
+    
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)  
     private ServiceProviderEntity serviceProvider;
 
@@ -48,10 +50,10 @@ public class AppointmentEntity implements Serializable {
 
     public AppointmentEntity(Long appointmentNo, String businessCategory, Date date, CustomerEntity customerEntity, ServiceProviderEntity serviceProviderEntity) {
         this.appointmentNo = appointmentNo;
-        rating = 0;
+        this.rating = 0;
         this.businessCategory = businessCategory;
         this.date = date;
-        isCompleted = false;
+        this.isCompleted = false;
         this.customer = customerEntity;
         this.serviceProvider = serviceProviderEntity;
     }
@@ -139,5 +141,12 @@ public class AppointmentEntity implements Serializable {
         }
         return true;
     }
+    
+    @Override
+    public String toString(){
+        return(this.customer + "     | " + this.date + "     | " + this.date.getTime() + "  | " + this.appointmentNo + " ");
+    }
+    
+  
 
 }
