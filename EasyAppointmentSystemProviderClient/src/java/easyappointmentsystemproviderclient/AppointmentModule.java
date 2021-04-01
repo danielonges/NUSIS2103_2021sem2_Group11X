@@ -55,15 +55,18 @@ public class AppointmentModule {
                 }
             }
             while (true) {
-                System.out.println("Enter 0 to go back to the previous menu");
+                System.out.print("Enter 0 to go back to the previous menu> ");
                 Integer response = scanner.nextInt();
                 if (response == 0) {
                     break;
-                } else {
-                    System.out.println("invalid input!");
-                }
-            }
 
+                } else {
+                    for (AppointmentEntity appointment : appointmentEntities) {
+                        System.out.println(appointment);
+                    }
+                }
+
+            }
         } catch (ServiceProviderNotFoundException | InputMismatchException ex) {
             System.out.println("Service provider not found!");
         }
@@ -73,16 +76,19 @@ public class AppointmentModule {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Service provider terminal :: Cancel Appointments ***\n");
         // the following code is the same as viewAppointment()
-        Long serviceProviderId = currentServiceProviderEntity.getProviderId();
-        List<AppointmentEntity> appointmentEntities = appointmentEntitySessionBeanRemote.retrieveAppointmentsByServiceProviderId(serviceProviderId);
-        System.out.println("");
-        for (AppointmentEntity appointment : appointmentEntities) {
-            System.out.println("Name     | Date     | Time  | Appointment No. ");
-            System.out.println(appointment);
+        try {
+        List<AppointmentEntity> appointmentEntities = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity);
+
+        if (appointmentEntities.isEmpty()) {
+            System.out.println("No current appointments.");
+        } else {
+            for (AppointmentEntity appointment : appointmentEntities) {
+                System.out.println(appointment);
+            }
         }
         while (true) {
-            System.out.println("Enter 0 to go back to the previous menu");
-            System.out.println("Enter Appointment Id> ");
+            System.out.print("Enter 0 to go back to the previous menu> ");
+            System.out.print("Enter Appointment Id> ");
             Long response = scanner.nextLong();
             if (response == 0L) {
                 break;
@@ -95,7 +101,8 @@ public class AppointmentModule {
                 }
             }
         }
-
+    } catch (ServiceProviderNotFoundException ex) {
+            System.out.println("Service provider not found");
     }
-
+}
 }

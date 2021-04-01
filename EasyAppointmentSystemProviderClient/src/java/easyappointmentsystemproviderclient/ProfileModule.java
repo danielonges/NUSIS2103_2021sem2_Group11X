@@ -61,7 +61,7 @@ public class ProfileModule {
             System.out.println("3: Edit Email Address");
             System.out.println("4: Edit Phone Number");
             System.out.println("5: Edit Password");
-            System.out.println("Enter 0 to go back to the previous menu+\n");
+            System.out.println("Enter 0 to go back to the previous menu\n");
             response = 9;
 
             OUTER:

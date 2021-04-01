@@ -11,6 +11,19 @@
             <test-roots>
                 <root id="test.src.dir" name="Test Packages"/>
             </test-roots>
+            <included-library dirs="200">reference.EasyAppointmentSystemLibrary.jar</included-library>
+            <included-library dirs="200">file.reference.javaee-api-8.0.jar</included-library>
+            <included-library dirs="200">file.reference.javax.persistence-2.1.0.jar</included-library>
         </data>
+        <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
+            <reference>
+                <foreign-project>EasyAppointmentSystemLibrary</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+        </references>
     </configuration>
 </project>

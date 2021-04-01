@@ -52,6 +52,7 @@ public class ServiceProviderEntity implements Serializable {
     private int overallRating;
     @Column(nullable = false, unique = true)
     private String phone;
+    private boolean isCancelled;
     
    
     @OneToMany(mappedBy = "serviceProvider",fetch = FetchType.EAGER)
@@ -74,9 +75,18 @@ public class ServiceProviderEntity implements Serializable {
         this.status = status;
         this.overallRating = overallRating;
         this.phone = phone;
-        this.status = ServiceProviderStatus.APPROVE;
-        this.overallRating = 0;
-        this.appointments = new ArrayList<>();
+        isCancelled = false;
+        status = ServiceProviderStatus.PENDING;
+        overallRating = 0;
+        appointments = new ArrayList<>();
+    }
+
+    public boolean isIsCancelled() {
+        return isCancelled;
+    }
+
+    public void setIsCancelled(boolean isCancelled) {
+        this.isCancelled = isCancelled;
     }
 
     public Long getProviderId() {
