@@ -20,9 +20,10 @@ import util.exception.ServiceProviderEmailExistException;
 import util.exception.UnknownPersistenceException;
 import java.util.List;
 import java.util.Scanner;
-import util.enumeration.ServiceProviderStatus;
-import static util.enumeration.ServiceProviderStatus.APPROVE;
+import util.enumeration.Status;
+import static util.enumeration.Status.APPROVE;
 //import util.exception.InvalidRegistrationException;
+
 /**
  *
  * @author meleenoob
@@ -138,7 +139,7 @@ public class MainApp {
             newServiceProviderEntity.setBusinessRegNum(businessRegistrationNum);
             newServiceProviderEntity.setCity(city);
             newServiceProviderEntity.setPhone(phone);
-            newServiceProviderEntity.setStatus(ServiceProviderStatus.APPROVE);//change to approve for testing, default:PENDING
+            newServiceProviderEntity.setStatus(Status.APPROVE);//change to approve for testing, default:PENDING
             newServiceProviderEntity.setAddress(businessAddress);
             newServiceProviderEntity.setEmail(email);
             newServiceProviderEntity.setPassword(password);

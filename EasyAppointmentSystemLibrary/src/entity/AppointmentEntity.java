@@ -141,11 +141,6 @@ public class AppointmentEntity implements Serializable {
         return true;
     }
     
-    @Override
-    public String toString(){
-        return(this.customer + "     | " + this.date + "     | " + this.date.getTime() + "  | " + this.appointmentNo + " ");
-    }
-    
   
 
 }

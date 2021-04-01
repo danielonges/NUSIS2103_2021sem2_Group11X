@@ -9,7 +9,7 @@ package util.enumeration;
  *
  * @author leele
  */
-public enum ServiceProviderStatus {
+public enum Status {
     PENDING,
     APPROVE,
     BLOCK
