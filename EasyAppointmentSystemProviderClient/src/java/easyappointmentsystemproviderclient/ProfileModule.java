@@ -27,15 +27,15 @@ public class ProfileModule {
     public ProfileModule() {
     }
 
-    public ProfileModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote) {
+    public ProfileModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote,ServiceProviderEntity currentServiceProviderEntity) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
+        this.currentServiceProviderEntity = currentServiceProviderEntity;
     }
 
     public void viewProfile() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("*** Service provider terminal :: View Profile ***\n");
         System.out.println("Name: " + currentServiceProviderEntity.getName());
         System.out.println("Business Category: " + currentServiceProviderEntity.getBusinessCategory());
@@ -68,33 +68,34 @@ public class ProfileModule {
             while (response < 0 || response > 5) {
                 System.out.print("> ");
                 response = scanner.nextInt();
+                scanner.nextLine();
                 switch (response) {
                     case 1:
-                        System.out.println("Enter new city: ");
+                        System.out.print("Enter new city> ");
                         String newCity = scanner.nextLine().trim();
                         currentServiceProviderEntity.setCity(newCity);
                         System.out.println("changed successfully!");
                         break;
                     case 2:
-                        System.out.println("Enter new business address");
+                        System.out.print("Enter new business address> ");
                         String newBusinessAddress = scanner.nextLine().trim();
                         currentServiceProviderEntity.setAddress(newBusinessAddress);
                         System.out.println("changed successfully!");
                         break;
                     case 3:
-                        System.out.println("Enter new email address");
+                        System.out.print("Enter new email address> ");
                         String newEmailAddress = scanner.nextLine().trim();
                         currentServiceProviderEntity.setEmail(newEmailAddress);
                         System.out.println("changed successfully!");
                         break;
                     case 4:
-                        System.out.println("Enter new phone number");
+                        System.out.print("Enter new phone number> ");
                         String newPhoneNumber = scanner.nextLine().trim();
                         currentServiceProviderEntity.setPhone(newPhoneNumber);
                         System.out.println("changed successfully!");
                         break;
                     case 5:
-                        System.out.println("Enter new password");
+                        System.out.print("Enter new password> ");
                         String newPassword = scanner.nextLine().trim();
                         currentServiceProviderEntity.setPassword(newPassword);
                         System.out.println("changed successfully!");

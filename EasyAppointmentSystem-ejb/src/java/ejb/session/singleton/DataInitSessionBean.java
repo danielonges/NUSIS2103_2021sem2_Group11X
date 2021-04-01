@@ -6,8 +6,10 @@
 package ejb.session.singleton;
 
 import ejb.session.stateless.AdminEntitySessionBeanLocal;
+import ejb.session.stateless.AppointmentEntitySessionBeanLocal;
 import ejb.session.stateless.BusinessCategorySessionBeanLocal;
 import entity.AdminEntity;
+import entity.AppointmentEntity;
 import entity.BusinessCategoryEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -27,6 +29,9 @@ import javax.persistence.PersistenceContext;
 
 public class DataInitSessionBean {
 
+    @EJB(name = "AppointmentEntitySessionBeanLocal")
+    private AppointmentEntitySessionBeanLocal appointmentEntitySessionBeanLocal;
+
     @EJB(name = "BusinessCategorySessionBeanLocal")
     private BusinessCategorySessionBeanLocal businessCategorySessionBeanLocal;
 
@@ -35,6 +40,8 @@ public class DataInitSessionBean {
 
     @EJB(name = "AdminEntitySessionBeanLocal")
     private AdminEntitySessionBeanLocal adminEntitySessionBeanLocal;
+    
+    
     
     @PostConstruct
     public void postConstruct() {
@@ -49,8 +56,11 @@ public class DataInitSessionBean {
             businessCategorySessionBeanLocal.createBusinessCategoryEntity(new BusinessCategoryEntity("Fashion"));
             businessCategorySessionBeanLocal.createBusinessCategoryEntity(new BusinessCategoryEntity("Education"));
         }
-        }
+      /*  if(em.find(AppointmentEntity.class,1L) == null) {
+           appointmentEntitySessionBeanLocal.createAppointmentEntity(new AppointmentEntity())
+        }*/
     }
+}
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

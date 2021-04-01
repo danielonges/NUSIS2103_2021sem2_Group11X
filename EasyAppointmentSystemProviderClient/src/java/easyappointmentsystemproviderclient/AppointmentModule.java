@@ -31,22 +31,23 @@ public class AppointmentModule {
     public AppointmentModule() {
     }
 
-    public AppointmentModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote) {
+    public AppointmentModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote,ServiceProviderEntity currentServiceProviderEntity) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
+        this.currentServiceProviderEntity = currentServiceProviderEntity;
     }
 
     void viewAppointments() throws AppointmentNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Service provider terminal :: View Appointments ***\n");
 
-        Long serviceProviderId = currentServiceProviderEntity.getProviderId();
-        List<AppointmentEntity> appointmentEntities = appointmentEntitySessionBeanRemote.retrieveAppointmentsByServiceProviderId(serviceProviderId);
-        System.out.println("");
+     //   Long serviceProviderId = currentServiceProviderEntity.getProviderId();
+      //  List<AppointmentEntity> appointmentEntities = appointmentEntitySessionBeanRemote.retrieveAppointmentsByServiceProviderId(serviceProviderId);
+      //  System.out.println("");
+        List<AppointmentEntity>  appointmentEntities = currentServiceProviderEntity.getAppointments();
         for (AppointmentEntity appointment : appointmentEntities) {
-            System.out.println("Name     | Date     | Time  | Appointment No. ");
             System.out.println(appointment);
         }
         while (true) {

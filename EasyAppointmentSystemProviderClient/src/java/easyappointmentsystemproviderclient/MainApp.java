@@ -75,8 +75,8 @@ public class MainApp {
                     try {
                         doLogin();
                         System.out.println("Login successful!\n");
-                        profileModule = new ProfileModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
-                        appointmentModule = new AppointmentModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
+                        profileModule = new ProfileModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote,currentServiceProviderEntity);
+                        appointmentModule = new AppointmentModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote,currentServiceProviderEntity);
                         //insert module here
                         menuMain();
                     } catch (InvalidLoginException ex) {
