@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.BusinessCategoryEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.BusinessCategoryNotFoundException;
 
 /**
  *
@@ -19,5 +20,11 @@ public interface BusinessCategorySessionBeanLocal {
     public Long createBusinessCategoryEntity(BusinessCategoryEntity newBusinessCategoryEntity);
 
     public List<BusinessCategoryEntity> retrieveAllBusinessCategories();
+
+    public void deleteBusinessCategoryEntity(String businessCategory) throws BusinessCategoryNotFoundException;
+
+    public BusinessCategoryEntity retrieveBusinessCategoryEntityByBusinessCategoryId(Long businessCategoryId) throws BusinessCategoryNotFoundException;
+
+    public BusinessCategoryEntity retrieveBusinessCategoryEntityByName(String businessCategory) throws BusinessCategoryNotFoundException;
     
 }

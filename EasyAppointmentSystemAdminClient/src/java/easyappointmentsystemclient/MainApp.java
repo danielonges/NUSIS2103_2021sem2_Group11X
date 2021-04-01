@@ -19,6 +19,7 @@ import java.util.Scanner;
  * @author leele
  */
 public class MainApp {
+
     private AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
@@ -28,20 +29,20 @@ public class MainApp {
     private CustomerModule customerModule;
     private ServiceProviderModule serviceProviderModule;
     private AdminModule adminModule;
-    
+
     public MainApp() {
     }
 
-    public MainApp(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote,CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, 
-            AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote,BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote) {
+    public MainApp(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote,
+            AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
         this.businessCategorySessionBeanRemote = businessCategorySessionBeanRemote;
     }
-    
-     public void runApp() {
+
+    public void runApp() {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
 
@@ -61,7 +62,7 @@ public class MainApp {
                         System.out.println("Login successful!\n");
                         customerModule = new CustomerModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
                         serviceProviderModule = new ServiceProviderModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
-                        adminModule = new AdminModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote,businessCategorySessionBeanRemote);
+                        adminModule = new AdminModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, businessCategorySessionBeanRemote);
                         menuMain();
                     } catch (InvalidLoginException ex) {
                         System.out.println("Invalid login");
@@ -78,8 +79,8 @@ public class MainApp {
 
         }
     }
-     
-     private void doLogin() throws InvalidLoginException {
+
+    private void doLogin() throws InvalidLoginException {
         Scanner scanner = new Scanner(System.in);
         String email = "";
         String password = "";
@@ -155,6 +156,3 @@ public class MainApp {
         }
     }
 }
-    
-    
-

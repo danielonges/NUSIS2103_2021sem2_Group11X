@@ -22,6 +22,7 @@ import util.enumeration.ServiceProviderStatus;
  * @author leele
  */
 public class ServiceProviderModule {
+
     private AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
@@ -38,61 +39,111 @@ public class ServiceProviderModule {
         Scanner sc = new Scanner(System.in);
         System.out.println("*** Admin terminal :: View Appointments for service providers ***");
         System.out.print("Enter service provider Id> ");
-        
-        try{
+
+        try {
             Long serviceProviderId = sc.nextLong();
             ServiceProviderEntity currentServiceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
-            List<AppointmentEntity> appointments = currentServiceProviderEntity.getAppointments();
-            if(appointments.size() >0) {
-            for(AppointmentEntity appointment: appointments ) {
-                System.out.println(appointment);
-            }
+            List<AppointmentEntity> appointments = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity);
+            if (appointments.isEmpty()) {
+                System.out.println("No current appointments.");
             } else {
-                System.out.println("No apppointments booked!");
+                for (AppointmentEntity appointment : appointments) {
+                    System.out.println(appointment);
+                }
             }
-        }catch (ServiceProviderNotFoundException ex){
-               System.out.println("Service Provider does not exist!");
+            while (true) {
+                System.out.println("Enter 0 to go back to the previous menu");
+                Integer response = sc.nextInt();
+                if (response == 0) {
+                    break;
+                } else {
+                    System.out.println("invalid input!");
+                }
+            }
+        } catch (ServiceProviderNotFoundException | InputMismatchException | NullPointerException ex) {
+            System.out.println("Service Providers does not exist!");
         }
     }
-    
 
-    public void viewListOfProviders(){
-        try{
-       List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveListOfServiceProviders();
-       for(ServiceProviderEntity value: serviceProviders ) {
-           System.out.println(value.toString());
-       }
-        }catch (ServiceProviderNotFoundException ex){
-               System.out.println("Service Providers does not exist!");
-               }
+    public void viewListOfProviders() {
+        System.out.println("*** Admin terminal :: View service provider ***");
+        System.out.println("List of service providers: ");
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            try {
+                List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveListOfServiceProviders();
+                for (ServiceProviderEntity serviceProvider : serviceProviders) {
+                    System.out.println(serviceProvider);
+                }
+                System.out.println("Enter 0 to go back to the previous menu.");
+                int response = sc.nextInt();
+                if (response == 0L) {
+                    break;
+                } else {
+                    System.out.println("Wrong input!");
+                }
+            } catch (ServiceProviderNotFoundException | InputMismatchException ex) {
+                System.out.println("Service Providers does not exist!");
+            }
+        }
     }
 
     public void approveProvider() {
         Scanner sc = new Scanner(System.in);
         System.out.println("*** Admin terminal :: Approve service provider ***");
-        System.out.println("List of service providers with pending approval");
-        while (true) {           
-           
+        System.out.println("List of service providers with pending approval:");
+
         try {
             List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveListOfServiceProvidersWithPendingApproval();
-            for(ServiceProviderEntity serviceProvider: serviceProviders ) {
-            System.out.println(serviceProvider);
+            for (ServiceProviderEntity serviceProvider : serviceProviders) {
+                System.out.println(serviceProvider);
             }
-            System.out.println("Enter 0 to go back to the previous menu.");
-            System.out.println("Enter service provider  Id> ");
-            Long serviceProviderId = sc.nextLong();
-            ServiceProviderEntity currentServiceProvider = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
-            currentServiceProvider.setStatus(ServiceProviderStatus.APPROVE);
-            serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
+
+            while (true) {
+                System.out.println("Enter 0 to go back to the previous menu.");
+                System.out.print("Enter service provider  Id> ");
+                Long serviceProviderId = sc.nextLong();
+                if (serviceProviderId == 0L) {
+                    break;
+                } else {
+
+                    ServiceProviderEntity currentServiceProvider = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
+                    currentServiceProvider.setStatus(ServiceProviderStatus.APPROVE);
+                    serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
+                }
+            }
         } catch (ServiceProviderNotFoundException | InputMismatchException ex) {
             System.out.println("Service Providers does not exist!");
         }
     }
-    }
-        
 
     public void blockProvider() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         Scanner sc = new Scanner(System.in);
+        System.out.println("*** Admin terminal :: Block service provider ***");
+        System.out.println("List of service providers :");
+
+        try {
+            List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveListOfServiceProvidersNotBlocked();
+            for (ServiceProviderEntity serviceProvider : serviceProviders) {
+                System.out.println(serviceProvider);
+            }
+
+            while (true) {
+                System.out.println("Enter 0 to go back to the previous menu.");
+                System.out.print("Enter service provider  Id> ");
+                Long serviceProviderId = sc.nextLong();
+                if (serviceProviderId == 0L) {
+                    break;
+                } else {
+
+                    ServiceProviderEntity currentServiceProvider = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
+                    currentServiceProvider.setStatus(ServiceProviderStatus.BLOCK);
+                    serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
+                }
+            }
+        } catch (ServiceProviderNotFoundException | InputMismatchException ex) {
+            System.out.println("Service Providers does not exist!");
+        }
     }
-    
+
 }

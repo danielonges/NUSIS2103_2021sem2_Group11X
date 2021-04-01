@@ -11,6 +11,7 @@ import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.CustomerEntity;
+import java.util.InputMismatchException;
 import util.exception.AppointmentNotFoundException;
 import java.util.List;
 import java.util.Scanner;
@@ -21,11 +22,12 @@ import util.exception.CustomerNotFoundException;
  * @author leele
  */
 public class CustomerModule {
+
     private AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
-    
+
     CustomerModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
@@ -37,21 +39,28 @@ public class CustomerModule {
         Scanner sc = new Scanner(System.in);
         System.out.println("*** Admin terminal :: View Appointments for customers ***");
         System.out.print("Enter customer Id> ");
-        
-        try{
-            Long customerId = sc.nextLong();       
+
+        try {
+            Long customerId = sc.nextLong();
             List<AppointmentEntity> appointments = customerEntitySessionBeanRemote.retrieveCustomerAppointments(customerId);
-            if(appointments.size() >0) {
-            for(AppointmentEntity appointment: appointments ) {
-                System.out.println(appointment);
-            }
+            if (appointments.isEmpty()) {
+                System.out.println("No current appointments.");
             } else {
-                System.out.println("No apppointments booked!");
+                for (AppointmentEntity appointment : appointments) {
+                    System.out.println(appointment);
+                }
             }
-        }catch (CustomerNotFoundException ex){
-               System.out.println("Customer does not exist!");
+            while (true) {
+                System.out.println("Enter 0 to go back to the previous menu");
+                Integer response = sc.nextInt();
+                if (response == 0) {
+                    break;
+                } else {
+                    System.out.println("invalid input!");
+                }
+            }
+        } catch (CustomerNotFoundException | InputMismatchException ex) {
+            System.out.println("Customer does not exist!");
         }
     }
-    }
-    
-
+}

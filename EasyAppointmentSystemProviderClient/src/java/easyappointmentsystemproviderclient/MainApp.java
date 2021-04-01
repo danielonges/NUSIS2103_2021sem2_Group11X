@@ -23,6 +23,7 @@ import java.util.Scanner;
 import util.enumeration.ServiceProviderStatus;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
 //import util.exception.InvalidRegistrationException;
+
 /**
  *
  * @author meleenoob
@@ -74,8 +75,8 @@ public class MainApp {
                     try {
                         doLogin();
                         System.out.println("Login successful!\n");
-                        profileModule = new ProfileModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote,currentServiceProviderEntity);
-                        appointmentModule = new AppointmentModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote,currentServiceProviderEntity);
+                        profileModule = new ProfileModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, currentServiceProviderEntity);
+                        appointmentModule = new AppointmentModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, currentServiceProviderEntity);
                         //insert module here
                         menuMain();
                     } catch (InvalidLoginException ex) {
@@ -96,14 +97,14 @@ public class MainApp {
 
     private void doRegister() throws InvalidRegistrationException {
         Scanner scanner = new Scanner(System.in);
-        
+
         System.out.println("*** Service Provider Terminal :: Registration Operation ***\n");
         System.out.print("Enter Name> ");
         String name = scanner.nextLine().trim();
         List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
         int sizeOfBusinessCategoryList = businessCategoryEntities.size();
         for (int i = 0; i < sizeOfBusinessCategoryList - 1; i++) {
-            System.out.printf( businessCategoryEntities.get(i).getId().toString() + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
+            System.out.printf(businessCategoryEntities.get(i).getId().toString() + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
         }
         System.out.println(businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getId().toString() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
         System.out.print("Enter Business Category> ");

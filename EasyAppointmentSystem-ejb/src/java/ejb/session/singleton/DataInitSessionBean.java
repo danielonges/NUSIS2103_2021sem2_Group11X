@@ -40,30 +40,26 @@ public class DataInitSessionBean {
 
     @EJB(name = "AdminEntitySessionBeanLocal")
     private AdminEntitySessionBeanLocal adminEntitySessionBeanLocal;
-    
-    
-    
+
     @PostConstruct
     public void postConstruct() {
-        if(em.find(AdminEntity.class,1L) == null) {
-        adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Leonard","leonard@gmail.com","password"));
-        adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Zikun","zikun@gmail.com","password"));
-        adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Daniel","daniel@gmail.com","password"));
-        
+        if (em.find(AdminEntity.class, 1L) == null) {
+            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Leonard", "leonard@gmail.com", "password"));
+            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Zikun", "zikun@gmail.com", "password"));
+            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Daniel", "daniel@gmail.com", "password"));
+
         }
-        if(em.find(BusinessCategoryEntity.class,1L) == null) {
+        if (em.find(BusinessCategoryEntity.class, 1L) == null) {
             businessCategorySessionBeanLocal.createBusinessCategoryEntity(new BusinessCategoryEntity("Health"));
             businessCategorySessionBeanLocal.createBusinessCategoryEntity(new BusinessCategoryEntity("Fashion"));
             businessCategorySessionBeanLocal.createBusinessCategoryEntity(new BusinessCategoryEntity("Education"));
         }
-      /*  if(em.find(AppointmentEntity.class,1L) == null) {
+        /*  if(em.find(AppointmentEntity.class,1L) == null) {
            appointmentEntitySessionBeanLocal.createAppointmentEntity(new AppointmentEntity())
         }*/
     }
 }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-
-    
+// Add business logic below. (Right-click in editor and choose
+// "Insert Code > Add Business Method")
 

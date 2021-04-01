@@ -27,7 +27,7 @@ public class ProfileModule {
     public ProfileModule() {
     }
 
-    public ProfileModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote,ServiceProviderEntity currentServiceProviderEntity) {
+    public ProfileModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, ServiceProviderEntity currentServiceProviderEntity) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
@@ -119,7 +119,5 @@ public class ProfileModule {
         }
 
     }
-    
-    
-    
+
 }

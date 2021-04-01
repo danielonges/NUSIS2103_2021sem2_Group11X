@@ -51,3 +51,4 @@ EasyAppointmentSystemLibrary/dist/
 hs_err_pid*
 /EasyAppointmentSystemProviderClient/nbproject/private/
 /EasyAppointmentSystemCustomerClient/nbproject/private/
+EasyAppointmentSystem-ejb/nbproject/private/private.xml

@@ -25,5 +25,7 @@ public interface ServiceProviderEntitySessionBeanLocal {
 
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException;
 
-    public List<AppointmentEntity> retrieveListOfAppointments(ServiceProviderEntity serviceProviderEntity);
+    public List<AppointmentEntity> retrieveListOfAppointments(ServiceProviderEntity serviceProviderEntity) throws ServiceProviderNotFoundException;
+
+    public List<ServiceProviderEntity> retrieveListOfServiceProvidersNotBlocked() throws ServiceProviderNotFoundException;
 }
