@@ -104,6 +104,20 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     }
     
     @Override
+    public List<ServiceProviderEntity> retrieveServiceProviderByCategoryAndCity(String category, String city) throws ServiceProviderNotFoundException {
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.businessCategory = :businessCategory AND s.city = :city AND s.status = :status");
+        query.setParameter("businessCategory", category);
+        query.setParameter("city", city);
+        query.setParameter("status", ServiceProviderStatus.APPROVE);
+
+        try {
+            return (List<ServiceProviderEntity>) query.getResultList();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new ServiceProviderNotFoundException("");
+        }
+    }
+    
+    @Override
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException {
         Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s where s.status = :status");
         query.setParameter("status", ServiceProviderStatus.PENDING);
@@ -118,4 +132,10 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     public List<AppointmentEntity> retrieveListOfAppointments(ServiceProviderEntity serviceProviderEntity) {
         return serviceProviderEntity.getAppointments();
     }
+    
+    public void updateServiceProviderRating(Long providerId, Integer rating) throws ServiceProviderNotFoundException {
+        // TODO: implement logic
+        // need to update ServiceProvider such that the average rating is captured!
+    }
+    
 }

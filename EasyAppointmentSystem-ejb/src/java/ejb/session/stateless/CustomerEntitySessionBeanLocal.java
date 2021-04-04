@@ -5,6 +5,7 @@ import entity.CustomerEntity;
 import java.util.List;
 import util.exception.AppointmentNotFoundException;
 import util.exception.CustomerNotFoundException;
+import util.exception.InvalidLoginException;
 
 public interface CustomerEntitySessionBeanLocal {
     
@@ -17,5 +18,8 @@ public interface CustomerEntitySessionBeanLocal {
     public void deleteCustomerEntity(Long customerId) throws CustomerNotFoundException;
 
     public List<AppointmentEntity> retrieveCustomerAppointments(Long customerId) throws CustomerNotFoundException;
+    
+    public CustomerEntity customerLogin(String email, String password) throws InvalidLoginException;
 
+    public CustomerEntity retrieveCustomerByEmail(String email) throws CustomerNotFoundException;
 }

@@ -8,9 +8,11 @@ package ejb.session.singleton;
 import ejb.session.stateless.AdminEntitySessionBeanLocal;
 import ejb.session.stateless.AppointmentEntitySessionBeanLocal;
 import ejb.session.stateless.BusinessCategorySessionBeanLocal;
+import ejb.session.stateless.CustomerEntitySessionBeanLocal;
 import entity.AdminEntity;
 import entity.AppointmentEntity;
 import entity.BusinessCategoryEntity;
+import entity.CustomerEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -41,6 +43,9 @@ public class DataInitSessionBean {
     @EJB(name = "AdminEntitySessionBeanLocal")
     private AdminEntitySessionBeanLocal adminEntitySessionBeanLocal;
     
+    @EJB(name = "CustomerEntitySessionBeanLocal")
+    private CustomerEntitySessionBeanLocal customerEntitySessionBeanLocal;
+    
     
     
     @PostConstruct
@@ -59,6 +64,10 @@ public class DataInitSessionBean {
       /*  if(em.find(AppointmentEntity.class,1L) == null) {
            appointmentEntitySessionBeanLocal.createAppointmentEntity(new AppointmentEntity())
         }*/
+      
+        if (em.find(CustomerEntity.class, 1L) == null) {
+            customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("S1234567A", "John", "Doe", 'M', 20, "62353535", "10 Heng Mui Keng Terrace", "Singapore", "johndoe@gmail.com", "password"));
+        }
     }
 }
 

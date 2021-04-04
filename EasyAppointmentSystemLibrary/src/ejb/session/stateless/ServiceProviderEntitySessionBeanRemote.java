@@ -25,4 +25,8 @@ public interface ServiceProviderEntitySessionBeanRemote {
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException;
 
     public List<AppointmentEntity> retrieveListOfAppointments(ServiceProviderEntity serviceProviderEntity);
+
+    public List<ServiceProviderEntity> retrieveServiceProviderByCategoryAndCity(String category, String city) throws ServiceProviderNotFoundException;
+
+    public void updateServiceProviderRating(Long providerId, Integer rating) throws ServiceProviderNotFoundException;
 }
