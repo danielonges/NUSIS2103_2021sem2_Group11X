@@ -42,8 +42,8 @@ public class ServiceProviderModule {
 
         try {
             Long serviceProviderId = sc.nextLong();
-            ServiceProviderEntity currentServiceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
-            List<AppointmentEntity> appointments = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity);
+            ServiceProviderEntity currentServiceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(serviceProviderId);
+            List<AppointmentEntity> appointments = currentServiceProviderEntity.getAppointments();
             if (appointments.isEmpty()) {
                 System.out.println("No current appointments.");
             } else {

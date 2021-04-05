@@ -128,9 +128,29 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
             throw new ServiceProviderNotFoundException("Service Providers does not exist!");
         }
     }
+    
+    public List<ServiceProviderEntity> retrieveListOfServiceProvidersNotBlocked() throws ServiceProviderNotFoundException {
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s where s.status != :status");
+        query.setParameter("status", ServiceProviderStatus.PENDING);
+
+        try {
+            return (List<ServiceProviderEntity>) query.getResultList();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new ServiceProviderNotFoundException("Service Providers does not exist!");
+        }
+    }
+    
     @Override
-    public List<AppointmentEntity> retrieveListOfAppointments(ServiceProviderEntity serviceProviderEntity) {
-        return serviceProviderEntity.getAppointments();
+    public ServiceProviderEntity retrieveListOfAppointments(Long serviceProviderId) throws ServiceProviderNotFoundException{
+        ServiceProviderEntity currentServiceProviderEntity = em.find(ServiceProviderEntity.class,serviceProviderId);
+        currentServiceProviderEntity.getAppointments().size();
+        return currentServiceProviderEntity;
+    }
+    
+    @Override
+    public ServiceProviderEntity retrieveListOfAppointmentsByProvider(ServiceProviderEntity currentServiceProviderEntity) throws ServiceProviderNotFoundException{
+        currentServiceProviderEntity.getAppointments().size();
+        return currentServiceProviderEntity;
     }
     
     public void updateServiceProviderRating(Long providerId, Integer rating) throws ServiceProviderNotFoundException {

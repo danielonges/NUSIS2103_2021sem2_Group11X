@@ -24,11 +24,15 @@ public interface ServiceProviderEntitySessionBeanLocal {
     public List<ServiceProviderEntity> retrieveListOfServiceProviders() throws ServiceProviderNotFoundException;
 
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException;
-
-    public List<AppointmentEntity> retrieveListOfAppointments(ServiceProviderEntity serviceProviderEntity);
     
     public List<ServiceProviderEntity> retrieveServiceProviderByCategoryAndCity(String category, String city) throws ServiceProviderNotFoundException;
 
     public void updateServiceProviderRating(Long providerId, Integer rating) throws ServiceProviderNotFoundException;
+
+    public List<ServiceProviderEntity> retrieveListOfServiceProvidersNotBlocked() throws ServiceProviderNotFoundException;
+
+    public ServiceProviderEntity retrieveListOfAppointments(Long serviceProviderId) throws ServiceProviderNotFoundException;
+
+    public ServiceProviderEntity retrieveListOfAppointmentsByProvider(ServiceProviderEntity currentServiceProviderEntity) throws ServiceProviderNotFoundException;
 
 }

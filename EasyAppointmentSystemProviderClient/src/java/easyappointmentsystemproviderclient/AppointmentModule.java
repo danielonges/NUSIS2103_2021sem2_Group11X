@@ -45,8 +45,8 @@ public class AppointmentModule {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Service provider terminal :: View Appointments ***\n");
         try {
-            List<AppointmentEntity> appointmentEntities = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity);
-
+            ServiceProviderEntity newServiceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointmentsByProvider(currentServiceProviderEntity);
+            List<AppointmentEntity> appointmentEntities = newServiceProviderEntity.getAppointments();
             if (appointmentEntities.isEmpty()) {
                 System.out.println("No current appointments.");
             } else {
@@ -67,8 +67,10 @@ public class AppointmentModule {
                 }
 
             }
-        } catch (ServiceProviderNotFoundException | InputMismatchException ex) {
+        } catch (ServiceProviderNotFoundException ex)  {
             System.out.println("Service provider not found!");
+        }catch (InputMismatchException ex) {
+            System.out.println("Wrong inputs!");
         }
     }
 
@@ -77,7 +79,8 @@ public class AppointmentModule {
         System.out.println("*** Service provider terminal :: Cancel Appointments ***\n");
         // the following code is the same as viewAppointment()
         try {
-        List<AppointmentEntity> appointmentEntities = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity);
+            ServiceProviderEntity newServiceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointmentsByProvider(currentServiceProviderEntity);
+        List<AppointmentEntity> appointmentEntities = newServiceProviderEntity.getAppointments();
 
         if (appointmentEntities.isEmpty()) {
             System.out.println("No current appointments.");
