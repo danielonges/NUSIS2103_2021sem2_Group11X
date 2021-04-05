@@ -50,7 +50,7 @@ public class CustomerEntity implements Serializable {
     @Column(nullable = false)
     private String password;
     
-    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer")
     private List<AppointmentEntity> appointments;
    
     public CustomerEntity() {

@@ -39,11 +39,11 @@ public class AppointmentEntity implements Serializable {
 
     private Boolean isCancelled;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private CustomerEntity customer;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private ServiceProviderEntity serviceProvider;
 

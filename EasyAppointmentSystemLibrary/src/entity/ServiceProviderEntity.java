@@ -55,7 +55,7 @@ public class ServiceProviderEntity implements Serializable {
     private boolean isCancelled;
     
    
-    @OneToMany(mappedBy = "serviceProvider",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "serviceProvider")
     private List<AppointmentEntity> appointments;
 
     public ServiceProviderEntity() {
