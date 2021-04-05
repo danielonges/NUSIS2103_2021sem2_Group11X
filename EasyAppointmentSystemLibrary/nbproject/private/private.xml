@@ -6,17 +6,9 @@
         <group/>
 =======
         <group>
-<<<<<<< HEAD
-            <file>file:/Users/danielonges/NetBeansProjects/EasyAppointmentSystem/EasyAppointmentSystemLibrary/src/entity/AppointmentEntity.java</file>
-            <file>file:/Users/danielonges/NetBeansProjects/EasyAppointmentSystem/EasyAppointmentSystemLibrary/src/entity/AdminEntity.java</file>
-            <file>file:/Users/danielonges/NetBeansProjects/EasyAppointmentSystem/EasyAppointmentSystemLibrary/src/entity/BusinessCategoryEntity.java</file>
+            <file>file:/Users/danielonges/NetBeansProjects/EasyAppointmentSystem/EasyAppointmentSystemLibrary/src/ejb/session/stateless/ServiceProviderEntitySessionBeanRemote.java</file>
             <file>file:/Users/danielonges/NetBeansProjects/EasyAppointmentSystem/EasyAppointmentSystemLibrary/src/entity/ServiceProviderEntity.java</file>
             <file>file:/Users/danielonges/NetBeansProjects/EasyAppointmentSystem/EasyAppointmentSystemLibrary/src/entity/CustomerEntity.java</file>
-=======
-            <file>file:/C:/Users/meleenoob/git/NUSIS2103_2021sem2_Group11X/EasyAppointmentSystemLibrary/src/entity/AppointmentEntity.java</file>
-            <file>file:/C:/Users/meleenoob/git/NUSIS2103_2021sem2_Group11X/EasyAppointmentSystemLibrary/src/entity/ServiceProviderEntity.java</file>
-            <file>file:/C:/Users/meleenoob/git/NUSIS2103_2021sem2_Group11X/EasyAppointmentSystemLibrary/src/ejb/session/stateless/ServiceProviderEntitySessionBeanRemote.java</file>
->>>>>>> bf361cd21f4ef1ed8a3b2fccd96bebaf68432c49
         </group>
 >>>>>>> master
     </open-files>
