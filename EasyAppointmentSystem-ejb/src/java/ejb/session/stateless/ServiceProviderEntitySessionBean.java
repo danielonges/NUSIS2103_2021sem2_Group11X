@@ -93,7 +93,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     @Override
     public List<ServiceProviderEntity> retrieveListOfServiceProviders() throws ServiceProviderNotFoundException {
 
-        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s", ServiceProviderEntity.class);
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s ORDER BY s.providerId", ServiceProviderEntity.class);
 
         try {
             return (List<ServiceProviderEntity>) query.getResultList();
@@ -119,7 +119,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     
     @Override
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException {
-        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s where s.status = :status");
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.status = :status");
         query.setParameter("status", ServiceProviderStatus.PENDING);
 
         try {
@@ -130,7 +130,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     }
     
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersNotBlocked() throws ServiceProviderNotFoundException {
-        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s where s.status != :status");
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.status != :status");
         query.setParameter("status", ServiceProviderStatus.PENDING);
 
         try {
@@ -147,11 +147,12 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         return currentServiceProviderEntity;
     }
     
-    @Override
-    public ServiceProviderEntity retrieveListOfAppointmentsByProvider(ServiceProviderEntity currentServiceProviderEntity) throws ServiceProviderNotFoundException{
-        currentServiceProviderEntity.getAppointments().size();
-        return currentServiceProviderEntity;
-    }
+//    public ServiceProviderEntity retrieveListOfPendingAppointments (Long serviceProviderId) throws ServiceProviderNotFoundException{
+//        ServiceProviderEntity currentServiceProviderEntity = em.find(ServiceProviderEntity.class,serviceProviderId);
+//        
+//        Query query = em.createQuery("SELECT a FROM AppointmentEntity a WHERE a.serviceProvider =: serviceProvider AND a.isCancelled = 'FALSE'")
+//    }
+    
     
     public void updateServiceProviderRating(Long providerId, Integer rating) throws ServiceProviderNotFoundException {
         // TODO: implement logic

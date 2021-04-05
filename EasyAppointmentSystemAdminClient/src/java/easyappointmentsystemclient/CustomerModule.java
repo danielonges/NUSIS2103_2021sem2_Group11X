@@ -42,7 +42,8 @@ public class CustomerModule {
 
         try {
             Long customerId = sc.nextLong();
-            List<AppointmentEntity> appointments = customerEntitySessionBeanRemote.retrieveCustomerAppointments(customerId);
+            CustomerEntity currentCustomerEntity = customerEntitySessionBeanRemote.retrieveCustomerAppointments(customerId);
+            List<AppointmentEntity> appointments = currentCustomerEntity.getAppointments();
             if (appointments.isEmpty()) {
                 System.out.println("No current appointments.");
             } else {

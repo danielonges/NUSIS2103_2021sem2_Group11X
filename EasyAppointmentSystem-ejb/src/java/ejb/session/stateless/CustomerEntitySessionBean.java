@@ -76,11 +76,12 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     
     
     @Override
-    public List<AppointmentEntity> retrieveCustomerAppointments (Long customerId) throws CustomerNotFoundException {
+    public CustomerEntity retrieveCustomerAppointments (Long customerId) throws CustomerNotFoundException {
         try {
-            CustomerEntity currentCustomerEntity = retrieveCustomerEntityByCustomerId(customerId);
-            return currentCustomerEntity.getAppointments();
-        } catch (CustomerNotFoundException | NullPointerException ex) {
+            CustomerEntity currentCustomerEntity = em.find(CustomerEntity.class,customerId);
+            currentCustomerEntity.getAppointments().size();
+            return currentCustomerEntity;
+        } catch (NoResultException | NullPointerException ex) {
             throw new CustomerNotFoundException("Customer not found!");
         } 
     }    

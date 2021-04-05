@@ -66,8 +66,8 @@ public class CustomerAppointmentWebService {
             throws CustomerNotFoundException, InvalidLoginException {
         // authentication needs to be performed
         CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
-
-        List<AppointmentEntity> appointmentEntities = customerEntitySessionBeanLocal.retrieveCustomerAppointments(customerEntity.getCustomerId());
+        CustomerEntity newCustomerEntity = customerEntitySessionBeanLocal.retrieveCustomerAppointments(customerEntity.getCustomerId());
+        List<AppointmentEntity> appointmentEntities = newCustomerEntity.getAppointments();
         return appointmentEntities;
     }
 

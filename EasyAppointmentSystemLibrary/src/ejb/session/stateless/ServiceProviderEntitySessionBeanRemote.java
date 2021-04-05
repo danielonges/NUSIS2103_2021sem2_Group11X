@@ -32,5 +32,5 @@ public interface ServiceProviderEntitySessionBeanRemote {
     
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersNotBlocked() throws ServiceProviderNotFoundException;
     
-    public ServiceProviderEntity retrieveListOfAppointmentsByProvider(ServiceProviderEntity currentServiceProviderEntity) throws ServiceProviderNotFoundException;
+    
 }

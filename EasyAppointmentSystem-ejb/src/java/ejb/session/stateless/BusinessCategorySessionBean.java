@@ -59,7 +59,7 @@ public class BusinessCategorySessionBean implements BusinessCategorySessionBeanR
 
     @Override
     public List<BusinessCategoryEntity> retrieveAllBusinessCategories() {
-        Query query = em.createQuery("SELECT s FROM BusinessCategoryEntity s");
+        Query query = em.createQuery("SELECT s FROM BusinessCategoryEntity s ORDER BY s.id");
         return query.getResultList();
     }
 
@@ -71,6 +71,11 @@ public class BusinessCategorySessionBean implements BusinessCategorySessionBeanR
         } catch (BusinessCategoryNotFoundException ex) {
             throw new BusinessCategoryNotFoundException("Business Category not found!");
         }
+    }
+    
+     public void updateBusinessCategoryEntity(BusinessCategoryEntity businessCategoryEntity) {
+        // TODO: implement checking for null
+        em.merge(businessCategoryEntity);
     }
 
     // Add business logic below. (Right-click in editor and choose

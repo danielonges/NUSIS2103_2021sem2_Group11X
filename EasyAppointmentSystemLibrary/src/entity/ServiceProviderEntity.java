@@ -18,6 +18,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
 import static util.enumeration.ServiceProviderStatus.PENDING;
@@ -45,8 +46,7 @@ public class ServiceProviderEntity implements Serializable {
     private String password;
     @Column(nullable = false, unique = true)
     private String businessRegNum;
-    @Column(nullable = false)
-    private String businessCategory;
+    
     @Enumerated (EnumType.STRING)
     private ServiceProviderStatus status;
     private int overallRating;
@@ -57,6 +57,9 @@ public class ServiceProviderEntity implements Serializable {
    
     @OneToMany(mappedBy = "serviceProvider")
     private List<AppointmentEntity> appointments;
+    
+    @ManyToOne
+    private BusinessCategoryEntity businessCategoryEntity;
 
     public ServiceProviderEntity() {
         appointments = new ArrayList<>();
@@ -64,14 +67,13 @@ public class ServiceProviderEntity implements Serializable {
         
     }
 
-    public ServiceProviderEntity(String name, String address, String city, String email, String password, String businessRegNum, String businessCategory, ServiceProviderStatus status, int overallRating, String phone) {
+    public ServiceProviderEntity(String name, String address, String city, String email, String password, String businessRegNum, ServiceProviderStatus status, int overallRating, String phone) {
         this.name = name;
         this.address = address;
         this.city = city;
         this.email = email;
         this.password = password;
         this.businessRegNum = businessRegNum;
-        this.businessCategory = businessCategory;
         this.status = status;
         this.overallRating = overallRating;
         this.phone = phone;
@@ -145,13 +147,7 @@ public class ServiceProviderEntity implements Serializable {
         this.businessRegNum = businessRegNum;
     }
 
-    public String getBusinessCategory() {
-        return businessCategory;
-    }
-
-    public void setBusinessCategory(String businessCategory) {
-        this.businessCategory = businessCategory;
-    }
+  
 
     public ServiceProviderStatus getStatus() {
         return status;
@@ -212,8 +208,22 @@ public class ServiceProviderEntity implements Serializable {
     
     @Override
     public String toString() {
-        return this.providerId + " | " + this.name + " | " + this.businessCategory + " | " + this.businessRegNum + " | "
+        return this.providerId + " | " + this.name + " | " + this.getBusinessCategory() + " | " + this.businessRegNum + " | "
                 + this.city + " | " + this.address + " | " + this.email + " | " + this.phone;
+    }
+
+    /**
+     * @return the businessCategory
+     */
+    public BusinessCategoryEntity getBusinessCategory() {
+        return businessCategoryEntity;
+    }
+
+    /**
+     * @param businessCategory the businessCategory to set
+     */
+    public void setBusinessCategory(BusinessCategoryEntity businessCategory) {
+        this.businessCategoryEntity = businessCategory;
     }
     
     

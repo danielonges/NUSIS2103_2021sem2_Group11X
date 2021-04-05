@@ -11,6 +11,7 @@ import ejb.session.stateless.BusinessCategorySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AdminEntity;
+import java.util.InputMismatchException;
 import util.exception.InvalidLoginException;
 import java.util.Scanner;
 
@@ -47,37 +48,43 @@ public class MainApp {
         Integer response = 0;
 
         while (true) {
+            try{
             System.out.println("*** Welcome to Admin terminal ***\n");
             System.out.println("1: Login");
             System.out.println("2: Exit\n");
             response = 0;
             while (response < 1 || response > 2) {
                 System.out.print("> ");
+                
+                    response = Integer.parseInt(scanner.nextLine());
 
-                response = scanner.nextInt();
-
-                if (response == 1) {
-                    try {
-                        doLogin();
-                        System.out.println("Login successful!\n");
-                        customerModule = new CustomerModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
-                        serviceProviderModule = new ServiceProviderModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
-                        adminModule = new AdminModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, businessCategorySessionBeanRemote);
-                        menuMain();
-                    } catch (InvalidLoginException ex) {
-                        System.out.println("Invalid login");
+                    if (response == 1) {
+                        try {
+                            doLogin();
+                            System.out.println("Login successful!\n");
+                            customerModule = new CustomerModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
+                            serviceProviderModule = new ServiceProviderModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
+                            adminModule = new AdminModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, businessCategorySessionBeanRemote);
+                            menuMain();
+                        } catch (InvalidLoginException ex) {
+                            System.out.println("Invalid login");
+                        }
+                    } else if (response == 2) {
+                        break;
+                    } else {
+                        System.out.println("Invalid option, please try again!\n");
                     }
-                } else if (response == 2) {
-                    break;
-                } else {
-                    System.out.println("Invalid option, please try again!\n");
-                }
-            }
+                } 
+            
             if (response == 2) {
                 break;
             }
 
-        }
+        }catch (NumberFormatException ex) {
+                    System.out.println("Wrong inputs!");
+                    
+                }
+    }
     }
 
     private void doLogin() throws InvalidLoginException {

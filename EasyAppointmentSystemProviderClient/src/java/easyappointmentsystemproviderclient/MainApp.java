@@ -55,7 +55,7 @@ public class MainApp {
         Integer response = 0;
 
         while (true) {
-            System.out.println("*** Welcome to Service provider terminal ***\n");
+            System.out.println("* Welcome to Service provider terminal *\n");
             System.out.println("1: Registration");
             System.out.println("2: Login");
             System.out.println("3: Exit\n");
@@ -98,7 +98,7 @@ public class MainApp {
     private void doRegister() throws InvalidRegistrationException {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("*** Service Provider Terminal :: Registration Operation ***\n");
+        System.out.println("* Service Provider Terminal :: Registration Operation *\n");
         System.out.print("Enter Name> ");
         String name = scanner.nextLine().trim();
         List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
@@ -111,7 +111,7 @@ public class MainApp {
         int businessCategoryId = scanner.nextInt();
         scanner.nextLine();
         businessCategoryId--; //the actual index in the list
-        String businessCategory = businessCategoryEntities.get(businessCategoryId).getCategory();
+        BusinessCategoryEntity businessCategory = businessCategoryEntities.get(businessCategoryId);       
         System.out.print("Enter Business Registration Number> ");
         String businessRegistrationNum = scanner.nextLine().trim();
         System.out.print("Enter City> ");
@@ -119,7 +119,7 @@ public class MainApp {
         System.out.print("Enter Phone> ");
         String phone = scanner.nextLine().trim();
         System.out.print("Enter Business Address> ");
-        String businessAddress = scanner.nextLine().trim();
+        String businessAddress = scanner.nextLine().trim();        
         System.out.print("Enter Email> ");
         String email = scanner.nextLine().trim();
         System.out.print("Enter Password> ");
@@ -128,6 +128,7 @@ public class MainApp {
             ServiceProviderEntity newServiceProviderEntity = new ServiceProviderEntity();
             newServiceProviderEntity.setName(name);
             newServiceProviderEntity.setBusinessCategory(businessCategory);
+            businessCategory.getServiceProviders().add(newServiceProviderEntity);
             newServiceProviderEntity.setBusinessRegNum(businessRegistrationNum);
             newServiceProviderEntity.setCity(city);
             newServiceProviderEntity.setPhone(phone);
@@ -136,6 +137,7 @@ public class MainApp {
             newServiceProviderEntity.setEmail(email);
             newServiceProviderEntity.setPassword(password);
             serviceProviderEntitySessionBeanRemote.createServiceProviderEntity(newServiceProviderEntity);
+            businessCategorySessionBeanRemote.updateBusinessCategoryEntity(businessCategory);
             System.out.println("You have been registered successfully! \n");
             System.out.println("Enter 0 to go back to the previous menu. \n");
             System.out.print("> ");
@@ -158,7 +160,7 @@ public class MainApp {
         Scanner scanner = new Scanner(System.in);
         String email = "";
         String password = "";
-        System.out.println("*** Service provider terminal :: Login ***\n");
+        System.out.println("* Service provider terminal :: Login *\n");
         System.out.print("Enter Email Address> ");
         email = scanner.nextLine().trim();
         System.out.print("Enter password> ");
@@ -175,7 +177,7 @@ public class MainApp {
         Integer response = 0;
 
         while (true) {
-            System.out.println("*** Service provider terminal :: Main ***\n");
+            System.out.println("* Service provider terminal :: Main *\n");
             System.out.println("You are login as " + currentServiceProviderEntity.getName() + " \n");
             System.out.println("1: View profile");
             System.out.println("2: Edit Profile");

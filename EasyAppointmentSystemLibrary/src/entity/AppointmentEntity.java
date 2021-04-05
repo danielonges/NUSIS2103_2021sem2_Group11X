@@ -35,7 +35,7 @@ public class AppointmentEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     //timestamp   
-    private Boolean isCompleted;
+   
 
     private Boolean isCancelled;
 
@@ -55,7 +55,6 @@ public class AppointmentEntity implements Serializable {
         this.rating = 0;
         this.businessCategory = businessCategory;
         this.date = date;
-        this.isCompleted = false;
         this.isCancelled = false;
         this.customer = customerEntity;
         this.serviceProvider = serviceProviderEntity;
@@ -109,14 +108,7 @@ public class AppointmentEntity implements Serializable {
         this.date = date;
     }
 
-    public Boolean getIsCompleted() {
-        return isCompleted;
-    }
-
-    public void setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
-    }
-
+  
     public CustomerEntity getCustomer() {
         return customer;
     }
