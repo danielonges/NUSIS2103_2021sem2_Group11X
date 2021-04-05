@@ -9,8 +9,11 @@ import entity.BusinessCategoryEntity;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.BusinessCategoryNotFoundException;
 
 /**
  *
@@ -30,9 +33,44 @@ public class BusinessCategorySessionBean implements BusinessCategorySessionBeanR
     }
 
     @Override
+    public BusinessCategoryEntity retrieveBusinessCategoryEntityByBusinessCategoryId(Long businessCategoryId) throws BusinessCategoryNotFoundException {
+        try {
+            BusinessCategoryEntity businessCategoryEntity = em.find(BusinessCategoryEntity.class, businessCategoryId);
+            return businessCategoryEntity;
+        } catch (NoResultException ex) {
+            throw new BusinessCategoryNotFoundException("Customer not found!");
+        }
+        // TODO: implement checking for null
+
+    }
+
+    @Override
+    public BusinessCategoryEntity retrieveBusinessCategoryEntityByName(String businessCategory) throws BusinessCategoryNotFoundException {
+
+        Query query = em.createQuery("SELECT s FROM BusinessCategoryEntity s WHERE s.category = :inCategory");
+        query.setParameter("inCategory", businessCategory);
+
+        try {
+            return (BusinessCategoryEntity) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new BusinessCategoryNotFoundException("Business Category does not exist!");
+        }
+    }
+
+    @Override
     public List<BusinessCategoryEntity> retrieveAllBusinessCategories() {
         Query query = em.createQuery("SELECT s FROM BusinessCategoryEntity s");
         return query.getResultList();
+    }
+
+    @Override
+    public void deleteBusinessCategoryEntity(String businessCategory) throws BusinessCategoryNotFoundException {
+        try {
+            BusinessCategoryEntity businessCategoryEntity = retrieveBusinessCategoryEntityByName(businessCategory);
+            em.remove(businessCategoryEntity);
+        } catch (BusinessCategoryNotFoundException ex) {
+            throw new BusinessCategoryNotFoundException("Business Category not found!");
+        }
     }
 
     // Add business logic below. (Right-click in editor and choose

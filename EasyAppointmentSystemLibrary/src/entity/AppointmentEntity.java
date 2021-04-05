@@ -36,13 +36,15 @@ public class AppointmentEntity implements Serializable {
     private Date date;
     //timestamp   
     private Boolean isCompleted;
-    
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
+
+    private Boolean isCancelled;
+
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private CustomerEntity customer;
-    
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)  
+
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private ServiceProviderEntity serviceProvider;
 
     public AppointmentEntity() {
@@ -54,8 +56,17 @@ public class AppointmentEntity implements Serializable {
         this.businessCategory = businessCategory;
         this.date = date;
         this.isCompleted = false;
+        this.isCancelled = false;
         this.customer = customerEntity;
         this.serviceProvider = serviceProviderEntity;
+    }
+
+    public Boolean getIsCancelled() {
+        return isCancelled;
+    }
+
+    public void setIsCancelled(Boolean isCancelled) {
+        this.isCancelled = isCancelled;
     }
 
     public Long getAppointmentId() {
@@ -141,12 +152,10 @@ public class AppointmentEntity implements Serializable {
         }
         return true;
     }
-    
+
     @Override
-    public String toString(){
-        return(this.customer + "     | " + this.date + "     | " + this.date.getTime() + "  | " + this.appointmentNo + " ");
+    public String toString() {
+        return (this.customer + "     | " + this.date + "     | " + this.date.getTime() + "  | " + this.appointmentNo + " ");
     }
-    
-  
 
 }

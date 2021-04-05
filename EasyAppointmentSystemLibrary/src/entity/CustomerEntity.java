@@ -47,15 +47,17 @@ public class CustomerEntity implements Serializable {
     private String city;
     @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
+    private String password;
     
-    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer")
     private List<AppointmentEntity> appointments;
    
     public CustomerEntity() {
         appointments = new ArrayList<>();
     }
 
-    public CustomerEntity(String identityNum, String firstName, String lastName, Character gender, Integer age, String phone, String address, String city, String email) {
+    public CustomerEntity(String identityNum, String firstName, String lastName, Character gender, Integer age, String phone, String address, String city, String email, String password) {
         this.identityNum = identityNum;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -65,7 +67,16 @@ public class CustomerEntity implements Serializable {
         this.address = address;
         this.city = city;
         this.email = email;
-        appointments = new ArrayList<>();
+        this.password = password;
+        this.appointments = new ArrayList<>();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Long getCustomerId() {
@@ -146,6 +157,10 @@ public class CustomerEntity implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public String getFullName() {
+        return String.format("%s, %s", firstName, lastName);
     }
 
     public List<AppointmentEntity> getAppointments() {

@@ -11,6 +11,7 @@ import ejb.session.stateless.BusinessCategorySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AdminEntity;
+import java.util.InputMismatchException;
 import util.exception.InvalidLoginException;
 import java.util.Scanner;
 
@@ -19,6 +20,7 @@ import java.util.Scanner;
  * @author leele
  */
 public class MainApp {
+
     private AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
@@ -28,20 +30,20 @@ public class MainApp {
     private CustomerModule customerModule;
     private ServiceProviderModule serviceProviderModule;
     private AdminModule adminModule;
-    
+
     public MainApp() {
     }
 
-    public MainApp(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote,CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, 
-            AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote,BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote) {
+    public MainApp(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote,
+            AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
         this.businessCategorySessionBeanRemote = businessCategorySessionBeanRemote;
     }
-    
-     public void runApp() {
+
+    public void runApp() {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
 
@@ -61,7 +63,7 @@ public class MainApp {
                         System.out.println("Login successful!\n");
                         customerModule = new CustomerModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
                         serviceProviderModule = new ServiceProviderModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
-                        adminModule = new AdminModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote,businessCategorySessionBeanRemote);
+                        adminModule = new AdminModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, businessCategorySessionBeanRemote);
                         menuMain();
                     } catch (InvalidLoginException ex) {
                         System.out.println("Invalid login");
@@ -78,21 +80,25 @@ public class MainApp {
 
         }
     }
-     
-     private void doLogin() throws InvalidLoginException {
-        Scanner scanner = new Scanner(System.in);
-        String email = "";
-        String password = "";
-        System.out.println("*** Admin terminal :: Login ***\n");
-        System.out.print("Enter Email Address> ");
-        email = scanner.nextLine().trim();
-        System.out.print("Enter password> ");
-        password = scanner.nextLine().trim();
 
-        if (email.length() > 0 && password.length() > 0) {
-            currentAdminEntity = adminEntitySessionBeanRemote.AdminLogin(email, password);
-        } else {
-            throw new InvalidLoginException("Invalid Login!");
+    private void doLogin() throws InvalidLoginException {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            String email = "";
+            String password = "";
+            System.out.println("*** Admin terminal :: Login ***\n");
+            System.out.print("Enter Email Address> ");
+            email = scanner.nextLine().trim();
+            System.out.print("Enter password> ");
+            password = scanner.nextLine().trim();
+
+            if (email.length() > 0 && password.length() > 0) {
+                currentAdminEntity = adminEntitySessionBeanRemote.AdminLogin(email, password);
+            } else {
+                throw new InvalidLoginException("Invalid Login!");
+            }
+        } catch (InputMismatchException ex) {
+            System.out.println("Wrong input!");
         }
     }
 
@@ -101,60 +107,64 @@ public class MainApp {
         Integer response = 0;
 
         while (true) {
-            System.out.println("*** Service provider terminal :: Main ***\n");
-            System.out.println("You are login as " + currentAdminEntity.getName() + " \n");
-            System.out.println("1: View Appointments for customers");
-            System.out.println("2: View Appointments for service providers");
-            System.out.println("3: View service providers");
-            System.out.println("4: Approve service provider");
-            System.out.println("5: Block service provider");
-            System.out.println("6: Add Business category");
-            System.out.println("7: Remove Business category");
-            System.out.println("8: Send reminder email");
-            System.out.println("9: Logout\n");
-            response = 0;
-            OUTER:
-            while (response < 1 || response > 5) {
-                System.out.print("> ");
-                response = scanner.nextInt();
-                switch (response) {
-                    case 1:
-                        customerModule.viewAppointments();
-                        break;
-                    case 2:
-                        serviceProviderModule.viewAppointments();
-                        break;
-                    case 3:
-                        serviceProviderModule.viewListOfProviders();
-                        break;
-                    case 4:
-                        serviceProviderModule.approveProvider();
-                        break;
-                    case 5:
-                        serviceProviderModule.blockProvider();
-                        break;
-                    case 6:
-                        adminModule.addBusinessCategory();
-                        break;
-                    case 7:
-                        adminModule.removeBusinessCategory();
-                        break;
-                    case 8:
-                        adminModule.sendReminderEmail();
-                        break;
-                    case 9:
-                        break OUTER;
-                    default:
-                        System.out.println("Invalid option, please try again!\n");
-                        break;
+            try {
+                System.out.println("*** Service provider terminal :: Main ***\n");
+                System.out.println("You are login as " + currentAdminEntity.getName() + " \n");
+                System.out.println("1: View Appointments for customers");
+                System.out.println("2: View Appointments for service providers");
+                System.out.println("3: View service providers");
+                System.out.println("4: Approve service provider");
+                System.out.println("5: Block service provider");
+                System.out.println("6: Add Business category");
+                System.out.println("7: Remove Business category");
+                System.out.println("8: Send reminder email");
+                System.out.println("9: Logout\n");
+                response = 0;
+                OUTER:
+                // dan: should it be response > 9?
+                while (response < 1 || response > 5) {
+                    System.out.print("> ");
+                    response = scanner.nextInt();
+                    switch (response) {
+                        case 1:
+                            customerModule.viewAppointments();
+                            break;
+                        case 2:
+                            serviceProviderModule.viewAppointments();
+                            break;
+                        case 3:
+                            serviceProviderModule.viewListOfProviders();
+                            break;
+                        case 4:
+                            serviceProviderModule.approveProvider();
+                            break;
+                        case 5:
+                            serviceProviderModule.blockProvider();
+                            break;
+                        case 6:
+                            adminModule.addBusinessCategory();
+                            break;
+                        case 7:
+                            adminModule.removeBusinessCategory();
+                            break;
+                        case 8:
+                            adminModule.sendReminderEmail();
+                            break;
+                        case 9:
+                            break OUTER;
+                        default:
+                            System.out.println("Invalid option, please try again!\n");
+                            break;
+                    }
                 }
-            }
-            if (response == 9) {
-                break;
+                if (response == 9) {
+                    break;
+                }
+            } catch (NumberFormatException ex) {
+                {
+                    System.out.println("Invalid data type!");
+                }
             }
         }
     }
 }
-    
-    
-

@@ -11,9 +11,11 @@ import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.ServiceProviderEntity;
+import java.util.InputMismatchException;
 import util.exception.AppointmentNotFoundException;
 import java.util.List;
 import java.util.Scanner;
+import util.exception.ServiceProviderNotFoundException;
 
 /**
  *
@@ -39,36 +41,46 @@ public class AppointmentModule {
         this.currentServiceProviderEntity = currentServiceProviderEntity;
     }
 
-    void viewAppointments() throws AppointmentNotFoundException {
+    void viewAppointments() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Service provider terminal :: View Appointments ***\n");
-
-        List<AppointmentEntity> appointmentEntities = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity);
-
-        if (appointmentEntities.isEmpty()) {
-            System.out.println("No current appointments.");
-        } else {
-            for (AppointmentEntity appointment : appointmentEntities) {
-                System.out.println(appointment);
-            }
-        }
-        while (true) {
-            System.out.print("Enter 0 to go back to the previous menu> ");
-            Integer response = scanner.nextInt();
-            if (response == 0) {
-                break;
+        try {
+            ServiceProviderEntity newServiceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity.getProviderId());
+            List<AppointmentEntity> appointmentEntities = newServiceProviderEntity.getAppointments();
+            if (appointmentEntities.isEmpty()) {
+                System.out.println("No current appointments.");
             } else {
-                System.out.println("invalid input!");
+                for (AppointmentEntity appointment : appointmentEntities) {
+                    System.out.println(appointment);
+                }
             }
-        }
+            while (true) {
+                System.out.print("Enter 0 to go back to the previous menu> ");
+                Integer response = scanner.nextInt();
+                if (response == 0) {
+                    break;
 
+                } else {
+                    for (AppointmentEntity appointment : appointmentEntities) {
+                        System.out.println(appointment);
+                    }
+                }
+
+            }
+        } catch (ServiceProviderNotFoundException ex)  {
+            System.out.println("Service provider not found!");
+        }catch (InputMismatchException ex) {
+            System.out.println("Wrong inputs!");
+        }
     }
 
     void cancelAppointment() throws AppointmentNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Service provider terminal :: Cancel Appointments ***\n");
         // the following code is the same as viewAppointment()
-        List<AppointmentEntity> appointmentEntities = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity);
+        try {
+            ServiceProviderEntity newServiceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity.getProviderId());
+        List<AppointmentEntity> appointmentEntities = newServiceProviderEntity.getAppointments();
 
         if (appointmentEntities.isEmpty()) {
             System.out.println("No current appointments.");
@@ -92,5 +104,8 @@ public class AppointmentModule {
                 }
             }
         }
+    } catch (ServiceProviderNotFoundException ex) {
+            System.out.println("Service provider not found");
     }
+}
 }

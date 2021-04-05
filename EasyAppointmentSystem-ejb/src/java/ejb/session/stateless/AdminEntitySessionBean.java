@@ -69,6 +69,7 @@ public class AdminEntitySessionBean implements AdminEntitySessionBeanRemote, Adm
     
     @Override
       public AdminEntity retrieveAdminByEmail(String email) throws AdminNotFoundException {
+          // dan: should it be inEmail instead of inUsername?
         Query query = em.createQuery("SELECT s FROM AdminEntity s WHERE s.username = :inUsername");
         query.setParameter("inUsername", email);
 

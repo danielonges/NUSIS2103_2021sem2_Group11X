@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.AppointmentNotFoundException;
 import util.exception.CustomerNotFoundException;
+import util.exception.InvalidLoginException;
 
 /**
  *
@@ -34,7 +35,7 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     }
     
     @Override
-    public CustomerEntity retrieveCustomerEntityByCustomerId(Long customerId) throws CustomerNotFoundException{
+    public CustomerEntity retrieveCustomerEntityByCustomerId(Long customerId) throws CustomerNotFoundException {
         try {
         CustomerEntity customerEntity = em.find(CustomerEntity.class, customerId);
             return customerEntity;
@@ -43,6 +44,18 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
         }
         // TODO: implement checking for null
         
+    }
+    
+    @Override
+    public CustomerEntity retrieveCustomerByEmail(String email) throws CustomerNotFoundException {
+        Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.email = :inEmail");
+        query.setParameter("inEmail", email);
+
+        try {
+            return (CustomerEntity) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new CustomerNotFoundException("Customer with Email " + email + " does not exist!");
+        }
     }
     
     @Override
@@ -61,6 +74,29 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
         }
     }
     
+    
+    @Override
+    public List<AppointmentEntity> retrieveCustomerAppointments (Long customerId) throws CustomerNotFoundException {
+        try {
+            CustomerEntity currentCustomerEntity = retrieveCustomerEntityByCustomerId(customerId);
+            return currentCustomerEntity.getAppointments();
+        } catch (CustomerNotFoundException | NullPointerException ex) {
+            throw new CustomerNotFoundException("Customer not found!");
+        } 
+    }    
   
+    @Override
+    public CustomerEntity customerLogin(String email, String password) throws InvalidLoginException {
+        try{
+            CustomerEntity customerEntity = retrieveCustomerByEmail(email);
+            if (customerEntity.getPassword().equals(password)) {
+                return customerEntity;
+            } else {
+                throw new InvalidLoginException("Email does not exist or invalid password!");
+            }
+        } catch (CustomerNotFoundException ex) {
+            throw new InvalidLoginException("Email does not exist or invalid password!");
+        }
+    }
     
 }
