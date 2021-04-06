@@ -23,11 +23,15 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import util.exception.AppointmentNotFoundException;
+import util.exception.BusinessCategoryNotFoundException;
 import util.exception.CreateNewAppointmentEntityException;
+import util.exception.CustomerAlreadyExistsException;
 import util.exception.CustomerNotFoundException;
+import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginException;
 import util.exception.ServiceProviderNotFoundException;
 import util.exception.UnauthorisedOperationException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -56,7 +60,8 @@ public class CustomerAppointmentWebService {
     }
 
     @WebMethod(operationName = "registerCustomer")
-    public void registerCustomer(@WebParam(name = "newCustomerEntity") CustomerEntity newCustomerEntity) {
+    public void registerCustomer(@WebParam(name = "newCustomerEntity") CustomerEntity newCustomerEntity)
+            throws CustomerAlreadyExistsException, InputDataValidationException, UnknownPersistenceException {
         customerEntitySessionBeanLocal.createCustomerEntity(newCustomerEntity);
     }
 
@@ -66,16 +71,15 @@ public class CustomerAppointmentWebService {
             throws CustomerNotFoundException, InvalidLoginException {
         // authentication needs to be performed
         CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
-        CustomerEntity newCustomerEntity = customerEntitySessionBeanLocal.retrieveCustomerAppointments(customerEntity.getCustomerId());
-        List<AppointmentEntity> appointmentEntities = newCustomerEntity.getAppointments();
-        return appointmentEntities;
+        customerEntity = customerEntitySessionBeanLocal.retrieveCustomerAppointments(customerEntity.getCustomerId());
+        return customerEntity.getAppointments();
     }
 
-    @WebMethod(operationName = "retrieveServiceProvidersByCategoryAndCity")
-    public List<ServiceProviderEntity> retrieveServiceProvidersByCategoryAndCity(
-            @WebParam(name = "category") String category,
-            @WebParam(name = "city") String city) throws ServiceProviderNotFoundException {
-        List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanLocal.retrieveServiceProviderByCategoryAndCity(category, city);
+    @WebMethod(operationName = "retrieveServiceProvidersByCategoryIdAndCity")
+    public List<ServiceProviderEntity> retrieveServiceProvidersByCategoryIdAndCity(
+            @WebParam(name = "categoryId") Long categoryId,
+            @WebParam(name = "city") String city) throws ServiceProviderNotFoundException, BusinessCategoryNotFoundException {
+        List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanLocal.retrieveServiceProviderByCategoryIdAndCity(categoryId, city);
         return serviceProviders;
     }
 
@@ -83,15 +87,15 @@ public class CustomerAppointmentWebService {
     public void addAppointment(
             @WebParam(name = "email") String email,
             @WebParam(name = "password") String password,
-            @WebParam(name = "serviceProviderEntity") ServiceProviderEntity serviceProviderEntity,
+            @WebParam(name = "providerId") Long providerId,
             @WebParam(name = "newAppointmentEntity") AppointmentEntity newAppointmentEntity)
             throws CustomerNotFoundException, InvalidLoginException, CreateNewAppointmentEntityException {
         // authentication needs to be performed
         CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
 
-        appointmentEntitySessionBeanLocal.createAppointmentEntity(customerEntity.getCustomerId(), serviceProviderEntity.getProviderId(), newAppointmentEntity);
+        appointmentEntitySessionBeanLocal.createAppointmentEntity(customerEntity.getCustomerId(), providerId, newAppointmentEntity);
     }
-    
+
     @WebMethod(operationName = "cancelAppointment")
     public void cancelAppointment(
             @WebParam(name = "email") String email,
@@ -99,12 +103,12 @@ public class CustomerAppointmentWebService {
             @WebParam(name = "appointmentNo") Long appointmentNo)
             throws InvalidLoginException, CustomerNotFoundException, AppointmentNotFoundException, UnauthorisedOperationException {
         // authentication needs to be performed
-        
+
         CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
-        
+
         appointmentEntitySessionBeanLocal.cancelAppointmentByCustomerId(customerEntity.getCustomerId(), appointmentNo);
     }
-    
+
     @WebMethod(operationName = "rateServiceProvider")
     public void rateServiceProvider(
             @WebParam(name = "email") String email,
@@ -113,19 +117,19 @@ public class CustomerAppointmentWebService {
             @WebParam(name = "rating") Integer rating) throws InvalidLoginException, ServiceProviderNotFoundException {
         // authentication needs to be performed
         CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
-        
+
         serviceProviderEntitySessionBeanLocal.updateServiceProviderRating(providerId, rating);
     }
-    
+
     @WebMethod(operationName = "retrieveAllBusinessCategories")
     public List<BusinessCategoryEntity> retrieveAllBusinessCategories() {
         return businessCategorySessionBeanLocal.retrieveAllBusinessCategories();
     }
-    
+
     @WebMethod(operationName = "retrieveServiceProviderByProviderId")
     public ServiceProviderEntity retrieveServiceProviderByProviderId(@WebParam(name = "providerId") Long providerId)
             throws ServiceProviderNotFoundException {
         return serviceProviderEntitySessionBeanLocal.retrieveServiceProviderEntityByProviderId(providerId);
     }
-    
+
 }

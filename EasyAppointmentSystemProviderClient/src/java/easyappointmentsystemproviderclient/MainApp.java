@@ -104,9 +104,9 @@ public class MainApp {
         List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
         int sizeOfBusinessCategoryList = businessCategoryEntities.size();
         for (int i = 0; i < sizeOfBusinessCategoryList - 1; i++) {
-            System.out.printf(businessCategoryEntities.get(i).getId().toString() + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
+            System.out.printf(businessCategoryEntities.get(i).getCategoryId().toString() + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
         }
-        System.out.println(businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getId().toString() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
+        System.out.println(businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategoryId().toString() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
         System.out.print("Enter Business Category> ");
         int businessCategoryId = scanner.nextInt();
         scanner.nextLine();
