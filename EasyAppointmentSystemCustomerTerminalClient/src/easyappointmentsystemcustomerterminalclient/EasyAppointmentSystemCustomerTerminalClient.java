@@ -1,13 +1,5 @@
 package easyappointmentsystemcustomerterminalclient;
 
-import ws.client.AppointmentNotFoundException_Exception;
-import ws.client.CreateNewAppointmentEntityException_Exception;
-import ws.client.CustomerEntity;
-import ws.client.CustomerNotFoundException_Exception;
-import ws.client.InvalidLoginException_Exception;
-import ws.client.ServiceProviderNotFoundException_Exception;
-import ws.client.UnauthorisedOperationException_Exception;
-
 /**
  *
  * @author danielonges

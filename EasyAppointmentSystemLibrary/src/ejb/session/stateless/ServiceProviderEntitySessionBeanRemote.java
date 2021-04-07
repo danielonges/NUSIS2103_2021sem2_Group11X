@@ -5,6 +5,7 @@ import entity.ServiceProviderEntity;
 import util.exception.InvalidLoginException;
 import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
+import util.exception.BusinessCategoryNotFoundException;
 
 public interface ServiceProviderEntitySessionBeanRemote {
 
@@ -26,7 +27,7 @@ public interface ServiceProviderEntitySessionBeanRemote {
 
     public ServiceProviderEntity retrieveListOfAppointments(Long serviceProviderId) throws ServiceProviderNotFoundException;
 
-    public List<ServiceProviderEntity> retrieveServiceProviderByCategoryAndCity(String category, String city) throws ServiceProviderNotFoundException;
+    public List<ServiceProviderEntity> retrieveServiceProviderByCategoryIdAndCity(Long categoryId, String city) throws ServiceProviderNotFoundException, BusinessCategoryNotFoundException;
 
     public void updateServiceProviderRating(Long providerId, Integer rating) throws ServiceProviderNotFoundException;
     

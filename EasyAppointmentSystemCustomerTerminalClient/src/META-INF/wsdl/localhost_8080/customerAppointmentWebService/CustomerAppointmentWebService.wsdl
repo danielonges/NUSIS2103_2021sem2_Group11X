@@ -4,35 +4,32 @@
 <xsd:import namespace="http://ws.session.ejb/" schemaLocation="http://localhost:8080/customerAppointmentWebService/CustomerAppointmentWebService?xsd=1"/>
 </xsd:schema>
 </types>
+<message name="retrieveServiceProvidersByCategoryIdAndCity">
+<part name="parameters" element="tns:retrieveServiceProvidersByCategoryIdAndCity"/>
+</message>
+<message name="retrieveServiceProvidersByCategoryIdAndCityResponse">
+<part name="parameters" element="tns:retrieveServiceProvidersByCategoryIdAndCityResponse"/>
+</message>
+<message name="ServiceProviderNotFoundException">
+<part name="fault" element="tns:ServiceProviderNotFoundException"/>
+</message>
+<message name="BusinessCategoryNotFoundException">
+<part name="fault" element="tns:BusinessCategoryNotFoundException"/>
+</message>
 <message name="registerCustomer">
 <part name="parameters" element="tns:registerCustomer"/>
 </message>
 <message name="registerCustomerResponse">
 <part name="parameters" element="tns:registerCustomerResponse"/>
 </message>
-<message name="retrieveServiceProvidersByCategoryAndCity">
-<part name="parameters" element="tns:retrieveServiceProvidersByCategoryAndCity"/>
+<message name="CustomerAlreadyExistsException">
+<part name="fault" element="tns:CustomerAlreadyExistsException"/>
 </message>
-<message name="retrieveServiceProvidersByCategoryAndCityResponse">
-<part name="parameters" element="tns:retrieveServiceProvidersByCategoryAndCityResponse"/>
+<message name="InputDataValidationException">
+<part name="fault" element="tns:InputDataValidationException"/>
 </message>
-<message name="ServiceProviderNotFoundException">
-<part name="fault" element="tns:ServiceProviderNotFoundException"/>
-</message>
-<message name="addAppointment">
-<part name="parameters" element="tns:addAppointment"/>
-</message>
-<message name="addAppointmentResponse">
-<part name="parameters" element="tns:addAppointmentResponse"/>
-</message>
-<message name="CustomerNotFoundException">
-<part name="fault" element="tns:CustomerNotFoundException"/>
-</message>
-<message name="InvalidLoginException">
-<part name="fault" element="tns:InvalidLoginException"/>
-</message>
-<message name="CreateNewAppointmentEntityException">
-<part name="fault" element="tns:CreateNewAppointmentEntityException"/>
+<message name="UnknownPersistenceException">
+<part name="fault" element="tns:UnknownPersistenceException"/>
 </message>
 <message name="cancelAppointment">
 <part name="parameters" element="tns:cancelAppointment"/>
@@ -40,11 +37,26 @@
 <message name="cancelAppointmentResponse">
 <part name="parameters" element="tns:cancelAppointmentResponse"/>
 </message>
+<message name="InvalidLoginException">
+<part name="fault" element="tns:InvalidLoginException"/>
+</message>
+<message name="CustomerNotFoundException">
+<part name="fault" element="tns:CustomerNotFoundException"/>
+</message>
 <message name="AppointmentNotFoundException">
 <part name="fault" element="tns:AppointmentNotFoundException"/>
 </message>
 <message name="UnauthorisedOperationException">
 <part name="fault" element="tns:UnauthorisedOperationException"/>
+</message>
+<message name="addAppointment">
+<part name="parameters" element="tns:addAppointment"/>
+</message>
+<message name="addAppointmentResponse">
+<part name="parameters" element="tns:addAppointmentResponse"/>
+</message>
+<message name="CreateNewAppointmentEntityException">
+<part name="fault" element="tns:CreateNewAppointmentEntityException"/>
 </message>
 <message name="rateServiceProvider">
 <part name="parameters" element="tns:rateServiceProvider"/>
@@ -52,11 +64,11 @@
 <message name="rateServiceProviderResponse">
 <part name="parameters" element="tns:rateServiceProviderResponse"/>
 </message>
-<message name="retrieveAllBusinessCategories">
-<part name="parameters" element="tns:retrieveAllBusinessCategories"/>
+<message name="retrieveServiceProviderByProviderId">
+<part name="parameters" element="tns:retrieveServiceProviderByProviderId"/>
 </message>
-<message name="retrieveAllBusinessCategoriesResponse">
-<part name="parameters" element="tns:retrieveAllBusinessCategoriesResponse"/>
+<message name="retrieveServiceProviderByProviderIdResponse">
+<part name="parameters" element="tns:retrieveServiceProviderByProviderIdResponse"/>
 </message>
 <message name="retrieveCustomerAppointments">
 <part name="parameters" element="tns:retrieveCustomerAppointments"/>
@@ -70,28 +82,25 @@
 <message name="customerLoginResponse">
 <part name="parameters" element="tns:customerLoginResponse"/>
 </message>
-<message name="retrieveServiceProviderByProviderId">
-<part name="parameters" element="tns:retrieveServiceProviderByProviderId"/>
+<message name="retrieveAllBusinessCategories">
+<part name="parameters" element="tns:retrieveAllBusinessCategories"/>
 </message>
-<message name="retrieveServiceProviderByProviderIdResponse">
-<part name="parameters" element="tns:retrieveServiceProviderByProviderIdResponse"/>
+<message name="retrieveAllBusinessCategoriesResponse">
+<part name="parameters" element="tns:retrieveAllBusinessCategoriesResponse"/>
 </message>
 <portType name="CustomerAppointmentWebService">
+<operation name="retrieveServiceProvidersByCategoryIdAndCity">
+<input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProvidersByCategoryIdAndCityRequest" message="tns:retrieveServiceProvidersByCategoryIdAndCity"/>
+<output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProvidersByCategoryIdAndCityResponse" message="tns:retrieveServiceProvidersByCategoryIdAndCityResponse"/>
+<fault message="tns:ServiceProviderNotFoundException" name="ServiceProviderNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProvidersByCategoryIdAndCity/Fault/ServiceProviderNotFoundException"/>
+<fault message="tns:BusinessCategoryNotFoundException" name="BusinessCategoryNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProvidersByCategoryIdAndCity/Fault/BusinessCategoryNotFoundException"/>
+</operation>
 <operation name="registerCustomer">
 <input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/registerCustomerRequest" message="tns:registerCustomer"/>
 <output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/registerCustomerResponse" message="tns:registerCustomerResponse"/>
-</operation>
-<operation name="retrieveServiceProvidersByCategoryAndCity">
-<input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProvidersByCategoryAndCityRequest" message="tns:retrieveServiceProvidersByCategoryAndCity"/>
-<output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProvidersByCategoryAndCityResponse" message="tns:retrieveServiceProvidersByCategoryAndCityResponse"/>
-<fault message="tns:ServiceProviderNotFoundException" name="ServiceProviderNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProvidersByCategoryAndCity/Fault/ServiceProviderNotFoundException"/>
-</operation>
-<operation name="addAppointment">
-<input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointmentRequest" message="tns:addAppointment"/>
-<output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointmentResponse" message="tns:addAppointmentResponse"/>
-<fault message="tns:CustomerNotFoundException" name="CustomerNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointment/Fault/CustomerNotFoundException"/>
-<fault message="tns:InvalidLoginException" name="InvalidLoginException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointment/Fault/InvalidLoginException"/>
-<fault message="tns:CreateNewAppointmentEntityException" name="CreateNewAppointmentEntityException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointment/Fault/CreateNewAppointmentEntityException"/>
+<fault message="tns:CustomerAlreadyExistsException" name="CustomerAlreadyExistsException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/registerCustomer/Fault/CustomerAlreadyExistsException"/>
+<fault message="tns:InputDataValidationException" name="InputDataValidationException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/registerCustomer/Fault/InputDataValidationException"/>
+<fault message="tns:UnknownPersistenceException" name="UnknownPersistenceException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/registerCustomer/Fault/UnknownPersistenceException"/>
 </operation>
 <operation name="cancelAppointment">
 <input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/cancelAppointmentRequest" message="tns:cancelAppointment"/>
@@ -101,15 +110,23 @@
 <fault message="tns:AppointmentNotFoundException" name="AppointmentNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/cancelAppointment/Fault/AppointmentNotFoundException"/>
 <fault message="tns:UnauthorisedOperationException" name="UnauthorisedOperationException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/cancelAppointment/Fault/UnauthorisedOperationException"/>
 </operation>
+<operation name="addAppointment">
+<input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointmentRequest" message="tns:addAppointment"/>
+<output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointmentResponse" message="tns:addAppointmentResponse"/>
+<fault message="tns:CustomerNotFoundException" name="CustomerNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointment/Fault/CustomerNotFoundException"/>
+<fault message="tns:InvalidLoginException" name="InvalidLoginException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointment/Fault/InvalidLoginException"/>
+<fault message="tns:CreateNewAppointmentEntityException" name="CreateNewAppointmentEntityException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/addAppointment/Fault/CreateNewAppointmentEntityException"/>
+</operation>
 <operation name="rateServiceProvider">
 <input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/rateServiceProviderRequest" message="tns:rateServiceProvider"/>
 <output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/rateServiceProviderResponse" message="tns:rateServiceProviderResponse"/>
 <fault message="tns:InvalidLoginException" name="InvalidLoginException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/rateServiceProvider/Fault/InvalidLoginException"/>
 <fault message="tns:ServiceProviderNotFoundException" name="ServiceProviderNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/rateServiceProvider/Fault/ServiceProviderNotFoundException"/>
 </operation>
-<operation name="retrieveAllBusinessCategories">
-<input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveAllBusinessCategoriesRequest" message="tns:retrieveAllBusinessCategories"/>
-<output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveAllBusinessCategoriesResponse" message="tns:retrieveAllBusinessCategoriesResponse"/>
+<operation name="retrieveServiceProviderByProviderId">
+<input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderByProviderIdRequest" message="tns:retrieveServiceProviderByProviderId"/>
+<output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderByProviderIdResponse" message="tns:retrieveServiceProviderByProviderIdResponse"/>
+<fault message="tns:ServiceProviderNotFoundException" name="ServiceProviderNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderByProviderId/Fault/ServiceProviderNotFoundException"/>
 </operation>
 <operation name="retrieveCustomerAppointments">
 <input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveCustomerAppointmentsRequest" message="tns:retrieveCustomerAppointments"/>
@@ -122,24 +139,14 @@
 <output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/customerLoginResponse" message="tns:customerLoginResponse"/>
 <fault message="tns:InvalidLoginException" name="InvalidLoginException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/customerLogin/Fault/InvalidLoginException"/>
 </operation>
-<operation name="retrieveServiceProviderByProviderId">
-<input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderByProviderIdRequest" message="tns:retrieveServiceProviderByProviderId"/>
-<output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderByProviderIdResponse" message="tns:retrieveServiceProviderByProviderIdResponse"/>
-<fault message="tns:ServiceProviderNotFoundException" name="ServiceProviderNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderByProviderId/Fault/ServiceProviderNotFoundException"/>
+<operation name="retrieveAllBusinessCategories">
+<input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveAllBusinessCategoriesRequest" message="tns:retrieveAllBusinessCategories"/>
+<output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveAllBusinessCategoriesResponse" message="tns:retrieveAllBusinessCategoriesResponse"/>
 </operation>
 </portType>
 <binding name="CustomerAppointmentWebServicePortBinding" type="tns:CustomerAppointmentWebService">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-<operation name="registerCustomer">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="retrieveServiceProvidersByCategoryAndCity">
+<operation name="retrieveServiceProvidersByCategoryIdAndCity">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -150,8 +157,11 @@
 <fault name="ServiceProviderNotFoundException">
 <soap:fault name="ServiceProviderNotFoundException" use="literal"/>
 </fault>
+<fault name="BusinessCategoryNotFoundException">
+<soap:fault name="BusinessCategoryNotFoundException" use="literal"/>
+</fault>
 </operation>
-<operation name="addAppointment">
+<operation name="registerCustomer">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -159,14 +169,14 @@
 <output>
 <soap:body use="literal"/>
 </output>
-<fault name="CustomerNotFoundException">
-<soap:fault name="CustomerNotFoundException" use="literal"/>
+<fault name="CustomerAlreadyExistsException">
+<soap:fault name="CustomerAlreadyExistsException" use="literal"/>
 </fault>
-<fault name="InvalidLoginException">
-<soap:fault name="InvalidLoginException" use="literal"/>
+<fault name="InputDataValidationException">
+<soap:fault name="InputDataValidationException" use="literal"/>
 </fault>
-<fault name="CreateNewAppointmentEntityException">
-<soap:fault name="CreateNewAppointmentEntityException" use="literal"/>
+<fault name="UnknownPersistenceException">
+<soap:fault name="UnknownPersistenceException" use="literal"/>
 </fault>
 </operation>
 <operation name="cancelAppointment">
@@ -190,6 +200,24 @@
 <soap:fault name="UnauthorisedOperationException" use="literal"/>
 </fault>
 </operation>
+<operation name="addAppointment">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+<fault name="CustomerNotFoundException">
+<soap:fault name="CustomerNotFoundException" use="literal"/>
+</fault>
+<fault name="InvalidLoginException">
+<soap:fault name="InvalidLoginException" use="literal"/>
+</fault>
+<fault name="CreateNewAppointmentEntityException">
+<soap:fault name="CreateNewAppointmentEntityException" use="literal"/>
+</fault>
+</operation>
 <operation name="rateServiceProvider">
 <soap:operation soapAction=""/>
 <input>
@@ -205,7 +233,7 @@
 <soap:fault name="ServiceProviderNotFoundException" use="literal"/>
 </fault>
 </operation>
-<operation name="retrieveAllBusinessCategories">
+<operation name="retrieveServiceProviderByProviderId">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -213,6 +241,9 @@
 <output>
 <soap:body use="literal"/>
 </output>
+<fault name="ServiceProviderNotFoundException">
+<soap:fault name="ServiceProviderNotFoundException" use="literal"/>
+</fault>
 </operation>
 <operation name="retrieveCustomerAppointments">
 <soap:operation soapAction=""/>
@@ -241,7 +272,7 @@
 <soap:fault name="InvalidLoginException" use="literal"/>
 </fault>
 </operation>
-<operation name="retrieveServiceProviderByProviderId">
+<operation name="retrieveAllBusinessCategories">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -249,9 +280,6 @@
 <output>
 <soap:body use="literal"/>
 </output>
-<fault name="ServiceProviderNotFoundException">
-<soap:fault name="ServiceProviderNotFoundException" use="literal"/>
-</fault>
 </operation>
 </binding>
 <service name="customerAppointmentWebService">

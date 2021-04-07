@@ -29,7 +29,7 @@ public class BusinessCategorySessionBean implements BusinessCategorySessionBeanR
     public Long createBusinessCategoryEntity(BusinessCategoryEntity newBusinessCategoryEntity) {
         em.persist(newBusinessCategoryEntity);
         em.flush();
-        return newBusinessCategoryEntity.getId();
+        return newBusinessCategoryEntity.getCategoryId();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class BusinessCategorySessionBean implements BusinessCategorySessionBeanR
 
     @Override
     public List<BusinessCategoryEntity> retrieveAllBusinessCategories() {
-        Query query = em.createQuery("SELECT s FROM BusinessCategoryEntity s ORDER BY s.id");
+        Query query = em.createQuery("SELECT s FROM BusinessCategoryEntity s ORDER BY s.categoryId");
         return query.getResultList();
     }
 

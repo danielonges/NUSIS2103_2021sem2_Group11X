@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -163,6 +164,7 @@ public class CustomerEntity implements Serializable {
         return String.format("%s, %s", firstName, lastName);
     }
 
+    @XmlTransient
     public List<AppointmentEntity> getAppointments() {
         return appointments;
     }

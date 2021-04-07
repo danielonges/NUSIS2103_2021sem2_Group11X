@@ -4,12 +4,15 @@ import entity.AppointmentEntity;
 import entity.CustomerEntity;
 import java.util.List;
 import util.exception.AppointmentNotFoundException;
+import util.exception.CustomerAlreadyExistsException;
 import util.exception.CustomerNotFoundException;
+import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginException;
+import util.exception.UnknownPersistenceException;
 
 public interface CustomerEntitySessionBeanRemote {
     
-    public void createCustomerEntity(CustomerEntity newCustomerEntity);
+    public Long createCustomerEntity(CustomerEntity newCustomerEntity) throws CustomerAlreadyExistsException, UnknownPersistenceException, InputDataValidationException;    
     
     public CustomerEntity retrieveCustomerEntityByCustomerId(Long customerId) throws CustomerNotFoundException;
     

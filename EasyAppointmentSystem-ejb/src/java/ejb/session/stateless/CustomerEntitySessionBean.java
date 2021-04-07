@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.AppointmentEntity;
 import entity.CustomerEntity;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -10,10 +11,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.exception.AppointmentNotFoundException;
+import util.exception.CustomerAlreadyExistsException;
 import util.exception.CustomerNotFoundException;
+import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -27,10 +36,55 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     @PersistenceContext(unitName = "EasyAppointmentSystem-ejbPU")
     private EntityManager em;
     
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+    
+    
+    
+    public CustomerEntitySessionBean()
+    {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+    }
+    
     @Override
-    public void createCustomerEntity(CustomerEntity newCustomerEntity) {
-        em.persist(newCustomerEntity);
-        em.flush();
+    public Long createCustomerEntity(CustomerEntity newCustomerEntity) throws CustomerAlreadyExistsException, UnknownPersistenceException, InputDataValidationException {
+//        em.persist(newCustomerEntity);
+//        em.flush();
+            try
+        {
+            Set<ConstraintViolation<CustomerEntity>> constraintViolations = validator.validate(newCustomerEntity);
+        
+            if(constraintViolations.isEmpty())
+            {
+                em.persist(newCustomerEntity);
+                em.flush();
+
+                return newCustomerEntity.getCustomerId();
+            }
+            else
+            {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }            
+        }
+        catch(PersistenceException ex)
+        {
+            if(ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException"))
+            {
+                if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
+                {
+                    throw new CustomerAlreadyExistsException();
+                }
+                else
+                {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+            else
+            {
+                throw new UnknownPersistenceException(ex.getMessage());
+            }
+        }
         
     }
     
@@ -78,8 +132,9 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     @Override
     public CustomerEntity retrieveCustomerAppointments (Long customerId) throws CustomerNotFoundException {
         try {
-            CustomerEntity currentCustomerEntity = em.find(CustomerEntity.class,customerId);
+            CustomerEntity currentCustomerEntity = em.find(CustomerEntity.class, customerId);
             currentCustomerEntity.getAppointments().size();
+            System.out.println(currentCustomerEntity.getAppointments());
             return currentCustomerEntity;
         } catch (NoResultException | NullPointerException ex) {
             throw new CustomerNotFoundException("Customer not found!");
@@ -98,6 +153,18 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
         } catch (CustomerNotFoundException ex) {
             throw new InvalidLoginException("Email does not exist or invalid password!");
         }
+    }
+    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<CustomerEntity>>constraintViolations)
+    {
+        String msg = "Input data validation error!:";
+            
+        for(ConstraintViolation constraintViolation:constraintViolations)
+        {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+        
+        return msg;
     }
     
 }
