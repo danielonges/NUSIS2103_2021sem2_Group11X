@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,9 +34,11 @@ public class BusinessCategoryEntity implements Serializable {
     
 
     public BusinessCategoryEntity() {
+        this.serviceProviders = new ArrayList<>();
     }
 
     public BusinessCategoryEntity(String category) {
+        this();
         this.category = category;
     }
     
