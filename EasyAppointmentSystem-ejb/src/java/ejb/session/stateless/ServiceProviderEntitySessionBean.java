@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.AppointmentEntity;
 import entity.BusinessCategoryEntity;
 import entity.ServiceProviderEntity;
+import java.lang.reflect.InvocationTargetException;
 import util.exception.InvalidLoginException;
 import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
@@ -32,7 +33,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
 
     @PersistenceContext(unitName = "EasyAppointmentSystem-ejbPU")
     private EntityManager em;
-    
+
     @EJB
     private BusinessCategorySessionBeanLocal businessCategorySessionBeanLocal;
 
@@ -108,7 +109,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         }
 
     }
-    
+
     @Override
     public List<ServiceProviderEntity> retrieveServiceProviderByCategoryIdAndCity(Long categoryId, String city) throws ServiceProviderNotFoundException, BusinessCategoryNotFoundException {
         Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.businessCategoryEntity = :businessCategoryEntity AND s.city = :city AND s.status = :status ORDER BY s.providerId");
@@ -123,7 +124,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
             throw new ServiceProviderNotFoundException("");
         }
     }
-    
+
     @Override
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersWithPendingApproval() throws ServiceProviderNotFoundException {
         Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.status = :status");
@@ -135,10 +136,10 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
             throw new ServiceProviderNotFoundException("Service Providers does not exist!");
         }
     }
-    
+
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersNotBlocked() throws ServiceProviderNotFoundException {
         Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.status != :status");
-        query.setParameter("status", ServiceProviderStatus.PENDING);
+        query.setParameter("status", ServiceProviderStatus.BLOCK);
 
         try {
             return (List<ServiceProviderEntity>) query.getResultList();
@@ -146,24 +147,27 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
             throw new ServiceProviderNotFoundException("Service Providers does not exist!");
         }
     }
-    
+
     @Override
-    public ServiceProviderEntity retrieveListOfAppointments(Long serviceProviderId) throws ServiceProviderNotFoundException{
-        ServiceProviderEntity currentServiceProviderEntity = em.find(ServiceProviderEntity.class,serviceProviderId);
-        currentServiceProviderEntity.getAppointments().size();
-        return currentServiceProviderEntity;
+    public ServiceProviderEntity retrieveListOfAppointments(Long serviceProviderId) throws ServiceProviderNotFoundException {
+        ServiceProviderEntity currentServiceProviderEntity = em.find(ServiceProviderEntity.class, serviceProviderId);
+        if (currentServiceProviderEntity != null) {
+            currentServiceProviderEntity.getAppointments().size();
+            return currentServiceProviderEntity;
+        }
+        else{
+            throw new ServiceProviderNotFoundException("not found!");
+        }
     }
-    
+
 //    public ServiceProviderEntity retrieveListOfPendingAppointments (Long serviceProviderId) throws ServiceProviderNotFoundException{
 //        ServiceProviderEntity currentServiceProviderEntity = em.find(ServiceProviderEntity.class,serviceProviderId);
 //        
 //        Query query = em.createQuery("SELECT a FROM AppointmentEntity a WHERE a.serviceProvider =: serviceProvider AND a.isCancelled = 'FALSE'")
 //    }
-    
-    
     public void updateServiceProviderRating(Long providerId, Integer rating) throws ServiceProviderNotFoundException {
         // TODO: implement logic
         // need to update ServiceProvider such that the average rating is captured!
     }
-    
+
 }

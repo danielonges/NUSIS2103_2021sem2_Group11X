@@ -51,9 +51,9 @@ public class DataInitSessionBean {
     @PostConstruct
     public void postConstruct() {
         if (em.find(AdminEntity.class, 1L) == null) {
-            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Leonard", "leonard@gmail.com", "password"));
-            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Zikun", "zikun@gmail.com", "password"));
-            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Daniel", "daniel@gmail.com", "password"));
+            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Leonard", "leonard@gmail.com", "123456"));
+            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Zikun", "em", "123456"));
+            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Daniel", "daniel@gmail.com", "123456"));
 
         }
         if (em.find(BusinessCategoryEntity.class, 1L) == null) {
@@ -67,7 +67,7 @@ public class DataInitSessionBean {
       
         if (em.find(CustomerEntity.class, 1L) == null) {
             try {
-                customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("S1234567A", "John", "Doe", 'M', 20, "62353535", "10 Heng Mui Keng Terrace", "Singapore", "johndoe@gmail.com", "password"));
+                customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("S1234567A", "John", "Doe", 'M', 20, "62353535", "10 Heng Mui Keng Terrace", "Singapore", "johndoe@gmail.com", "123456"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
