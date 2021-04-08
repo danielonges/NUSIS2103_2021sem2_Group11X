@@ -105,16 +105,15 @@ public class MainApp {
         try {
             Scanner scanner = new Scanner(System.in);
 
-<<<<<<< HEAD
             System.out.println("* Service Provider Terminal :: Registration Operation *\n");
             System.out.print("Enter Name> ");
             String name = scanner.nextLine().trim();
             List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
             int sizeOfBusinessCategoryList = businessCategoryEntities.size();
             for (int i = 0; i < sizeOfBusinessCategoryList - 1; i++) {
-                System.out.printf(i + 1 + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
+                System.out.printf(businessCategoryEntities.get(i).getCategoryId().toString() + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
             }
-            System.out.println(sizeOfBusinessCategoryList + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
+            System.out.println(businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategoryId().toString() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
             System.out.print("Enter Business Category> ");
             int businessCategoryId = scanner.nextInt();
             scanner.nextLine();
@@ -132,11 +131,6 @@ public class MainApp {
             String email = scanner.nextLine().trim();
             System.out.print("Enter Password> ");
             String password = scanner.nextLine().trim();
-            while (password.length() != 6 || !password.matches("[0-9]+")) {
-                System.out.println("password must be a 6 digit number!");
-                System.out.print("Enter Password> ");
-                password = scanner.nextLine().trim();
-            }
             if (email.length() > 0 && password.length() > 0) {
                 ServiceProviderEntity newServiceProviderEntity = new ServiceProviderEntity();
                 newServiceProviderEntity.setName(name);
@@ -146,7 +140,7 @@ public class MainApp {
                 newServiceProviderEntity.setBusinessRegNum(businessRegistrationNum);
                 newServiceProviderEntity.setCity(city);
                 newServiceProviderEntity.setPhone(phone);
-                newServiceProviderEntity.setStatus(ServiceProviderStatus.PENDING);//change to approve for testing, default:PENDING
+                newServiceProviderEntity.setStatus(ServiceProviderStatus.APPROVE);//change to approve for testing, default:PENDING
                 newServiceProviderEntity.setAddress(businessAddress);
                 newServiceProviderEntity.setEmail(email);
                 newServiceProviderEntity.setPassword(password);
@@ -158,65 +152,12 @@ public class MainApp {
                 Integer goBack = scanner.nextInt();
                 while (goBack < 0 || goBack > 0) {
                     if (goBack != 0) {
-                        System.out.print("Enter 0 to go back to the previous menu> ");
+                        System.out.println("Enter 0 to go back to the previous menu. \n");
+                        System.out.print("> ");
                         goBack = scanner.nextInt();
                     } else {
                         break;
                     }
-=======
-        System.out.println("* Service Provider Terminal :: Registration Operation *\n");
-        System.out.print("Enter Name> ");
-        String name = scanner.nextLine().trim();
-        List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
-        int sizeOfBusinessCategoryList = businessCategoryEntities.size();
-        for (int i = 0; i < sizeOfBusinessCategoryList - 1; i++) {
-            System.out.printf(businessCategoryEntities.get(i).getCategoryId().toString() + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
-        }
-        System.out.println(businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategoryId().toString() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
-        System.out.print("Enter Business Category> ");
-        int businessCategoryId = scanner.nextInt();
-        scanner.nextLine();
-        businessCategoryId--; //the actual index in the list
-        BusinessCategoryEntity businessCategory = businessCategoryEntities.get(businessCategoryId);       
-        System.out.print("Enter Business Registration Number> ");
-        String businessRegistrationNum = scanner.nextLine().trim();
-        System.out.print("Enter City> ");
-        String city = scanner.nextLine().trim();
-        System.out.print("Enter Phone> ");
-        String phone = scanner.nextLine().trim();
-        System.out.print("Enter Business Address> ");
-        String businessAddress = scanner.nextLine().trim();        
-        System.out.print("Enter Email> ");
-        String email = scanner.nextLine().trim();
-        System.out.print("Enter Password> ");
-        String password = scanner.nextLine().trim();
-        if (email.length() > 0 && password.length() > 0) {
-            ServiceProviderEntity newServiceProviderEntity = new ServiceProviderEntity();
-            newServiceProviderEntity.setName(name);
-            newServiceProviderEntity.setBusinessCategory(businessCategory);
-            BusinessCategoryEntity currentBusinessCategory = businessCategorySessionBeanRemote.retrieveServiceProviders(businessCategory.getCategoryId());
-            currentBusinessCategory.getServiceProviders().add(newServiceProviderEntity);
-            newServiceProviderEntity.setBusinessRegNum(businessRegistrationNum);
-            newServiceProviderEntity.setCity(city);
-            newServiceProviderEntity.setPhone(phone);
-            newServiceProviderEntity.setStatus(ServiceProviderStatus.APPROVE);//change to approve for testing, default:PENDING
-            newServiceProviderEntity.setAddress(businessAddress);
-            newServiceProviderEntity.setEmail(email);
-            newServiceProviderEntity.setPassword(password);
-            serviceProviderEntitySessionBeanRemote.createServiceProviderEntity(newServiceProviderEntity);
-          //  businessCategorySessionBeanRemote.updateBusinessCategoryEntity(currentBusinessCategory);
-            System.out.println("You have been registered successfully! \n");
-            System.out.println("Enter 0 to go back to the previous menu. \n");
-            System.out.print("> ");
-            Integer goBack = scanner.nextInt();
-            while (goBack < 0 || goBack > 0) {
-                if (goBack != 0) {
-                    System.out.println("Enter 0 to go back to the previous menu. \n");
-                    System.out.print("> ");
-                    goBack = scanner.nextInt();
-                } else {
-                    break;
->>>>>>> c0af504506ddd8e376bb2e9b5887f1a488086c8e
                 }
             } else {
                 throw new InvalidRegistrationException("invalid registration!");

@@ -12,6 +12,7 @@ import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.EmailSessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AdminEntity;
+import java.util.InputMismatchException;
 import util.exception.InvalidLoginException;
 import java.util.Scanner;
 import javax.jms.ConnectionFactory;
@@ -121,7 +122,6 @@ public class MainApp {
         Integer response = 0;
 
         while (true) {
-<<<<<<< HEAD
             try {
                 System.out.println("*** Service provider terminal :: Main ***\n");
                 System.out.println("You are login as " + currentAdminEntity.getName() + " \n");
@@ -177,55 +177,6 @@ public class MainApp {
             } catch (NumberFormatException ex) {
                 {
                     System.out.println("Invalid data type!");
-=======
-            System.out.println("*** Service provider terminal :: Main ***\n");
-            System.out.println("You are login as " + currentAdminEntity.getName() + " \n");
-            System.out.println("1: View Appointments for customers");
-            System.out.println("2: View Appointments for service providers");
-            System.out.println("3: View service providers");
-            System.out.println("4: Approve service provider");
-            System.out.println("5: Block service provider");
-            System.out.println("6: Add Business category");
-            System.out.println("7: Remove Business category");
-            System.out.println("8: Send reminder email");
-            System.out.println("9: Logout\n");
-            response = 0;
-            OUTER:
-            // dan: should it be response > 9?
-            while (response < 1 || response > 9) {
-                System.out.print("> ");
-                response = scanner.nextInt();
-                switch (response) {
-                    case 1:
-                        customerModule.viewAppointments();
-                        break;
-                    case 2:
-                        serviceProviderModule.viewAppointments();
-                        break;
-                    case 3:
-                        serviceProviderModule.viewListOfProviders();
-                        break;
-                    case 4:
-                        serviceProviderModule.approveProvider();
-                        break;
-                    case 5:
-                        serviceProviderModule.blockProvider();
-                        break;
-                    case 6:
-                        adminModule.addBusinessCategory();
-                        break;
-                    case 7:
-                        adminModule.removeBusinessCategory();
-                        break;
-                    case 8:
-                        adminModule.sendReminderEmail();
-                        break;
-                    case 9:
-                        break OUTER;
-                    default:
-                        System.out.println("Invalid option, please try again!\n");
-                        break;
->>>>>>> c0af504506ddd8e376bb2e9b5887f1a488086c8e
                 }
             }
         }
