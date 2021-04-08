@@ -46,8 +46,7 @@ public class AppointmentModule {
         Scanner scanner = new Scanner(System.in);
         System.out.println("*** Service provider terminal :: View Appointments ***\n");
         try {
-            ServiceProviderEntity newServiceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity.getProviderId());
-            List<AppointmentEntity> appointmentEntities = newServiceProviderEntity.getAppointments();
+            List<AppointmentEntity> appointmentEntities = serviceProviderEntitySessionBeanRemote.retrieveListOfPendingAppointments(currentServiceProviderEntity.getProviderId());
             if (appointmentEntities.isEmpty()) {
                 System.out.println("No current appointments.");
             } else {

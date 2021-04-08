@@ -3,7 +3,12 @@ package ejb.session.stateless;
 import entity.AppointmentEntity;
 import entity.BusinessCategoryEntity;
 import entity.ServiceProviderEntity;
+<<<<<<< HEAD
 import java.lang.reflect.InvocationTargetException;
+=======
+import java.util.ArrayList;
+import java.util.Date;
+>>>>>>> c0af504506ddd8e376bb2e9b5887f1a488086c8e
 import util.exception.InvalidLoginException;
 import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
@@ -159,12 +164,33 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
             throw new ServiceProviderNotFoundException("not found!");
         }
     }
+<<<<<<< HEAD
 
 //    public ServiceProviderEntity retrieveListOfPendingAppointments (Long serviceProviderId) throws ServiceProviderNotFoundException{
 //        ServiceProviderEntity currentServiceProviderEntity = em.find(ServiceProviderEntity.class,serviceProviderId);
 //        
 //        Query query = em.createQuery("SELECT a FROM AppointmentEntity a WHERE a.serviceProvider =: serviceProvider AND a.isCancelled = 'FALSE'")
 //    }
+=======
+    
+    @Override
+    public List<AppointmentEntity> retrieveListOfPendingAppointments (Long serviceProviderId) throws ServiceProviderNotFoundException{
+        ServiceProviderEntity currentServiceProviderEntity = em.find(ServiceProviderEntity.class,serviceProviderId);
+        List<AppointmentEntity> tempList = currentServiceProviderEntity.getAppointments();
+        List<AppointmentEntity> newList = new ArrayList<>();
+        for(AppointmentEntity appointment : tempList) {
+            Date currentDate = new Date();
+            long diff_in_time = appointment.getDate().getTime() - currentDate.getTime();
+            long diff_in_hours = (diff_in_time / (1000 * 60 * 60 )) % 365;
+            if( diff_in_hours >= -1 && appointment.getIsCancelled() == false) {
+                newList.add(appointment);
+            }
+        }
+        return newList;
+    }
+    
+    
+>>>>>>> c0af504506ddd8e376bb2e9b5887f1a488086c8e
     public void updateServiceProviderRating(Long providerId, Integer rating) throws ServiceProviderNotFoundException {
         // TODO: implement logic
         // need to update ServiceProvider such that the average rating is captured!

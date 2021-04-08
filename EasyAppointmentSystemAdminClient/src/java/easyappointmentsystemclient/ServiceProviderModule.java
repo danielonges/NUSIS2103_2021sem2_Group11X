@@ -52,7 +52,12 @@ public class ServiceProviderModule {
                 }
             }
             while (true) {
+<<<<<<< HEAD
                 System.out.print("Enter 0 to go back to the previous menu> ");
+=======
+                System.out.println("Enter 0 to go back to the previous menu");
+                System.out.print(">");
+>>>>>>> c0af504506ddd8e376bb2e9b5887f1a488086c8e
                 Integer response = sc.nextInt();
                 if (response == 0) {
                     break;

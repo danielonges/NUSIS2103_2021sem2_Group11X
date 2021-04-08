@@ -10,11 +10,24 @@ import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import ejb.session.stateless.BusinessCategorySessionBeanRemote;
+import ejb.session.stateless.EmailSessionBeanRemote;
+import entity.AppointmentEntity;
 import entity.BusinessCategoryEntity;
+import entity.CustomerEntity;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
 import util.exception.BusinessCategoryNotFoundException;
+import util.exception.CustomerNotFoundException;
 
 /**
  *
@@ -27,14 +40,21 @@ public class AdminModule {
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     private BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote;
+    private EmailSessionBeanRemote emailSessionBeanRemote;
+    private Queue queueApplication;
+    private ConnectionFactory queueApplicationFactory;
 
     AdminModule(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote,
-            CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote) {
+            CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote,
+            EmailSessionBeanRemote emailSessionBeanRemote, Queue queueApplication, ConnectionFactory queueApplicationFactory) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
         this.businessCategorySessionBeanRemote = businessCategorySessionBeanRemote;
+        this.emailSessionBeanRemote = emailSessionBeanRemote;
+        this.queueApplication = queueApplication;
+        this.queueApplicationFactory = queueApplicationFactory;
     }
 
     public AdminModule() {
@@ -102,7 +122,74 @@ public class AdminModule {
     }
 
     public void sendReminderEmail() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Scanner sc = new Scanner(System.in);
+        System.out.println("*** Admin terminal :: Send reminder emai ***");
+
+        while (true) {
+            try {
+                System.out.println("Enter 0 to go back to the previous menu.");
+                System.out.print("Enter customer Id> ");
+                Long customerId = sc.nextLong();
+                if (customerId == 0L) {
+                    break;
+                } else {
+                    CustomerEntity currentCustomerEntity = customerEntitySessionBeanRemote.retrieveCustomerAppointments(customerId);
+                    List<AppointmentEntity> appointments = currentCustomerEntity.getAppointments();
+                    String toEmailAddress = currentCustomerEntity.getEmail();
+                    if (appointments.isEmpty()) {
+                        System.out.println("There are no new appointments to " + currentCustomerEntity.getFullName() + ".");
+                    } else {
+                        for (AppointmentEntity appointment : appointments) {
+                            if (toEmailAddress.length() > 0) {
+                                try {
+
+                                    // 03 - JMS Messaging with Message Driven Bean
+                                    sendJMSMessageToQueueApplication(appointment.getAppointmentId(), "exleolee@gmail.com", toEmailAddress);
+
+                                    System.out.println("An email is sent to " + currentCustomerEntity.getFullName() + " for the appointment " + appointment.getAppointmentNo());
+                                } catch (Exception ex) {
+                                    System.out.println("An error has occurred while sending the checkout notification email: " + ex.getMessage() + "\n");
+                                }
+                            }
+                        }
+                    }
+                }
+
+            } catch (InputMismatchException ex) {
+                System.out.println("Wrong Input! \n");
+            } catch (CustomerNotFoundException ex) {
+                System.out.println("Customer Entity not found!");
+            }
+
+        }
+    }
+
+    private void sendJMSMessageToQueueApplication(Long appointmentId, String fromEmailAddress, String toEmailAddress) throws JMSException {
+        Connection connection = null;
+        Session session = null;
+        try {
+            connection = queueApplicationFactory.createConnection();
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+            MapMessage mapMessage = session.createMapMessage();
+            mapMessage.setString("fromEmailAddress", fromEmailAddress);
+            mapMessage.setString("toEmailAddress", toEmailAddress);
+            mapMessage.setLong("appointmentId", appointmentId);
+            MessageProducer messageProducer = session.createProducer(queueApplication);
+            messageProducer.send(mapMessage);
+
+        } finally {
+            if (session != null) {
+                try {
+                    session.close();
+                } catch (JMSException e) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Cannot close session", e);
+                }
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
 }
