@@ -1,12 +1,14 @@
 package ejb.session.stateless;
 
 import entity.AppointmentEntity;
+import entity.BusinessCategoryEntity;
 import entity.ServiceProviderEntity;
 import util.exception.InvalidLoginException;
 import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -17,6 +19,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.enumeration.ServiceProviderStatus;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
+import util.exception.BusinessCategoryNotFoundException;
 
 /**
  *
@@ -29,6 +32,9 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
 
     @PersistenceContext(unitName = "EasyAppointmentSystem-ejbPU")
     private EntityManager em;
+    
+    @EJB
+    private BusinessCategorySessionBeanLocal businessCategorySessionBeanLocal;
 
     @Override
     public void createServiceProviderEntity(ServiceProviderEntity newServiceProviderEntity) {
@@ -104,9 +110,10 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     }
     
     @Override
-    public List<ServiceProviderEntity> retrieveServiceProviderByCategoryAndCity(String category, String city) throws ServiceProviderNotFoundException {
-        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.businessCategory = :businessCategory AND s.city = :city AND s.status = :status");
-        query.setParameter("businessCategory", category);
+    public List<ServiceProviderEntity> retrieveServiceProviderByCategoryIdAndCity(Long categoryId, String city) throws ServiceProviderNotFoundException, BusinessCategoryNotFoundException {
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.businessCategoryEntity = :businessCategoryEntity AND s.city = :city AND s.status = :status ORDER BY s.providerId");
+        BusinessCategoryEntity businessCategoryEntity = businessCategorySessionBeanLocal.retrieveBusinessCategoryEntityByBusinessCategoryId(categoryId);
+        query.setParameter("businessCategoryEntity", businessCategoryEntity);
         query.setParameter("city", city);
         query.setParameter("status", ServiceProviderStatus.APPROVE);
 

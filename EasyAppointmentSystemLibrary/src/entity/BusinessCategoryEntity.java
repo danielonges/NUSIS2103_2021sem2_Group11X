@@ -24,7 +24,7 @@ public class BusinessCategoryEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long categoryId;
     @Column(nullable = false, unique = true)
     private String category;
     
@@ -43,18 +43,18 @@ public class BusinessCategoryEntity implements Serializable {
     
 
     
-    public Long getId() {
-        return id;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (getId() != null ? getId().hashCode() : 0);
+        hash += (getCategoryId() != null ? getCategoryId().hashCode() : 0);
         return hash;
     }
 
@@ -65,7 +65,7 @@ public class BusinessCategoryEntity implements Serializable {
             return false;
         }
         BusinessCategoryEntity other = (BusinessCategoryEntity) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
+        if ((this.getCategoryId() == null && other.getCategoryId() != null) || (this.getCategoryId() != null && !this.categoryId.equals(other.categoryId))) {
             return false;
         }
         return true;

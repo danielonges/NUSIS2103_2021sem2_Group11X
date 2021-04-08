@@ -66,7 +66,11 @@ public class DataInitSessionBean {
         }*/
       
         if (em.find(CustomerEntity.class, 1L) == null) {
-            customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("S1234567A", "John", "Doe", 'M', 20, "62353535", "10 Heng Mui Keng Terrace", "Singapore", "johndoe@gmail.com", "password"));
+            try {
+                customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("S1234567A", "John", "Doe", 'M', 20, "62353535", "10 Heng Mui Keng Terrace", "Singapore", "johndoe@gmail.com", "password"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -2,15 +2,23 @@
 
 <xs:element name="AppointmentNotFoundException" type="tns:AppointmentNotFoundException"/>
 
+<xs:element name="BusinessCategoryNotFoundException" type="tns:BusinessCategoryNotFoundException"/>
+
 <xs:element name="CreateNewAppointmentEntityException" type="tns:CreateNewAppointmentEntityException"/>
 
+<xs:element name="CustomerAlreadyExistsException" type="tns:CustomerAlreadyExistsException"/>
+
 <xs:element name="CustomerNotFoundException" type="tns:CustomerNotFoundException"/>
+
+<xs:element name="InputDataValidationException" type="tns:InputDataValidationException"/>
 
 <xs:element name="InvalidLoginException" type="tns:InvalidLoginException"/>
 
 <xs:element name="ServiceProviderNotFoundException" type="tns:ServiceProviderNotFoundException"/>
 
 <xs:element name="UnauthorisedOperationException" type="tns:UnauthorisedOperationException"/>
+
+<xs:element name="UnknownPersistenceException" type="tns:UnknownPersistenceException"/>
 
 <xs:element name="addAppointment" type="tns:addAppointment"/>
 
@@ -44,18 +52,43 @@
 
 <xs:element name="retrieveServiceProviderByProviderIdResponse" type="tns:retrieveServiceProviderByProviderIdResponse"/>
 
-<xs:element name="retrieveServiceProvidersByCategoryAndCity" type="tns:retrieveServiceProvidersByCategoryAndCity"/>
+<xs:element name="retrieveServiceProvidersByCategoryIdAndCity" type="tns:retrieveServiceProvidersByCategoryIdAndCity"/>
 
-<xs:element name="retrieveServiceProvidersByCategoryAndCityResponse" type="tns:retrieveServiceProvidersByCategoryAndCityResponse"/>
+<xs:element name="retrieveServiceProvidersByCategoryIdAndCityResponse" type="tns:retrieveServiceProvidersByCategoryIdAndCityResponse"/>
 
-<xs:complexType name="retrieveServiceProvidersByCategoryAndCity">
+<xs:complexType name="rateServiceProvider">
 <xs:sequence>
-<xs:element name="category" type="xs:string" minOccurs="0"/>
+<xs:element name="email" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="providerId" type="xs:long" minOccurs="0"/>
+<xs:element name="rating" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="rateServiceProviderResponse">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="InvalidLoginException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ServiceProviderNotFoundException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="retrieveServiceProvidersByCategoryIdAndCity">
+<xs:sequence>
+<xs:element name="categoryId" type="xs:long" minOccurs="0"/>
 <xs:element name="city" type="xs:string" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="retrieveServiceProvidersByCategoryAndCityResponse">
+<xs:complexType name="retrieveServiceProvidersByCategoryIdAndCityResponse">
 <xs:sequence>
 <xs:element name="return" type="tns:serviceProviderEntity" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
@@ -65,7 +98,7 @@
 <xs:sequence>
 <xs:element name="address" type="xs:string" minOccurs="0"/>
 <xs:element name="appointments" type="tns:appointmentEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-<xs:element name="businessCategory" type="xs:string" minOccurs="0"/>
+<xs:element name="businessCategory" type="tns:businessCategoryEntity" minOccurs="0"/>
 <xs:element name="businessRegNum" type="xs:string" minOccurs="0"/>
 <xs:element name="city" type="xs:string" minOccurs="0"/>
 <xs:element name="email" type="xs:string" minOccurs="0"/>
@@ -87,7 +120,6 @@
 <xs:element name="customer" type="tns:customerEntity" minOccurs="0"/>
 <xs:element name="date" type="xs:dateTime" minOccurs="0"/>
 <xs:element name="isCancelled" type="xs:boolean" minOccurs="0"/>
-<xs:element name="isCompleted" type="xs:boolean" minOccurs="0"/>
 <xs:element name="rating" type="xs:int" minOccurs="0"/>
 <xs:element name="serviceProvider" type="tns:serviceProviderEntity" minOccurs="0"/>
 </xs:sequence>
@@ -97,7 +129,6 @@
 <xs:sequence>
 <xs:element name="address" type="xs:string" minOccurs="0"/>
 <xs:element name="age" type="xs:int" minOccurs="0"/>
-<xs:element name="appointments" type="tns:appointmentEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 <xs:element name="city" type="xs:string" minOccurs="0"/>
 <xs:element name="customerId" type="xs:long" minOccurs="0"/>
 <xs:element name="email" type="xs:string" minOccurs="0"/>
@@ -110,26 +141,15 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="ServiceProviderNotFoundException">
+<xs:complexType name="businessCategoryEntity">
 <xs:sequence>
-<xs:element name="message" type="xs:string" minOccurs="0"/>
+<xs:element name="category" type="xs:string" minOccurs="0"/>
+<xs:element name="categoryId" type="xs:long" minOccurs="0"/>
+<xs:element name="serviceProviders" type="tns:serviceProviderEntity" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="rateServiceProvider">
-<xs:sequence>
-<xs:element name="email" type="xs:string" minOccurs="0"/>
-<xs:element name="password" type="xs:string" minOccurs="0"/>
-<xs:element name="providerId" type="xs:long" minOccurs="0"/>
-<xs:element name="rating" type="xs:int" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="rateServiceProviderResponse">
-<xs:sequence/>
-</xs:complexType>
-
-<xs:complexType name="InvalidLoginException">
+<xs:complexType name="BusinessCategoryNotFoundException">
 <xs:sequence>
 <xs:element name="message" type="xs:string" minOccurs="0"/>
 </xs:sequence>
@@ -164,6 +184,24 @@
 <xs:sequence/>
 </xs:complexType>
 
+<xs:complexType name="CustomerAlreadyExistsException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="InputDataValidationException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="UnknownPersistenceException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="retrieveAllBusinessCategories">
 <xs:sequence/>
 </xs:complexType>
@@ -171,13 +209,6 @@
 <xs:complexType name="retrieveAllBusinessCategoriesResponse">
 <xs:sequence>
 <xs:element name="return" type="tns:businessCategoryEntity" minOccurs="0" maxOccurs="unbounded"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="businessCategoryEntity">
-<xs:sequence>
-<xs:element name="category" type="xs:string" minOccurs="0"/>
-<xs:element name="id" type="xs:long" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -234,7 +265,7 @@
 <xs:sequence>
 <xs:element name="email" type="xs:string" minOccurs="0"/>
 <xs:element name="password" type="xs:string" minOccurs="0"/>
-<xs:element name="serviceProviderEntity" type="tns:serviceProviderEntity" minOccurs="0"/>
+<xs:element name="providerId" type="xs:long" minOccurs="0"/>
 <xs:element name="newAppointmentEntity" type="tns:appointmentEntity" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>

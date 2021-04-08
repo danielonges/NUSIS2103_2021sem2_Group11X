@@ -1,8 +1,11 @@
 package easyappointmentsystemcustomerterminalclient;
 
 import java.util.Scanner;
+import ws.client.CustomerAlreadyExistsException_Exception;
 import ws.client.CustomerEntity;
+import ws.client.InputDataValidationException_Exception;
 import ws.client.InvalidLoginException_Exception;
+import ws.client.UnknownPersistenceException_Exception;
 
 /**
  *
@@ -15,7 +18,7 @@ public class MainApp {
     private CustomerEntity currentCustomerEntity;
 
     public MainApp() {
-        customerAppointmentModule = new CustomerAppointmentModule(currentCustomerEntity);
+        customerAppointmentModule = new CustomerAppointmentModule();
     }
 
     public void runApp() {
@@ -37,6 +40,7 @@ public class MainApp {
 
                 if (response == 1) {
                     // register
+                    doRegisterCustomer();
                 } else if (response == 2) {
                     // login
                     try {
@@ -72,6 +76,7 @@ public class MainApp {
         password = sc.nextLine().trim();
 
         currentCustomerEntity = customerLogin(email, password);
+        customerAppointmentModule.setCurrentCustomerEntity(currentCustomerEntity);
     }
 
     private void doRegisterCustomer() {
@@ -93,7 +98,7 @@ public class MainApp {
         System.out.print("Enter first name> ");
         String firstName = sc.nextLine().trim();
 
-        while (firstName.length() > 0) {
+        while (firstName.length() == 0) {
             System.out.println("Invalid input! First name field must be present.");
             System.out.print("Enter first name> ");
             firstName = sc.nextLine().trim();
@@ -104,7 +109,7 @@ public class MainApp {
         System.out.print("Enter last name> ");
         String lastName = sc.nextLine().trim();
 
-        while (lastName.length() > 0) {
+        while (lastName.length() == 0) {
             System.out.println("Invalid input! Last name field must be present.");
             System.out.print("Enter last name> ");
             lastName = sc.nextLine().trim();
@@ -135,18 +140,28 @@ public class MainApp {
         System.out.print("Enter address> ");
         String address = sc.nextLine().trim();
 
-        while (address.length() > 0) {
+        while (address.length() == 0) {
             System.out.println("Invalid input! Address field must be present.");
             System.out.print("Enter address> ");
             address = sc.nextLine().trim();
         }
         newCustomerEntity.setAddress(address);
 
+        // set phone
+        System.out.print("Enter phone (digits only, without spaces or hyphens) > ");
+        String phone = sc.nextLine().trim();
+
+        while (!isValidDigitInput(phone)) {
+            System.out.print("Enter phone (digits only, without spaces or hyphens) > ");
+            phone = sc.nextLine().trim();
+        }
+        newCustomerEntity.setPhone(phone);
+
         // set city
         System.out.print("Enter city> ");
         String city = sc.nextLine().trim();
 
-        while (city.length() > 0) {
+        while (city.length() == 0) {
             System.out.println("Invalid input! City field must be present.");
             System.out.print("Enter city> ");
             city = sc.nextLine().trim();
@@ -154,28 +169,46 @@ public class MainApp {
         newCustomerEntity.setCity(city);
 
         // set email
-        System.out.println("Enter email> ");
+        System.out.print("Enter email> ");
         String email = sc.nextLine().trim();
 
         while (!isValidEmail(email)) {
-            System.out.println("Enter email> ");
+            System.out.print("Enter email> ");
             email = sc.nextLine().trim();
         }
         newCustomerEntity.setEmail(age);
 
         // set password
-        System.out.println("Enter password> ");
+        System.out.print("Enter password> ");
         String password = sc.nextLine().trim();
 
-        while (password.length() > 0) {
+        while (password.length() == 0) {
             System.out.println("Invalid input! Password field must be present.");
             System.out.print("Enter password> ");
             password = sc.nextLine().trim();
         }
         newCustomerEntity.setPassword(password);
 
-        registerCustomer(newCustomerEntity);
-        System.out.println("New customer successfully registered!\n");
+        try {
+            registerCustomer(newCustomerEntity);
+            System.out.println("New customer successfully registered!\n");
+        } catch (CustomerAlreadyExistsException_Exception ex) {
+            System.out.println("An error has occurred while registering the new customer!: The customer with the same ID number, phone number or email address already exist.\n");
+        } catch (UnknownPersistenceException_Exception ex) {
+            System.out.println("An unknown error has occurred while registering the new customer!: " + ex.getMessage() + "\n");
+        } catch (InputDataValidationException_Exception ex) {
+            System.out.println(ex.getMessage() + "\n");
+        }
+
+    }
+
+    private boolean isValidDigitInput(String input) {
+        if (!input.matches("\\d+")) {
+            System.out.println("Invalid input! Input must be all digits.");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private boolean isValidIdentityNo(String input) {
@@ -248,11 +281,11 @@ public class MainApp {
                 switch (response) {
                     case 1:
                         System.out.println("*** Customer terminal :: Search operation ***\n");
-                        customerAppointmentModule.doSearchOperation();
+                        customerAppointmentModule.doSearchOperation(false);
                         break;
                     case 2:
                         System.out.println("*** Customer terminal :: Add appointment ***\n");
-                        customerAppointmentModule.doAddAppointment();
+                        customerAppointmentModule.doSearchOperation(true);
                         break;
                     case 3:
                         System.out.println("*** Customer terminal :: View appointments ***\n");
@@ -286,7 +319,7 @@ public class MainApp {
         return port.customerLogin(email, password);
     }
 
-    private static void registerCustomer(ws.client.CustomerEntity newCustomerEntity) {
+    private static void registerCustomer(ws.client.CustomerEntity newCustomerEntity) throws CustomerAlreadyExistsException_Exception, InputDataValidationException_Exception, UnknownPersistenceException_Exception {
         ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
         ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
         port.registerCustomer(newCustomerEntity);
