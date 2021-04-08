@@ -128,7 +128,8 @@ public class MainApp {
             ServiceProviderEntity newServiceProviderEntity = new ServiceProviderEntity();
             newServiceProviderEntity.setName(name);
             newServiceProviderEntity.setBusinessCategory(businessCategory);
-            businessCategory.getServiceProviders().add(newServiceProviderEntity);
+            BusinessCategoryEntity currentBusinessCategory = businessCategorySessionBeanRemote.retrieveServiceProviders(businessCategory.getId());
+            currentBusinessCategory.getServiceProviders().add(newServiceProviderEntity);
             newServiceProviderEntity.setBusinessRegNum(businessRegistrationNum);
             newServiceProviderEntity.setCity(city);
             newServiceProviderEntity.setPhone(phone);
@@ -137,7 +138,7 @@ public class MainApp {
             newServiceProviderEntity.setEmail(email);
             newServiceProviderEntity.setPassword(password);
             serviceProviderEntitySessionBeanRemote.createServiceProviderEntity(newServiceProviderEntity);
-            businessCategorySessionBeanRemote.updateBusinessCategoryEntity(businessCategory);
+          //  businessCategorySessionBeanRemote.updateBusinessCategoryEntity(currentBusinessCategory);
             System.out.println("You have been registered successfully! \n");
             System.out.println("Enter 0 to go back to the previous menu. \n");
             System.out.print("> ");

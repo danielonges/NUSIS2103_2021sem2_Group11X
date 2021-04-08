@@ -28,4 +28,6 @@ public interface BusinessCategorySessionBeanRemote {
     public BusinessCategoryEntity retrieveBusinessCategoryEntityByName(String businessCategory) throws BusinessCategoryNotFoundException;
     
     public void updateBusinessCategoryEntity(BusinessCategoryEntity businessCategoryEntity);
+    
+    public BusinessCategoryEntity retrieveServiceProviders(Long businessCategoryEntityId);
 }
