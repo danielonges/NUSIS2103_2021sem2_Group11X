@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlTransient;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
 import static util.enumeration.ServiceProviderStatus.PENDING;
 
@@ -174,6 +175,7 @@ public class ServiceProviderEntity implements Serializable {
         this.phone = phone;
     }
 
+    @XmlTransient
     public List<AppointmentEntity> getAppointments() {
         return appointments;
     }

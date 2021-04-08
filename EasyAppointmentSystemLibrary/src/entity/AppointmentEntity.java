@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,13 +31,14 @@ public class AppointmentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
+    @Column(nullable = false, unique = true)
     private Long appointmentNo;
+    @Column(nullable = false)
     private String businessCategory;
     private Integer rating;// (between 1 to 5)
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     //timestamp   
-   
 
     private Boolean isCancelled;
 
@@ -48,6 +51,8 @@ public class AppointmentEntity implements Serializable {
     private ServiceProviderEntity serviceProvider;
 
     public AppointmentEntity() {
+        isCancelled = false;
+        this.rating = 0;
     }
 
     public AppointmentEntity(Long appointmentNo, String businessCategory, Date date, CustomerEntity customerEntity, ServiceProviderEntity serviceProviderEntity) {
@@ -108,7 +113,7 @@ public class AppointmentEntity implements Serializable {
         this.date = date;
     }
 
-  
+//    @XmlTransient
     public CustomerEntity getCustomer() {
         return customer;
     }
@@ -117,6 +122,7 @@ public class AppointmentEntity implements Serializable {
         this.customer = customer;
     }
 
+//    @XmlTransient
     public ServiceProviderEntity getServiceProvider() {
         return serviceProvider;
     }

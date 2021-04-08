@@ -100,22 +100,24 @@ public class CustomerAppointmentModule {
             ex.printStackTrace();
         }
 
-        List<ServiceProviderEntity> availableServiceProvidersByDate = null;
+        List<ServiceProviderEntity> approvedServiceProviders = null;
+
         try {
             // retrieve list of service providers
-            List<ServiceProviderEntity> approvedServiceProviders
+            approvedServiceProviders
                     = retrieveServiceProvidersByCategoryIdAndCity(categoryId, city)
                             .stream()
                             .filter(sp -> sp.getStatus() == ServiceProviderStatus.APPROVE)
                             .collect(Collectors.toList());
             boolean hasAvailableAppointment = false;
-            availableServiceProvidersByDate = getAvailableServiceProvidersByDate(dateToSearch, approvedServiceProviders);
+//            availableServiceProvidersByDate = getAvailableServiceProvidersByDate(dateToSearch, approvedServiceProviders);
             System.out.printf("\n%20s | %20s | %20s | %20s | %20s \n", "Service Provider Id", "Name", "First available time", "Address", "Overall rating");
-            for (ServiceProviderEntity sp : availableServiceProvidersByDate) {
+            for (ServiceProviderEntity sp : approvedServiceProviders) {
+//                System.out.println(sp);
                 List<Integer> availableTimings = findAvailableTimingsOnDate(sp, dateToSearch);
                 if (availableTimings.size() > 0) {
                     hasAvailableAppointment = true;
-                    System.out.printf("\n%20s | %20s | %20s | %20s | %20s ", sp.getProviderId(), sp.getName(), availableTimings.get(0), sp.getAddress(), sp.getOverallRating());
+                    System.out.printf("\n%20s | %20s | %20s | %20s | %20s ", sp.getProviderId(), sp.getName(), String.format("%02d:30", availableTimings.get(0)), sp.getAddress(), sp.getOverallRating());
                 }
             }
             if (!hasAvailableAppointment) {
@@ -127,35 +129,47 @@ public class CustomerAppointmentModule {
         } catch (BusinessCategoryNotFoundException_Exception ex) {
             System.out.println("Unable to find business category: " + ex.getMessage() + "\n");
         }
-        
+
         if (doAddAppointment) {
-            doAddAppointment(availableServiceProvidersByDate, dateToSearch);
+            doAddAppointment(approvedServiceProviders, dateToSearch);
         }
     }
 
-    private List<ServiceProviderEntity> getAvailableServiceProvidersByDate(Date date, List<ServiceProviderEntity> serviceProviders) {
-        return serviceProviders.stream()
-                .filter(sp -> sp.getAppointments().stream().anyMatch(app -> {
-            XMLGregorianCalendar appDate = app.getDate();
-            int appDay = appDate.getDay();
-            int appMonth = appDate.getMonth();
-            int appYear = appDate.getYear();
-            return date.getDate() == appDay && date.getMonth() == appMonth && date.getYear() == appYear;
-        })).collect(Collectors.toList());
-    }
-
-    private List<Integer> findAvailableTimingsOnDate(ServiceProviderEntity serviceProvider, Date date) {
+//    private List<ServiceProviderEntity> getAvailableServiceProvidersByDate(Date date, List<ServiceProviderEntity> serviceProviders) {
+//        return serviceProviders.stream()
+//                .filter(sp -> sp.getAppointments().stream().anyMatch(app -> {
+//            XMLGregorianCalendar appDate = app.getDate();
+//            int appDay = appDate.getDay();
+//            int appMonth = appDate.getMonth();
+//            int appYear = appDate.getYear();
+//            return date.getDate() == appDay && date.getMonth() == appMonth && date.getYear() == appYear;
+//        })).collect(Collectors.toList());
+//    }
+    private List<Integer> findAvailableTimingsOnDate(ServiceProviderEntity serviceProvider, Date date) throws ServiceProviderNotFoundException_Exception {
         List<Integer> availableTimings = getAvailableHoursInADay();
-        List<AppointmentEntity> appointments = serviceProvider.getAppointments();
+        List<AppointmentEntity> appointments = retrieveServiceProviderAppointments(serviceProvider.getProviderId());
+
+        System.out.println(appointments);
 
         for (AppointmentEntity a : appointments) {
+//            System.out.println(a.getDate().getMonth());
+//            System.out.println(date.getMonth());
+//            System.out.println(date.getDate() == a.getDate().getDay());
+//            System.out.println(date.getMonth() + 1 == a.getDate().getMonth());
+//            System.out.println(date.getYear() + 1900 == a.getDate().getYear());
+//            System.out.println(a.getDate().getHour());
+//            System.out.println(availableTimings.contains(a.getDate().getHour()));
+
             if (date.getDate() == a.getDate().getDay()
-                    && date.getMonth() == a.getDate().getMonth()
-                    && date.getYear() == a.getDate().getYear()
+                    && date.getMonth() + 1 == a.getDate().getMonth()
+                    && date.getYear() + 1900 == a.getDate().getYear()
                     && availableTimings.contains(a.getDate().getHour())) {
-                availableTimings.remove(a.getDate().getHour());
+                int index = availableTimings.indexOf(a.getDate().getHour());
+//                System.out.println(index);
+                availableTimings.remove(index);
             }
         }
+//        System.out.println(availableTimings);
         Collections.sort(availableTimings);
         return availableTimings;
     }
@@ -168,52 +182,69 @@ public class CustomerAppointmentModule {
         return availableHoursInADay;
     }
 
-    public void doAddAppointment(List<ServiceProviderEntity> availableServiceProvidersByDate, Date dateToSearch) {
+    public void doAddAppointment(List<ServiceProviderEntity> approvedServiceProviders, Date dateToSearch) {
         System.out.println("Enter 0 to go back to the previous menu.");
         System.out.print("Service provider Id> ");
         String input = sc.nextLine().trim();
-        
+
         while (!isValidDigitInput(input)) {
             System.out.print("Service provider Id> ");
             input = sc.nextLine().trim();
         }
-        
+
         Long providerId = Long.parseLong(input);
-        
+
         if (providerId == 0) {
             return;
         }
-        
+
         try {
             ServiceProviderEntity serviceProvider = retrieveServiceProviderByProviderId(providerId);
-            if (!availableServiceProvidersByDate.contains(serviceProvider)) {
+//            if (!approvedServiceProviders.contains(serviceProvider)) {
+//                System.out.println("Service provider with Id provided is not free on date " + new SimpleDateFormat("yyyy-MM-dd").format(dateToSearch) + ".\n");
+//                return;
+//            }
+
+            List<Integer> availableTimings = findAvailableTimingsOnDate(serviceProvider, dateToSearch);
+
+            if (availableTimings.size() == 0) {
                 System.out.println("Service provider with Id provided is not free on date " + new SimpleDateFormat("yyyy-MM-dd").format(dateToSearch) + ".\n");
                 return;
             }
-            
-            List<Integer> availableTimings = findAvailableTimingsOnDate(serviceProvider, dateToSearch);
             System.out.println("Available appointment slots:");
             System.out.println(availableTimings.stream()
-                    .map(hour -> hour + ":30")
+                    .map(hour -> String.format("%02d:30", hour))
                     .collect(Collectors.joining(" | ")));
             System.out.println("Enter 0 to go back to the previous menu.");
             System.out.print("Enter time> ");
             String time = sc.nextLine().trim();
-            
-            while (!isValidTime(time)) {
-                System.out.print("Enter time> ");
-                time = sc.nextLine().trim();
+
+            int hour;
+            int minute;
+
+            while (true) {
+
+                if (!isValidTime(time)) {
+                    System.out.print("Enter time> ");
+                    time = sc.nextLine().trim();
+                } else {
+                    hour = Integer.parseInt(time.split(":")[0]);
+                    minute = Integer.parseInt(time.split(":")[1]);
+                    if (!availableTimings.contains(hour)) {
+                        System.out.println("Service provider is not available during that time!");
+                        System.out.print("Enter time> ");
+                        time = sc.nextLine().trim();
+                    } else {
+                        break;
+                    }
+                }
             }
-            
-            int hour = Integer.parseInt(time.split(":")[0]);
-            int minute = Integer.parseInt(time.split(":")[1]);
-            
+
             AppointmentEntity appointmentEntity = new AppointmentEntity();
-            appointmentEntity.setAppointmentNo(Long.parseLong(appointmentEntity.getAppointmentId() 
-                    + String.format("%02d%02d%02d%02d", dateToSearch.getMonth(), dateToSearch.getDate(), hour, minute)));
+            appointmentEntity.setAppointmentNo(Long.parseLong(String.format("%02d%02d%02d%02d", dateToSearch.getMonth() + 1, dateToSearch.getDate(), hour, minute)));
             appointmentEntity.setBusinessCategory(serviceProvider.getBusinessCategory().getCategory());
             GregorianCalendar c = new GregorianCalendar();
-            
+
             try {
                 c.setTime(new Date(dateToSearch.getYear(), dateToSearch.getMonth(), dateToSearch.getDate(), hour, minute));
                 XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
@@ -221,18 +252,18 @@ public class CustomerAppointmentModule {
             } catch (DatatypeConfigurationException ex) {
                 ex.printStackTrace();
             }
-            
+
             addAppointment(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), serviceProvider.getProviderId(), appointmentEntity);
             System.out.println(String.format("The appointment with %s at %s on %s is confimed.\n", serviceProvider.getName(), time, new SimpleDateFormat("yyyy-MM-dd").format(dateToSearch)));
-            
+
         } catch (ServiceProviderNotFoundException_Exception ex) {
             System.out.println("Service provider with Id provided does not exist!\n");
         } catch (CreateNewAppointmentEntityException_Exception | CustomerNotFoundException_Exception | InvalidLoginException_Exception ex) {
             System.out.println("An error occured while creating the appointment: " + ex.getMessage());
         }
-        
+
     }
-    
+
     private boolean isValidTime(String input) {
         String validationRegex = "\\d{1,2}:\\d{2}";
         if (!input.matches(validationRegex)) {
@@ -244,20 +275,30 @@ public class CustomerAppointmentModule {
     }
 
     public void doViewAppointments() {
-        
+
         System.out.println(currentCustomerEntity);
 
         try {
             List<AppointmentEntity> appointmentEntities = retrieveCustomerAppointments(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword());
 
             System.out.println(String.format("Appointments for %s %s:\n", currentCustomerEntity.getFirstName(), currentCustomerEntity.getLastName()));
+            boolean hasAppointments = false;
             if (appointmentEntities.size() > 0) {
-                for (AppointmentEntity appointmentEntity : appointmentEntities) {
-                    System.out.println(appointmentEntity);
+
+                System.out.println(String.format("%20s | %20s | %10s | %20s", "Name", "Date", "Time", "Appointment no."));
+
+                for (AppointmentEntity a : appointmentEntities) {
+                    if (!a.isIsCancelled()) {
+                        hasAppointments = true;
+                        System.out.println(String.format("%20s | %20s | %10s | %20s", a.getServiceProvider().getName(), String.format("%04d-%02d-%02d", a.getDate().getYear(), a.getDate().getMonth(), a.getDate().getDay()), String.format("%02d:%02d", a.getDate().getHour(), a.getDate().getMinute()), a.getAppointmentNo()));
+                    }
                 }
-            } else {
+            }
+            
+            if (!hasAppointments) {
                 System.out.println("You don't have any appointments!");
             }
+                     
             System.out.println();
 
         } catch (InvalidLoginException_Exception | CustomerNotFoundException_Exception ex) {
@@ -371,31 +412,22 @@ public class CustomerAppointmentModule {
         }
     }
 
-
-    private static java.util.List<ws.client.AppointmentEntity> retrieveCustomerAppointments(java.lang.String email, java.lang.String password) throws InvalidLoginException_Exception, CustomerNotFoundException_Exception {
+    private static void addAppointment(java.lang.String email, java.lang.String password, java.lang.Long providerId, ws.client.AppointmentEntity newAppointmentEntity) throws InvalidLoginException_Exception, CustomerNotFoundException_Exception, CreateNewAppointmentEntityException_Exception {
         ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
         ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
-        return port.retrieveCustomerAppointments(email, password);
+        port.addAppointment(email, password, providerId, newAppointmentEntity);
     }
 
-
-
-    private static void cancelAppointment(java.lang.String email, java.lang.String password, java.lang.Long appointmentNo) throws AppointmentNotFoundException_Exception, UnauthorisedOperationException_Exception, InvalidLoginException_Exception, CustomerNotFoundException_Exception {
+    private static void cancelAppointment(java.lang.String email, java.lang.String password, java.lang.Long appointmentNo) throws AppointmentNotFoundException_Exception, UnauthorisedOperationException_Exception, CustomerNotFoundException_Exception, InvalidLoginException_Exception {
         ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
         ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
         port.cancelAppointment(email, password, appointmentNo);
     }
 
-    private static void rateServiceProvider(java.lang.String email, java.lang.String password, java.lang.Long providerId, java.lang.Integer rating) throws ServiceProviderNotFoundException_Exception, InvalidLoginException_Exception {
+    private static void rateServiceProvider(java.lang.String email, java.lang.String password, java.lang.Long providerId, java.lang.Integer rating) throws InvalidLoginException_Exception, ServiceProviderNotFoundException_Exception {
         ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
         ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
         port.rateServiceProvider(email, password, providerId, rating);
-    }
-
-    private static ServiceProviderEntity retrieveServiceProviderByProviderId(java.lang.Long providerId) throws ServiceProviderNotFoundException_Exception {
-        ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
-        ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
-        return port.retrieveServiceProviderByProviderId(providerId);
     }
 
     private static java.util.List<ws.client.BusinessCategoryEntity> retrieveAllBusinessCategories() {
@@ -404,19 +436,28 @@ public class CustomerAppointmentModule {
         return port.retrieveAllBusinessCategories();
     }
 
-    private static java.util.List<ws.client.ServiceProviderEntity> retrieveServiceProvidersByCategoryIdAndCity(java.lang.Long categoryId, java.lang.String city) throws BusinessCategoryNotFoundException_Exception, ServiceProviderNotFoundException_Exception {
+    private static java.util.List<ws.client.AppointmentEntity> retrieveCustomerAppointments(java.lang.String email, java.lang.String password) throws CustomerNotFoundException_Exception, InvalidLoginException_Exception {
+        ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
+        ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
+        return port.retrieveCustomerAppointments(email, password);
+    }
+
+    private static ServiceProviderEntity retrieveServiceProviderByProviderId(java.lang.Long providerId) throws ServiceProviderNotFoundException_Exception {
+        ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
+        ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
+        return port.retrieveServiceProviderByProviderId(providerId);
+    }
+
+    private static java.util.List<ws.client.ServiceProviderEntity> retrieveServiceProvidersByCategoryIdAndCity(java.lang.Long categoryId, java.lang.String city) throws ServiceProviderNotFoundException_Exception, BusinessCategoryNotFoundException_Exception {
         ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
         ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
         return port.retrieveServiceProvidersByCategoryIdAndCity(categoryId, city);
     }
 
-    private static void addAppointment(java.lang.String email, java.lang.String password, java.lang.Long providerId, ws.client.AppointmentEntity newAppointmentEntity) throws CreateNewAppointmentEntityException_Exception, InvalidLoginException_Exception, CustomerNotFoundException_Exception {
+    private static java.util.List<ws.client.AppointmentEntity> retrieveServiceProviderAppointments(java.lang.Long providerId) throws ServiceProviderNotFoundException_Exception {
         ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
         ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
-        port.addAppointment(email, password, providerId, newAppointmentEntity);
+        return port.retrieveServiceProviderAppointments(providerId);
     }
-
-    
-    
 
 }

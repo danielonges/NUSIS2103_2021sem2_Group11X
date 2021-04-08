@@ -182,8 +182,8 @@ public class MainApp {
         System.out.print("Enter password> ");
         String password = sc.nextLine().trim();
 
-        while (password.length() == 0) {
-            System.out.println("Invalid input! Password field must be present.");
+        while (!password.matches("\\d{6}")) {
+            System.out.println("Invalid input! Password field must be a 6 digit number.");
             System.out.print("Enter password> ");
             password = sc.nextLine().trim();
         }
