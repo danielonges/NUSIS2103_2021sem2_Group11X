@@ -125,7 +125,7 @@ public class ServiceProviderModule {
                         serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
                         System.out.println("Service provider with Id: "+serviceProviderId +" has been successfully approved!");      
                     } else {
-                        System.out.println("Service provider Id is invalid! or service provider has already been approved");
+                        System.out.println("Service provider Id is invalid or service provider has already been approved");
                     }
                 }
             }
