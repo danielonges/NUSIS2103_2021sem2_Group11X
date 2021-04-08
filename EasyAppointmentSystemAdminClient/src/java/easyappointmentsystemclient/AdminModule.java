@@ -124,12 +124,13 @@ public class AdminModule {
     public void sendReminderEmail() {
         Scanner sc = new Scanner(System.in);
         System.out.println("*** Admin terminal :: Send reminder emai ***");
-
+        
         while (true) {
             try {
                 System.out.println("Enter 0 to go back to the previous menu.");
                 System.out.print("Enter customer Id> ");
                 Long customerId = sc.nextLong();
+                 sendJMSMessageToQueue("exleolee@gmail.com", "leeleonard_98@yahoo.com.sg");
                 if (customerId == 0L) {
                     break;
                 } else {
@@ -142,7 +143,7 @@ public class AdminModule {
                         for (AppointmentEntity appointment : appointments) {
                             if (toEmailAddress.length() > 0) {
                                 try {
-
+                                         sendJMSMessageToQueue("exleolee@gmail.com", toEmailAddress);
                                     // 03 - JMS Messaging with Message Driven Bean
                                     sendJMSMessageToQueueApplication(appointment.getAppointmentId(), "exleolee@gmail.com", toEmailAddress);
 
@@ -159,6 +160,8 @@ public class AdminModule {
                 System.out.println("Wrong Input! \n");
             } catch (CustomerNotFoundException ex) {
                 System.out.println("Customer Entity not found!");
+            } catch (JMSException ex) {
+                System.out.println("hello");
             }
 
         }
@@ -171,10 +174,42 @@ public class AdminModule {
             connection = queueApplicationFactory.createConnection();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
+            System.out.println("MEssage received by MDB");
+            
             MapMessage mapMessage = session.createMapMessage();
             mapMessage.setString("fromEmailAddress", fromEmailAddress);
             mapMessage.setString("toEmailAddress", toEmailAddress);
             mapMessage.setLong("appointmentId", appointmentId);
+            MessageProducer messageProducer = session.createProducer(queueApplication);
+            messageProducer.send(mapMessage);
+
+        } finally {
+            if (session != null) {
+                try {
+                    session.close();
+                } catch (JMSException e) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Cannot close session", e);
+                }
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+    
+    private void sendJMSMessageToQueue(String fromEmailAddress, String toEmailAddress) throws JMSException {
+        Connection connection = null;
+        Session session = null;
+        try {
+            connection = queueApplicationFactory.createConnection();
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+            System.out.println("MEssage received by MDB");
+            
+            MapMessage mapMessage = session.createMapMessage();
+            mapMessage.setString("fromEmailAddress", fromEmailAddress);
+            mapMessage.setString("toEmailAddress", toEmailAddress);
+            
             MessageProducer messageProducer = session.createProducer(queueApplication);
             messageProducer.send(mapMessage);
 

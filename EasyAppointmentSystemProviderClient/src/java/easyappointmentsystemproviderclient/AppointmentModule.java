@@ -98,10 +98,13 @@ public class AppointmentModule {
             } else {
                 try {
                     Long value = new Long(response);
-                    appointmentEntitySessionBeanRemote.deleteAppointmentEntity(value);
+                    
+                    AppointmentEntity currentAppointmentEntity = appointmentEntitySessionBeanRemote.retrieveAppointmentEntityByAppointmentId(value);
+                    currentAppointmentEntity.setIsCancelled(Boolean.TRUE);
+                    appointmentEntitySessionBeanRemote.updateAppointmentEntity(currentAppointmentEntity);
                     System.out.println("Appointment " + response + " has been cancelled successfully");
                 } catch (AppointmentNotFoundException ex) {
-                    System.out.println("Unable to delete!");
+                    System.out.println("Unable to cancel!");
                 }
             }
         }
