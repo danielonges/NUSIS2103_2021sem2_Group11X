@@ -134,7 +134,6 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
         try {
             CustomerEntity currentCustomerEntity = em.find(CustomerEntity.class, customerId);
             currentCustomerEntity.getAppointments().size();
-            System.out.println(currentCustomerEntity.getAppointments());
             return currentCustomerEntity;
         } catch (NoResultException | NullPointerException ex) {
             throw new CustomerNotFoundException("Customer not found!");

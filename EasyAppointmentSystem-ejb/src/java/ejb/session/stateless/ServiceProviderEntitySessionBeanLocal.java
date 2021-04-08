@@ -34,5 +34,7 @@ public interface ServiceProviderEntitySessionBeanLocal {
 
     public ServiceProviderEntity retrieveListOfAppointments(Long serviceProviderId) throws ServiceProviderNotFoundException;
 
+    public List<AppointmentEntity> retrieveListOfPendingAppointments(Long serviceProviderId) throws ServiceProviderNotFoundException;
+
 
 }

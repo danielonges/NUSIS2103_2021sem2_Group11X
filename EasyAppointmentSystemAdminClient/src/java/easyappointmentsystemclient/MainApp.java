@@ -9,11 +9,13 @@ import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.BusinessCategorySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
+import ejb.session.stateless.EmailSessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AdminEntity;
-import java.util.InputMismatchException;
 import util.exception.InvalidLoginException;
 import java.util.Scanner;
+import javax.jms.ConnectionFactory;
+import javax.jms.Queue;
 
 /**
  *
@@ -29,19 +31,25 @@ public class MainApp {
     private AdminEntity currentAdminEntity;
     private CustomerModule customerModule;
     private ServiceProviderModule serviceProviderModule;
-    private AdminModule adminModule;
+    private AdminModule adminModule;  
+    private EmailSessionBeanRemote emailSessionBeanRemote;
+    private Queue queueApplication;
+    private ConnectionFactory queueApplicationFactory;
 
     public MainApp() {
     }
 
-    public MainApp(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote,
-            AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote) {
+    public MainApp(AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, BusinessCategorySessionBeanRemote businessCategorySessionBeanRemote,EmailSessionBeanRemote emailSessionBeanRemote, Queue queueApplication,ConnectionFactory queueApplicationFactory ) {
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
-        this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
+        this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
         this.businessCategorySessionBeanRemote = businessCategorySessionBeanRemote;
+        this.emailSessionBeanRemote = emailSessionBeanRemote;
+        this.queueApplication = queueApplication;
+        this.queueApplicationFactory = queueApplicationFactory;
     }
+
 
     public void runApp() {
         Scanner scanner = new Scanner(System.in);
@@ -64,7 +72,7 @@ public class MainApp {
                             System.out.println("Login successful!\n");
                             customerModule = new CustomerModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
                             serviceProviderModule = new ServiceProviderModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
-                            adminModule = new AdminModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, businessCategorySessionBeanRemote);
+                            adminModule = new AdminModule(appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, businessCategorySessionBeanRemote, emailSessionBeanRemote,queueApplication,queueApplicationFactory);
                             menuMain();
                         } catch (InvalidLoginException ex) {
                             System.out.println("Invalid login");
@@ -123,7 +131,7 @@ public class MainApp {
             response = 0;
             OUTER:
             // dan: should it be response > 9?
-            while (response < 1 || response > 5) {
+            while (response < 1 || response > 9) {
                 System.out.print("> ");
                 response = scanner.nextInt();
                 switch (response) {

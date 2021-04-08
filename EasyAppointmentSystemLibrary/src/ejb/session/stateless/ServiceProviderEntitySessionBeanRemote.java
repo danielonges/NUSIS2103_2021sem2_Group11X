@@ -33,5 +33,7 @@ public interface ServiceProviderEntitySessionBeanRemote {
     
     public List<ServiceProviderEntity> retrieveListOfServiceProvidersNotBlocked() throws ServiceProviderNotFoundException;
     
+    public List<AppointmentEntity> retrieveListOfPendingAppointments(Long serviceProviderId) throws ServiceProviderNotFoundException;
+    
     
 }

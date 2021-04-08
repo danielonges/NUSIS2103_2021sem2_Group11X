@@ -128,7 +128,7 @@ public class MainApp {
             ServiceProviderEntity newServiceProviderEntity = new ServiceProviderEntity();
             newServiceProviderEntity.setName(name);
             newServiceProviderEntity.setBusinessCategory(businessCategory);
-            BusinessCategoryEntity currentBusinessCategory = businessCategorySessionBeanRemote.retrieveServiceProviders(businessCategory.getId());
+            BusinessCategoryEntity currentBusinessCategory = businessCategorySessionBeanRemote.retrieveServiceProviders(businessCategory.getCategoryId());
             currentBusinessCategory.getServiceProviders().add(newServiceProviderEntity);
             newServiceProviderEntity.setBusinessRegNum(businessRegistrationNum);
             newServiceProviderEntity.setCity(city);
