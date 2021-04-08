@@ -17,6 +17,8 @@ import javax.ejb.Local;
 public interface EmailSessionBeanLocal {
     
     public Boolean emailCheckoutNotificationSync(AppointmentEntity appointmentEntity, String fromEmailAddress, String toEmailAddress);
+
+    public Boolean sendFreeEmail(String fromEmailAddress, String toEmailAddress);
     
-    public Future<Boolean> emailCheckoutNotificationAsync(AppointmentEntity appointmentEntity, String fromEmailAddress, String toEmailAddress) throws InterruptedException;
+   
 }

@@ -38,44 +38,33 @@ public class MessageDrivenBean implements MessageListener {
 
     @EJB(name = "AdminEntitySessionBeanLocal")
     private AdminEntitySessionBeanLocal adminEntitySessionBeanLocal;
-    
-    
-    
+
     @PostConstruct
-    public void postConstruct()
-    {
+    public void postConstruct() {
     }
-    
-    
-    
+
     @PreDestroy
-    public void preDestroy()
-    {
+    public void preDestroy() {
     }
 
-
-    
     @Override
-    public void onMessage(Message message)
-    {
-        try
-        {
-            if (message instanceof MapMessage)
-            {
-                MapMessage mapMessage = (MapMessage)message;                
+    public void onMessage(Message message) {
+        try {
+            if (message instanceof MapMessage) {
+                MapMessage mapMessage = (MapMessage) message;
                 String toEmailAddress = mapMessage.getString("toEmailAddress");
                 String fromEmailAddress = mapMessage.getString("fromEmailAddress");
-                Long appointmentId = (Long)mapMessage.getLong("appointmentId");
-                AppointmentEntity appointmentEntity = appointmentEntitySessionBeanLocal.retrieveAppointmentEntityByAppointmentId(appointmentId);
-                
-                emailSessionBeanLocal.emailCheckoutNotificationSync(appointmentEntity, fromEmailAddress, toEmailAddress);
-                
-                System.err.println("********** CheckoutNotificationMdb.onMessage: " + appointmentEntity.getAppointmentId() + "; " + toEmailAddress + "; " + fromEmailAddress);
+//                Long appointmentId = (Long) mapMessage.getLong("appointmentId");
+//                AppointmentEntity appointmentEntity = appointmentEntitySessionBeanLocal.retrieveAppointmentEntityByAppointmentId(appointmentId);
+
+//                emailSessionBeanLocal.emailCheckoutNotificationSync(appointmentEntity, fromEmailAddress, toEmailAddress);
+                emailSessionBeanLocal.sendFreeEmail(fromEmailAddress, toEmailAddress);
+                System.out.println("Message sent!");
+//                System.err.println("********** CheckoutNotificationMdb.onMessage: " + appointmentEntity.getAppointmentId() + "; " + toEmailAddress + "; " + fromEmailAddress);
             }
-        }
-        catch(AppointmentNotFoundException | JMSException ex)
-        {
+        } //        catch(AppointmentNotFoundException | JMSException ex)
+        catch (JMSException ex) {
             System.err.println("CheckoutNotificationMdb.onMessage(): " + ex.getMessage());
         }
-    }    
+    }
 }
