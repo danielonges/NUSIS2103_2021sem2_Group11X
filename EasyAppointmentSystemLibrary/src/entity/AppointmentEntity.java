@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,7 +31,9 @@ public class AppointmentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
+    @Column(nullable = false, unique = true)
     private Long appointmentNo;
+    @Column(nullable = false)
     private String businessCategory;
     private Integer rating;// (between 1 to 5)
     @Temporal(TemporalType.TIMESTAMP)
@@ -48,6 +51,8 @@ public class AppointmentEntity implements Serializable {
     private ServiceProviderEntity serviceProvider;
 
     public AppointmentEntity() {
+        isCancelled = false;
+        this.rating = 0;
     }
 
     public AppointmentEntity(Long appointmentNo, String businessCategory, Date date, CustomerEntity customerEntity, ServiceProviderEntity serviceProviderEntity) {

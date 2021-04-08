@@ -70,6 +70,12 @@
 <message name="retrieveServiceProviderByProviderIdResponse">
 <part name="parameters" element="tns:retrieveServiceProviderByProviderIdResponse"/>
 </message>
+<message name="retrieveServiceProviderAppointments">
+<part name="parameters" element="tns:retrieveServiceProviderAppointments"/>
+</message>
+<message name="retrieveServiceProviderAppointmentsResponse">
+<part name="parameters" element="tns:retrieveServiceProviderAppointmentsResponse"/>
+</message>
 <message name="retrieveAllBusinessCategories">
 <part name="parameters" element="tns:retrieveAllBusinessCategories"/>
 </message>
@@ -127,6 +133,11 @@
 <input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderByProviderIdRequest" message="tns:retrieveServiceProviderByProviderId"/>
 <output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderByProviderIdResponse" message="tns:retrieveServiceProviderByProviderIdResponse"/>
 <fault message="tns:ServiceProviderNotFoundException" name="ServiceProviderNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderByProviderId/Fault/ServiceProviderNotFoundException"/>
+</operation>
+<operation name="retrieveServiceProviderAppointments">
+<input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderAppointmentsRequest" message="tns:retrieveServiceProviderAppointments"/>
+<output wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderAppointmentsResponse" message="tns:retrieveServiceProviderAppointmentsResponse"/>
+<fault message="tns:ServiceProviderNotFoundException" name="ServiceProviderNotFoundException" wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveServiceProviderAppointments/Fault/ServiceProviderNotFoundException"/>
 </operation>
 <operation name="retrieveAllBusinessCategories">
 <input wsam:Action="http://ws.session.ejb/CustomerAppointmentWebService/retrieveAllBusinessCategoriesRequest" message="tns:retrieveAllBusinessCategories"/>
@@ -234,6 +245,18 @@
 </fault>
 </operation>
 <operation name="retrieveServiceProviderByProviderId">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+<fault name="ServiceProviderNotFoundException">
+<soap:fault name="ServiceProviderNotFoundException" use="literal"/>
+</fault>
+</operation>
+<operation name="retrieveServiceProviderAppointments">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>

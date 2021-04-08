@@ -16,6 +16,8 @@ import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
@@ -74,6 +76,12 @@ public class CustomerAppointmentWebService {
         customerEntity = customerEntitySessionBeanLocal.retrieveCustomerAppointments(customerEntity.getCustomerId());
         return customerEntity.getAppointments();
     }
+    
+    @WebMethod(operationName = "retrieveServiceProviderAppointments")
+    public List<AppointmentEntity> retrieveServiceProviderAppointments(@WebParam(name = "providerId") Long providerId) throws ServiceProviderNotFoundException {
+        ServiceProviderEntity serviceProviderEntity = serviceProviderEntitySessionBeanLocal.retrieveListOfAppointments(providerId);
+        return serviceProviderEntity.getAppointments();
+    }
 
     @WebMethod(operationName = "retrieveServiceProvidersByCategoryIdAndCity")
     public List<ServiceProviderEntity> retrieveServiceProvidersByCategoryIdAndCity(
@@ -93,7 +101,17 @@ public class CustomerAppointmentWebService {
         // authentication needs to be performed
         CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
 
-        appointmentEntitySessionBeanLocal.createAppointmentEntity(customerEntity.getCustomerId(), providerId, newAppointmentEntity);
+        Long appointmentId = appointmentEntitySessionBeanLocal.createAppointmentEntity(customerEntity.getCustomerId(), providerId, newAppointmentEntity);
+        // update appointment no manually
+        AppointmentEntity appointmentEntity = null;
+        try {
+            appointmentEntity = appointmentEntitySessionBeanLocal.retrieveAppointmentEntityByAppointmentId(appointmentId);
+        } catch (AppointmentNotFoundException ex) {
+            // this should not happen
+            ex.printStackTrace();
+        }
+        appointmentEntity.setAppointmentNo(Long.parseLong(appointmentEntity.getAppointmentId() + String.format("%08d", appointmentEntity.getAppointmentNo())));
+        appointmentEntitySessionBeanLocal.updateAppointmentEntity(appointmentEntity);
     }
 
     @WebMethod(operationName = "cancelAppointment")
