@@ -65,7 +65,7 @@ public class MainApp {
                 while (response < 1 || response > 4) {
                     System.out.print("> ");
 
-                    response = scanner.nextInt();
+                    response = Integer.parseInt(scanner.nextLine());
 
                     if (response == 1) {
                         try {
@@ -207,7 +207,7 @@ public class MainApp {
                 response = 0;
                 while (response < 1 || response > 5) {
                     System.out.print("> ");
-                    response = scanner.nextInt();
+                    response = Integer.parseInt(scanner.nextLine());
                     if (response == 1) {
                         profileModule.viewProfile();
                     } else if (response == 2) {
@@ -225,8 +225,10 @@ public class MainApp {
                 if (response == 5) {
                     break;
                 }
-            } catch (InputMismatchException ex) {
-                System.out.println("Wrong input!");
+            } catch (NumberFormatException ex) {
+                {
+                    System.out.println("Invalid data type!");
+                }
             }
         }
     }

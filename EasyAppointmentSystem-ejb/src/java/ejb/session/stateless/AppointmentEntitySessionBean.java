@@ -33,7 +33,7 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
 
     @PersistenceContext(unitName = "EasyAppointmentSystem-ejbPU")
     private EntityManager em;
-    
+
     @EJB
     private CustomerEntitySessionBeanLocal customerEntitySessionBeanLocal;
     @EJB
@@ -49,12 +49,12 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
                 newAppointmentEntity.setServiceProvider(serviceProviderEntity);
                 customerEntity.getAppointments().add(newAppointmentEntity);
                 serviceProviderEntity.getAppointments().add(newAppointmentEntity);
-                
+
                 em.persist(newAppointmentEntity);
                 em.flush();
-                
+
                 return newAppointmentEntity.getAppointmentId();
-                
+
             } catch (CustomerNotFoundException | ServiceProviderNotFoundException ex) {
                 throw new CreateNewAppointmentEntityException(ex.getMessage());
             }
@@ -66,18 +66,17 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
     @Override
     public void cancelAppointmentByCustomerId(Long customerId, Long appointmentNo) throws CustomerNotFoundException, AppointmentNotFoundException, UnauthorisedOperationException {
         CustomerEntity customerEntity = customerEntitySessionBeanLocal.retrieveCustomerEntityByCustomerId(customerId);
-    
+
         AppointmentEntity appointmentEntity = retrieveAppointmentEntityByAppointmentNo(appointmentNo);
-        
+
         if (!appointmentEntity.getCustomer().equals(customerEntity)) {
             throw new UnauthorisedOperationException("Appointment does not belong to customer with customer ID " + customerId);
         }
-    
-        
+
         appointmentEntity.setIsCancelled(true);
         updateAppointmentEntity(appointmentEntity);
     }
-    
+
     @Override
     public AppointmentEntity retrieveAppointmentEntityByAppointmentId(Long appointmentId) throws AppointmentNotFoundException {
         try {
@@ -87,12 +86,12 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
             throw new AppointmentNotFoundException("Appointments not found!");
         }
     }
-    
+
     @Override
     public AppointmentEntity retrieveAppointmentEntityByAppointmentNo(Long appointmentNo) throws AppointmentNotFoundException {
         Query query = em.createQuery("SELECT a FROM AppointmentEntity a WHERE s.appointmentNo = :inAppointmentNo");
         query.setParameter("appointmentNo", appointmentNo);
-        
+
         return (AppointmentEntity) query.getSingleResult();
     }
 
@@ -103,18 +102,14 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
     }
 
     @Override
-    public void deleteAppointmentEntity(Long appointmentId) throws AppointmentNotFoundException{
+    public void deleteAppointmentEntity(Long appointmentId) throws AppointmentNotFoundException {
         AppointmentEntity appointmentEntity = null;
         try {
             appointmentEntity = retrieveAppointmentEntityByAppointmentId(appointmentId);
             em.remove(appointmentEntity);
         } catch (AppointmentNotFoundException ex) {
             //throw new DeleteAppointmentException("unable to delete!");
-        }    
+        }
     }
-
-   
-    
-    
 
 }

@@ -129,7 +129,7 @@ public class MainApp {
                 OUTER:
                 while (response < 1 || response > 9) {
                     System.out.print("> ");
-                    response = scanner.nextInt();
+                    response = Integer.parseInt(scanner.nextLine());
                     switch (response) {
                         case 1:
                             customerModule.viewAppointments();
