@@ -10,6 +10,7 @@ import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.ServiceProviderEntity;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -55,69 +56,73 @@ public class ProfileModule {
         Integer response = 9;
 
         while (true) {
-            System.out.println("*** Service provider terminal :: Edit Profile ***\n");
-            System.out.println("1: Edit city");
-            System.out.println("2: Edit Business Address");
-            System.out.println("3: Edit Email Address");
-            System.out.println("4: Edit Phone Number");
-            System.out.println("5: Edit Password");
-            System.out.println("Enter 0 to go back to the previous menu\n");
-            response = 9;
+            try {
+                System.out.println("*** Service provider terminal :: Edit Profile ***\n");
+                System.out.println("1: Edit city");
+                System.out.println("2: Edit Business Address");
+                System.out.println("3: Edit Email Address");
+                System.out.println("4: Edit Phone Number");
+                System.out.println("5: Edit Password");
+                System.out.println("Enter 0 to go back to the previous menu\n");
+                response = 9;
 
-            OUTER:
-            while (response < 0 || response > 5) {
-                System.out.print("> ");
-                response = scanner.nextInt();
-                scanner.nextLine();
-                switch (response) {
-                    case 1:
-                        System.out.print("Enter new city> ");
-                        String newCity = scanner.nextLine().trim();
-                        currentServiceProviderEntity.setCity(newCity);
-                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
-                        System.out.println("changed successfully!");
-                        break;
-                    case 2:
-                        System.out.print("Enter new business address> ");
-                        String newBusinessAddress = scanner.nextLine().trim();
-                        currentServiceProviderEntity.setAddress(newBusinessAddress);
-                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
-                        System.out.println("changed successfully!");
-                        break;
-                    case 3:
-                        System.out.print("Enter new email address> ");
-                        String newEmailAddress = scanner.nextLine().trim();
-                        currentServiceProviderEntity.setEmail(newEmailAddress);
-                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
-                        System.out.println("changed successfully!");
-                        break;
-                    case 4:
-                        System.out.print("Enter new phone number> ");
-                        String newPhoneNumber = scanner.nextLine().trim();
-                        currentServiceProviderEntity.setPhone(newPhoneNumber);
-                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
-                        System.out.println("changed successfully!");
-                        break;
-                    case 5:
-                        System.out.print("Enter new password> ");
-                        String newPassword = scanner.nextLine().trim();
-                        currentServiceProviderEntity.setPassword(newPassword);
-                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
-                        System.out.println("changed successfully!");
-                        break;
-                    case 0:
-                        break OUTER;
-                    default:
-                        System.out.println("Invalid option, please try again!\n");
-                        break;
+                OUTER:
+                while (response < 0 || response > 5) {
+                    System.out.print("> ");
+                    response = Integer.parseInt(scanner.nextLine());
+                    switch (response) {
+                        case 1:
+                            System.out.print("Enter new city> ");
+                            String newCity = scanner.nextLine().trim();
+                            currentServiceProviderEntity.setCity(newCity);
+                            serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
+                            System.out.println("changed successfully!");
+                            break;
+                        case 2:
+                            System.out.print("Enter new business address> ");
+                            String newBusinessAddress = scanner.nextLine().trim();
+                            currentServiceProviderEntity.setAddress(newBusinessAddress);
+                            serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
+                            System.out.println("changed successfully!");
+                            break;
+                        case 3:
+                            System.out.print("Enter new email address> ");
+                            String newEmailAddress = scanner.nextLine().trim();
+                            currentServiceProviderEntity.setEmail(newEmailAddress);
+                            serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
+                            System.out.println("changed successfully!");
+                            break;
+                        case 4:
+                            System.out.print("Enter new phone number> ");
+                            String newPhoneNumber = scanner.nextLine().trim();
+                            currentServiceProviderEntity.setPhone(newPhoneNumber);
+                            serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
+                            System.out.println("changed successfully!");
+                            break;
+                        case 5:
+                            System.out.print("Enter new password> ");
+                            String newPassword = scanner.nextLine().trim();
+                            currentServiceProviderEntity.setPassword(newPassword);
+                            serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
+                            System.out.println("changed successfully!");
+                            break;
+                        case 0:
+                            break OUTER;
+                        default:
+                            System.out.println("Invalid option, please try again!\n");
+                            break;
+                    }
+
                 }
-            }
-            if (response == 0) {
-                break;
+                if (response == 0) {
+                    break;
+                }
+
+            } catch (NumberFormatException ex) {
+                System.out.println("wrong data type!");
             }
 
         }
-
     }
 
 }

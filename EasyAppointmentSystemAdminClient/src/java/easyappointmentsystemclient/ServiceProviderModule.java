@@ -52,7 +52,7 @@ public class ServiceProviderModule {
                 }
             }
             while (true) {
-                System.out.println("Enter 0 to go back to the previous menu");
+                System.out.print("Enter 0 to go back to the previous menu> ");
                 Integer response = sc.nextInt();
                 if (response == 0) {
                     break;
@@ -61,7 +61,7 @@ public class ServiceProviderModule {
                 }
             }
         } catch (ServiceProviderNotFoundException | InputMismatchException | NullPointerException ex) {
-            System.out.println("Service Providers does not exist!");
+            System.out.println("Service Providers does not exist or your input is invalid!");
         }
     }
 
@@ -69,22 +69,28 @@ public class ServiceProviderModule {
         System.out.println("*** Admin terminal :: View service provider ***");
         System.out.println("List of service providers: ");
         Scanner sc = new Scanner(System.in);
-        while (true) {
-            try {
-                List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveListOfServiceProviders();
+        try {
+            List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveListOfServiceProviders();
+            if (serviceProviders.isEmpty()) {
+                System.out.println("**No current pending service providers**");
+            } else {
+                System.out.println("ID | Name | BusinessCategory | BusinessRegistrationNumber | City"
+                        + " | Address | Email | Phone");
                 for (ServiceProviderEntity serviceProvider : serviceProviders) {
                     System.out.println(serviceProvider);
                 }
-                System.out.println("Enter 0 to go back to the previous menu.");
-                int response = sc.nextInt();
-                if (response == 0L) {
+            }
+            while (true) {
+                System.out.print("Enter 0 to go back to the previous menu> ");
+                Integer response = sc.nextInt();
+                if (response == 0) {
                     break;
                 } else {
-                    System.out.println("Wrong input!");
+                    System.out.println("invalid input!");
                 }
-            } catch (ServiceProviderNotFoundException | InputMismatchException ex) {
-                System.out.println("Service Providers does not exist!");
             }
+        } catch (ServiceProviderNotFoundException | InputMismatchException ex) {
+            System.out.println("Service Providers does not exist or invalid data type!");
         }
     }
 
@@ -95,37 +101,54 @@ public class ServiceProviderModule {
 
         try {
             List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveListOfServiceProvidersWithPendingApproval();
-            for (ServiceProviderEntity serviceProvider : serviceProviders) {
-                System.out.println(serviceProvider);
+            if (serviceProviders.isEmpty()) {
+                System.out.println("**No current pending service providers**");
+            } else {
+                System.out.println("ID | Name | BusinessCategory | BusinessRegistrationNumber | City"
+                        + " | Address | Email | Phone");
+                for (ServiceProviderEntity serviceProvider : serviceProviders) {
+                    System.out.println(serviceProvider);
+                }
             }
 
             while (true) {
                 System.out.println("Enter 0 to go back to the previous menu.");
-                System.out.print("Enter service provider  Id> ");
+                System.out.print("Enter service provider Id to approve> ");
                 Long serviceProviderId = sc.nextLong();
                 if (serviceProviderId == 0L) {
                     break;
                 } else {
 
                     ServiceProviderEntity currentServiceProvider = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
-                    currentServiceProvider.setStatus(ServiceProviderStatus.APPROVE);
-                    serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
+                    if (currentServiceProvider != null && currentServiceProvider.getStatus()==ServiceProviderStatus.PENDING) {
+                        currentServiceProvider.setStatus(ServiceProviderStatus.APPROVE);
+                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
+                        System.out.println("Service provider with Id: "+serviceProviderId +" has been successfully approved!");      
+                    } else {
+                        System.out.println("Service provider Id is invalid! or service provider has already been approved");
+                    }
                 }
             }
         } catch (ServiceProviderNotFoundException | InputMismatchException ex) {
-            System.out.println("Service Providers does not exist!");
+            System.out.println("Service Providers does not exist or wrong data type!");
         }
     }
 
     public void blockProvider() {
-         Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.println("*** Admin terminal :: Block service provider ***");
         System.out.println("List of service providers :");
 
         try {
             List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveListOfServiceProvidersNotBlocked();
-            for (ServiceProviderEntity serviceProvider : serviceProviders) {
-                System.out.println(serviceProvider);
+            if (serviceProviders.isEmpty()) {
+                System.out.println("**No current pending service providers**");
+            } else {
+                System.out.println("ID | Name | BusinessCategory | BusinessRegistrationNumber | City"
+                        + " | Address | Email | Phone");
+                for (ServiceProviderEntity serviceProvider : serviceProviders) {
+                    System.out.println(serviceProvider);
+                }
             }
 
             while (true) {
@@ -137,8 +160,13 @@ public class ServiceProviderModule {
                 } else {
 
                     ServiceProviderEntity currentServiceProvider = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
-                    currentServiceProvider.setStatus(ServiceProviderStatus.BLOCK);
-                    serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
+                    if (currentServiceProvider != null && currentServiceProvider.getStatus()!=ServiceProviderStatus.BLOCK) {
+                        currentServiceProvider.setStatus(ServiceProviderStatus.BLOCK);
+                        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
+                        System.out.println("Service provider with Id: "+serviceProviderId +" has been successfully blocked!");
+                    } else {
+                        System.out.println("Service provider Id is invalid!");
+                    }
                 }
             }
         } catch (ServiceProviderNotFoundException | InputMismatchException ex) {

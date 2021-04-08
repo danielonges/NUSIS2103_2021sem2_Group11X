@@ -52,22 +52,32 @@ public class AdminModule {
                 if (newBusinessCategoryEntity.equals("0")) {
                     break;
                 } else {
-                    businessCategorySessionBeanRemote.createBusinessCategoryEntity(new BusinessCategoryEntity(newBusinessCategoryEntity));
-                    System.out.println("The business category \"" + newBusinessCategoryEntity + "\" is added. ");
-
+                    System.out.println("Confirm adding **" + newBusinessCategoryEntity + "** into business categories?");
+                    while(true){
+                    System.out.print("press Y to confirm and N to reject> ");
+                    String answer = sc.nextLine().trim();
+                    if (answer.length() == 1 && answer.charAt(0) == 'Y') {
+                        businessCategorySessionBeanRemote.createBusinessCategoryEntity(new BusinessCategoryEntity(newBusinessCategoryEntity));
+                        System.out.println("The business category \"" + newBusinessCategoryEntity + "\" is added. ");
+                        break;
+                    } else if (answer.length() == 1 && answer.charAt(0) == 'N') {
+                        break;
+                    } else {
+                        System.out.println("Please enter only Y or N!");
+                    }
+                    }
                 }
             } catch (InputMismatchException ex) {
                 System.out.println("Wrong Input! \n");
             }
-
         }
-        
+
     }
 
     public void removeBusinessCategory() {
         Scanner sc = new Scanner(System.in);
         System.out.println("*** Admin terminal :: Remove a Business category ***");
-        
+
         List<BusinessCategoryEntity> businessCategoryEntitys = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
 
         while (true) {

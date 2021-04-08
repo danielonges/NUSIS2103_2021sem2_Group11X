@@ -53,7 +53,7 @@ public class CustomerModule {
             }
 
             while (true) {
-                System.out.println("Enter 0 to go back to the previous menu");
+                System.out.print("Enter 0 to go back to the previous menu> ");
                 Integer response = sc.nextInt();
                 if (response == 0) {
                     break;
@@ -63,6 +63,7 @@ public class CustomerModule {
             }
         } catch (CustomerNotFoundException | InputMismatchException ex) {
             System.out.println("Customer does not exist!");
+            System.out.println("");
 
         }
     }

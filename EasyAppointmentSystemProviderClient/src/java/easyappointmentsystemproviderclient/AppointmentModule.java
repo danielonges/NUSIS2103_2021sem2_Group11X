@@ -11,6 +11,7 @@ import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.ServiceProviderEntity;
+import static java.util.Calendar.LONG;
 import java.util.InputMismatchException;
 import util.exception.AppointmentNotFoundException;
 import java.util.List;
@@ -90,21 +91,22 @@ public class AppointmentModule {
             }
         }
         while (true) {
-            System.out.print("Enter 0 to go back to the previous menu> ");
+            System.out.println("Enter 0 to go back to the previous menu> ");
             System.out.print("Enter Appointment Id> ");
-            Long response = scanner.nextLong();
-            if (response == 0L) {
+            Integer response = Integer.parseInt(scanner.nextLine().trim());
+            if (response == 0) {
                 break;
             } else {
                 try {
-                    appointmentEntitySessionBeanRemote.deleteAppointmentEntity(response);
+                    Long value = new Long(response);
+                    appointmentEntitySessionBeanRemote.deleteAppointmentEntity(value);
                     System.out.println("Appointment " + response + " has been cancelled successfully");
                 } catch (AppointmentNotFoundException ex) {
                     System.out.println("Unable to delete!");
                 }
             }
         }
-    } catch (ServiceProviderNotFoundException ex) {
+    } catch (ServiceProviderNotFoundException| NumberFormatException ex) {
             System.out.println("Service provider not found");
     }
 }

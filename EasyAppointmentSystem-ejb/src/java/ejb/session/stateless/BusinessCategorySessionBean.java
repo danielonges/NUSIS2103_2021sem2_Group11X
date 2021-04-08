@@ -77,7 +77,12 @@ public class BusinessCategorySessionBean implements BusinessCategorySessionBeanR
         // TODO: implement checking for null
         em.merge(businessCategoryEntity);
     }
-
+     
+     public BusinessCategoryEntity retrieveServiceProviders (Long businessCategoryEntityId) {
+         BusinessCategoryEntity currentBusinessCategoryEntity = em.find(BusinessCategoryEntity.class,businessCategoryEntityId);
+        currentBusinessCategoryEntity.getServiceProviders().size();
+        return currentBusinessCategoryEntity;
+     }
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 }

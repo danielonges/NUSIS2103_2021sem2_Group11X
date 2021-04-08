@@ -18,6 +18,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
@@ -58,10 +59,12 @@ public class ServiceProviderEntity implements Serializable {
     @OneToMany(mappedBy = "serviceProvider")
     private List<AppointmentEntity> appointments;
     
-    @ManyToOne
+    @ManyToOne (optional = false)
+    @JoinColumn(nullable = false)
     private BusinessCategoryEntity businessCategoryEntity;
 
     public ServiceProviderEntity() {
+        isCancelled = false;
         appointments = new ArrayList<>();
         this.overallRating = 0;
         
@@ -146,8 +149,6 @@ public class ServiceProviderEntity implements Serializable {
     public void setBusinessRegNum(String businessRegNum) {
         this.businessRegNum = businessRegNum;
     }
-
-  
 
     public ServiceProviderStatus getStatus() {
         return status;
