@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,7 +36,6 @@ public class AppointmentEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     //timestamp   
-   
 
     private Boolean isCancelled;
 
@@ -108,7 +108,7 @@ public class AppointmentEntity implements Serializable {
         this.date = date;
     }
 
-  
+//    @XmlTransient
     public CustomerEntity getCustomer() {
         return customer;
     }
@@ -117,6 +117,7 @@ public class AppointmentEntity implements Serializable {
         this.customer = customer;
     }
 
+//    @XmlTransient
     public ServiceProviderEntity getServiceProvider() {
         return serviceProvider;
     }

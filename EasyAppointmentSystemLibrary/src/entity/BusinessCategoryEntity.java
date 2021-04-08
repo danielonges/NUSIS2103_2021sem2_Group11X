@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -96,6 +97,7 @@ public class BusinessCategoryEntity implements Serializable {
     /**
      * @return the serviceProviders
      */
+    @XmlTransient
     public List<ServiceProviderEntity> getServiceProviders() {
         return serviceProviders;
     }
