@@ -105,7 +105,6 @@ public class MainApp {
 
         Scanner scanner = new Scanner(System.in);
         try {
-
             System.out.println("*** Service Provider Terminal :: Registration Operation ***\n");
             System.out.print("Enter Name> ");
             String name = scanner.nextLine().trim();
@@ -121,7 +120,7 @@ public class MainApp {
                 scanner.nextLine();
                 businessCategoryId--; //the actual index in the list
 
-                String businessCategory = businessCategoryEntities.get(businessCategoryId).getCategory();
+                BusinessCategoryEntity businessCategory = businessCategoryEntities.get(businessCategoryId);       
                 System.out.print("Enter Business Registration Number> ");
                 String businessRegistrationNum = scanner.nextLine().trim();
                 System.out.print("Enter City> ");

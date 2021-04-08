@@ -17,8 +17,6 @@ public interface AppointmentEntitySessionBeanRemote {
     
     public void deleteAppointmentEntity(Long appointmentId) throws AppointmentNotFoundException;
 
-    public List<AppointmentEntity> retrieveAppointmentsByServiceProviderId(Long serviceProviderId) throws AppointmentNotFoundException;
-
     public AppointmentEntity retrieveAppointmentEntityByAppointmentNo(Long appointmentNo) throws AppointmentNotFoundException;
     
     public void cancelAppointmentByCustomerId(Long customerId, Long appointmentNo) throws CustomerNotFoundException, AppointmentNotFoundException, UnauthorisedOperationException;

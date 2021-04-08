@@ -6,11 +6,13 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -25,6 +27,9 @@ public class BusinessCategoryEntity implements Serializable {
     private Long id;
     @Column(nullable = false, unique = true)
     private String category;
+    
+    @OneToMany(mappedBy = "businessCategoryEntity")
+    private List<ServiceProviderEntity> serviceProviders;
     
 
     public BusinessCategoryEntity() {
@@ -49,7 +54,7 @@ public class BusinessCategoryEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (getId() != null ? getId().hashCode() : 0);
         return hash;
     }
 
@@ -60,7 +65,7 @@ public class BusinessCategoryEntity implements Serializable {
             return false;
         }
         BusinessCategoryEntity other = (BusinessCategoryEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -68,7 +73,7 @@ public class BusinessCategoryEntity implements Serializable {
 
     @Override
     public String toString() {
-        return this.category;
+        return this.getCategory();
     }
 
     /**
@@ -83,6 +88,20 @@ public class BusinessCategoryEntity implements Serializable {
      */
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    /**
+     * @return the serviceProviders
+     */
+    public List<ServiceProviderEntity> getServiceProviders() {
+        return serviceProviders;
+    }
+
+    /**
+     * @param serviceProviders the serviceProviders to set
+     */
+    public void setServiceProviders(List<ServiceProviderEntity> serviceProviders) {
+        this.serviceProviders = serviceProviders;
     }
     
 }

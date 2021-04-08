@@ -113,17 +113,7 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
         }    
     }
 
-    @Override
-    public List<AppointmentEntity> retrieveAppointmentsByServiceProviderId(Long serviceProviderId) throws AppointmentNotFoundException {
-        Query query = em.createQuery("SELECT s FROM AppointmentEntity s WHERE s.serviceProviderId = :inServiceProviderId");
-        query.setParameter("inServiceProviderId", serviceProviderId);
-
-        try {
-            return query.getResultList();
-        } catch (NoResultException | NonUniqueResultException ex) {
-            throw new AppointmentNotFoundException("Appointments not found!");
-        }
-    }
+   
     
     
 

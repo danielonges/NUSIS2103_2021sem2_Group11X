@@ -17,7 +17,7 @@ public interface CustomerEntitySessionBeanRemote {
     
     public void deleteCustomerEntity(Long customerId) throws CustomerNotFoundException;
     
-    public List<AppointmentEntity> retrieveCustomerAppointments(Long customerId) throws CustomerNotFoundException;
+    public CustomerEntity retrieveCustomerAppointments (Long customerId) throws CustomerNotFoundException;
     
     public CustomerEntity customerLogin(String email, String password) throws InvalidLoginException;
     
