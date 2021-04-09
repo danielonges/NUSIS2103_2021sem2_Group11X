@@ -111,9 +111,9 @@ public class MainApp {
             List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
             int sizeOfBusinessCategoryList = businessCategoryEntities.size();
             for (int i = 0; i < sizeOfBusinessCategoryList - 1; i++) {
-                System.out.printf(businessCategoryEntities.get(i).getCategoryId().toString() + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
+                System.out.printf((i + 1) + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
             }
-            System.out.println(businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategoryId().toString() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
+            System.out.println(businessCategoryEntities.size() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
             System.out.print("Enter Business Category> ");
             int businessCategoryId = scanner.nextInt();
             scanner.nextLine();
@@ -140,7 +140,7 @@ public class MainApp {
                 newServiceProviderEntity.setBusinessRegNum(businessRegistrationNum);
                 newServiceProviderEntity.setCity(city);
                 newServiceProviderEntity.setPhone(phone);
-                newServiceProviderEntity.setStatus(ServiceProviderStatus.APPROVE);//change to approve for testing, default:PENDING
+                newServiceProviderEntity.setStatus(ServiceProviderStatus.PENDING);//change to approve for testing, default:PENDING
                 newServiceProviderEntity.setAddress(businessAddress);
                 newServiceProviderEntity.setEmail(email);
                 newServiceProviderEntity.setPassword(password);

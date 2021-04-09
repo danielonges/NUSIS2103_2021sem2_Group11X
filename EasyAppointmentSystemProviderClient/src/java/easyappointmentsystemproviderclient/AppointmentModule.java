@@ -99,7 +99,7 @@ public class AppointmentModule {
                 try {
                     Long value = new Long(response);
                     
-                    AppointmentEntity currentAppointmentEntity = appointmentEntitySessionBeanRemote.retrieveAppointmentEntityByAppointmentId(value);
+                    AppointmentEntity currentAppointmentEntity = appointmentEntitySessionBeanRemote.retrieveAppointmentEntityByAppointmentNo(value);
                     currentAppointmentEntity.setIsCancelled(Boolean.TRUE);
                     appointmentEntitySessionBeanRemote.updateAppointmentEntity(currentAppointmentEntity);
                     System.out.println("Appointment " + response + " has been cancelled successfully");

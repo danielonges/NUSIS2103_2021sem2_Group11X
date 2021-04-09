@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -48,7 +49,8 @@ public class CustomerEntity implements Serializable {
     private String city;
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 6)
+    @Size(min = 6, max = 6)
     private String password;
     
     @OneToMany(mappedBy = "customer")
