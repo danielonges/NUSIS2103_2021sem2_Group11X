@@ -254,7 +254,7 @@ public class CustomerAppointmentModule {
             }
 
             addAppointment(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), serviceProvider.getProviderId(), appointmentEntity);
-            System.out.println(String.format("The appointment with %s at %s on %s is confimed.\n", serviceProvider.getName(), time, new SimpleDateFormat("yyyy-MM-dd").format(dateToSearch)));
+            System.out.println(String.format("The appointment with %s at %s on %s is confirmed.\n", serviceProvider.getName(), time, new SimpleDateFormat("yyyy-MM-dd").format(dateToSearch)));
 
         } catch (ServiceProviderNotFoundException_Exception ex) {
             System.out.println("Service provider with Id provided does not exist!\n");

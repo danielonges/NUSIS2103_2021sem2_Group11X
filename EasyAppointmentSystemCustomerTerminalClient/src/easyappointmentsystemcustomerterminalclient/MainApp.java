@@ -176,7 +176,7 @@ public class MainApp {
             System.out.print("Enter email> ");
             email = sc.nextLine().trim();
         }
-        newCustomerEntity.setEmail(age);
+        newCustomerEntity.setEmail(email);
 
         // set password
         System.out.print("Enter password> ");
