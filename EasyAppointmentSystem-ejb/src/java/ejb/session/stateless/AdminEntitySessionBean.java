@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -57,12 +58,13 @@ public class AdminEntitySessionBean implements AdminEntitySessionBeanRemote, Adm
     public AdminEntity AdminLogin(String email, String password) throws InvalidLoginException {
         try{
             AdminEntity adminEntity = retrieveAdminByEmail(email);
-            if (adminEntity.getPassword().equals(password)) {
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + adminEntity.getSalt()));
+            if (adminEntity.getPassword().equals(passwordHash)) {
                 return adminEntity;
             } else {
                 throw new InvalidLoginException("Email does not exist or invalid password!");
             }
-        } catch (AdminNotFoundException ex) {
+        } catch (AdminNotFoundException| NullPointerException ex) {
             throw new InvalidLoginException("Email does not exist or invalid password!");
         }
     }
