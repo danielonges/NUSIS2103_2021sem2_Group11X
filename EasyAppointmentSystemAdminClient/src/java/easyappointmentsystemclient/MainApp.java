@@ -82,6 +82,10 @@ public class MainApp {
                         break;
                     } else {
                         System.out.println("Invalid option, please try again!\n");
+                        System.out.println("*** Welcome to Admin terminal ***\n");
+            System.out.println("1: Login");
+            System.out.println("2: Exit\n");
+                        
                     }
                 } 
             
@@ -96,7 +100,7 @@ public class MainApp {
     }
     }
 
-    private void doLogin() throws InvalidLoginException {
+   private void doLogin() throws InvalidLoginException {
         try {
             Scanner scanner = new Scanner(System.in);
             String email = "";
@@ -116,6 +120,7 @@ public class MainApp {
             System.out.println("Wrong input!");
         }
     }
+
 
     private void menuMain() {
         Scanner scanner = new Scanner(System.in);

@@ -23,6 +23,7 @@ import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginException;
 import util.exception.UnknownPersistenceException;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -144,7 +145,8 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     public CustomerEntity customerLogin(String email, String password) throws InvalidLoginException {
         try{
             CustomerEntity customerEntity = retrieveCustomerByEmail(email);
-            if (customerEntity.getPassword().equals(password)) {
+               String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + customerEntity.getSalt()));
+            if (customerEntity.getPassword().equals(passwordHash)) {
                 return customerEntity;
             } else {
                 throw new InvalidLoginException("Email does not exist or invalid password!");

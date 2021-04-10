@@ -88,10 +88,10 @@ public class MainApp {
         System.out.print("Enter identity number (must be valid Singapore ID)> ");
         String identityNo = sc.nextLine().trim();
 
-        while (!isValidIdentityNo(identityNo)) {
+     /*   while (!isValidIdentityNo(identityNo)) {
             System.out.print("Enter identity number (must be valid Singapore ID)> ");
             identityNo = sc.nextLine().trim();
-        }
+        }*/
         newCustomerEntity.setIdentityNum(identityNo);
 
         // set first name

@@ -54,16 +54,15 @@ public class MessageDrivenBean implements MessageListener {
                 MapMessage mapMessage = (MapMessage) message;
                 String toEmailAddress = mapMessage.getString("toEmailAddress");
                 String fromEmailAddress = mapMessage.getString("fromEmailAddress");
-//                Long appointmentId = (Long) mapMessage.getLong("appointmentId");
-//                AppointmentEntity appointmentEntity = appointmentEntitySessionBeanLocal.retrieveAppointmentEntityByAppointmentId(appointmentId);
+                Long appointmentId = (Long) mapMessage.getLong("appointmentId");
+                AppointmentEntity appointmentEntity = appointmentEntitySessionBeanLocal.retrieveAppointmentEntityByAppointmentId(appointmentId);
 
-//                emailSessionBeanLocal.emailCheckoutNotificationSync(appointmentEntity, fromEmailAddress, toEmailAddress);
-                emailSessionBeanLocal.sendFreeEmail(fromEmailAddress, toEmailAddress);
+                emailSessionBeanLocal.emailCheckoutNotificationSync(appointmentEntity, fromEmailAddress, toEmailAddress);
+//                emailSessionBeanLocal.sendFreeEmail(fromEmailAddress, toEmailAddress);
                 System.out.println("Message sent!");
 //                System.err.println("********** CheckoutNotificationMdb.onMessage: " + appointmentEntity.getAppointmentId() + "; " + toEmailAddress + "; " + fromEmailAddress);
             }
-        } //        catch(AppointmentNotFoundException | JMSException ex)
-        catch (JMSException ex) {
+        } catch(AppointmentNotFoundException | JMSException ex) {
             System.err.println("CheckoutNotificationMdb.onMessage(): " + ex.getMessage());
         }
     }

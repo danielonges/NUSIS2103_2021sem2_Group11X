@@ -21,9 +21,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
 import static util.enumeration.ServiceProviderStatus.PENDING;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -44,23 +46,29 @@ public class ServiceProviderEntity implements Serializable {
     private String city;
     @Column(nullable = false, unique = true)
     private String email;
+
+   
     @Column(nullable = false)
     private String password;
     @Column(nullable = false, unique = true)
     private String businessRegNum;
-    
-    @Enumerated (EnumType.STRING)
+
+    @Enumerated(EnumType.STRING)
     private ServiceProviderStatus status;
     private int overallRating;
     @Column(nullable = false, unique = true)
     private String phone;
     private boolean isCancelled;
-    
-   
+
+    @Column(columnDefinition = "CHAR(32) NOT NULL")
+    private String salt;
+
+   // private String resetPasswordPathParam;
+
     @OneToMany(mappedBy = "serviceProvider")
     private List<AppointmentEntity> appointments;
     
-    @OneToMany(mappedBy = "serviceProvider")
+    @OneToMany(mappedBy = "serviceProviderEntity")
     private List<RatingEntity> ratings;
 
     @ManyToOne (optional = false)
@@ -73,9 +81,12 @@ public class ServiceProviderEntity implements Serializable {
         this.overallRating = 0;
         ratings = new ArrayList<>();
         
+        this.salt = CryptographicHelper.getInstance().generateRandomString(32);
+
     }
 
     public ServiceProviderEntity(String name, String address, String city, String email, String password, String businessRegNum, ServiceProviderStatus status, int overallRating, String phone) {
+        this();
         this.name = name;
         this.address = address;
         this.city = city;
@@ -90,6 +101,7 @@ public class ServiceProviderEntity implements Serializable {
         overallRating = 0;
         appointments = new ArrayList<>();
         ratings = new ArrayList<>();
+        setPassword(password);
     }
     
     @XmlTransient
@@ -154,7 +166,11 @@ public class ServiceProviderEntity implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (password != null) {
+            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
+        } else {
+            this.password = null;
+        }
     }
 
     public String getBusinessRegNum() {
@@ -197,7 +213,17 @@ public class ServiceProviderEntity implements Serializable {
     public void setAppointments(List<AppointmentEntity> appointments) {
         this.appointments = appointments;
     }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
     
+
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -222,7 +248,7 @@ public class ServiceProviderEntity implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return this.providerId + " | " + this.name + " | " + this.getBusinessCategory() + " | " + this.businessRegNum + " | "
@@ -242,6 +268,5 @@ public class ServiceProviderEntity implements Serializable {
     public void setBusinessCategory(BusinessCategoryEntity businessCategory) {
         this.businessCategoryEntity = businessCategory;
     }
-    
-    
+
 }

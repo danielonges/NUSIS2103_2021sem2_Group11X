@@ -153,6 +153,7 @@ public class AppointmentEntity implements Serializable {
 
     @Override
     public String toString() {
+     // System.out.printf("\n%20s | %20s | %20s | %20s | %20s \n","Name", "| Date", "| Time", "| Appointment No.");
         return (this.customer + "     | " + this.date + "     | " + this.date.getTime() + "  | " + this.appointmentNo + " ");
     }
 
