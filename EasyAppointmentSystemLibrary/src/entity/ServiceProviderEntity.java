@@ -60,6 +60,9 @@ public class ServiceProviderEntity implements Serializable {
     @OneToMany(mappedBy = "serviceProvider")
     private List<AppointmentEntity> appointments;
     
+    @OneToMany(mappedBy = "serviceProvider")
+    private List<RatingEntity> ratings;
+
     @ManyToOne (optional = false)
     @JoinColumn(nullable = false)
     private BusinessCategoryEntity businessCategoryEntity;
@@ -68,6 +71,7 @@ public class ServiceProviderEntity implements Serializable {
         isCancelled = false;
         appointments = new ArrayList<>();
         this.overallRating = 0;
+        ratings = new ArrayList<>();
         
     }
 
@@ -85,8 +89,18 @@ public class ServiceProviderEntity implements Serializable {
         status = ServiceProviderStatus.PENDING;
         overallRating = 0;
         appointments = new ArrayList<>();
+        ratings = new ArrayList<>();
+    }
+    
+    @XmlTransient
+    public List<RatingEntity> getRatings() {
+        return ratings;
     }
 
+    public void setRatings(List<RatingEntity> ratings) {
+        this.ratings = ratings;
+    }
+    
     public boolean isIsCancelled() {
         return isCancelled;
     }
@@ -174,7 +188,7 @@ public class ServiceProviderEntity implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
+    
     @XmlTransient
     public List<AppointmentEntity> getAppointments() {
         return appointments;

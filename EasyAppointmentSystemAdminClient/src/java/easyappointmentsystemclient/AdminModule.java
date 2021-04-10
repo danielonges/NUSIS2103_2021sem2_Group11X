@@ -133,7 +133,7 @@ public class AdminModule {
                         for (AppointmentEntity appointment : appointments) {
                             if (toEmailAddress.length() > 0) {
                                 try {
-                                    sendJMSMessageToQueue("exleolee@gmail.com", toEmailAddress);
+                                 
                                     // 03 - JMS Messaging with Message Driven Bean
                                     sendJMSMessageToQueueApplication(appointment.getAppointmentId(), "exleolee@gmail.com", toEmailAddress);
 
