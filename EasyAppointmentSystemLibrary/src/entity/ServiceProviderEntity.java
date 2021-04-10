@@ -189,8 +189,14 @@ public class ServiceProviderEntity implements Serializable {
         this.status = status;
     }
 
-    public int getOverallRating() {
-        return overallRating;
+    public double getOverallRating() {
+        List<RatingEntity> ratingEntitys = this.getRatings();
+        double avgRating =0;
+        for(RatingEntity rating : ratingEntitys) {
+            avgRating += rating.getRating();
+        }
+        double size = ratingEntitys.size();
+        return (avgRating/size);
     }
 
     public void setOverallRating(int overallRating) {

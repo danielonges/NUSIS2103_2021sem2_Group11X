@@ -6,6 +6,8 @@
 package entity;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -153,8 +155,14 @@ public class AppointmentEntity implements Serializable {
 
     @Override
     public String toString() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss"); 
+        String strDate = dateFormat.format(this.date); 
+        
+        String[] array = strDate.toString().split(" ");
+        String month = array[0];
+        String time = array[1];
      // System.out.printf("\n%20s | %20s | %20s | %20s | %20s \n","Name", "| Date", "| Time", "| Appointment No.");
-        return (this.customer + "     | " + this.date + "     | " + this.date.getTime() + "  | " + this.appointmentNo + " ");
+        return (this.customer.getFullName() + "     | " + month + "     | " + time + "  | " + this.appointmentNo + " ");
     }
 
 }

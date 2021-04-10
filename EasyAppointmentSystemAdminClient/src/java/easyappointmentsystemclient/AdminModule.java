@@ -162,8 +162,6 @@ public class AdminModule {
             connection = queueApplicationFactory.createConnection();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-            System.out.println("MEssage received by MDB");
-
             MapMessage mapMessage = session.createMapMessage();
             mapMessage.setString("fromEmailAddress", fromEmailAddress);
             mapMessage.setString("toEmailAddress", toEmailAddress);

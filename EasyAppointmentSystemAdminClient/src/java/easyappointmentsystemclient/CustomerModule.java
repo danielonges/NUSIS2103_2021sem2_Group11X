@@ -11,6 +11,8 @@ import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.CustomerEntity;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.InputMismatchException;
 import util.exception.AppointmentNotFoundException;
 import java.util.List;
@@ -48,7 +50,15 @@ public class CustomerModule {
                 System.out.println("No current appointments.");
             } else {
                 for (AppointmentEntity appointment : appointments) {
-                    System.out.println(appointment);
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                    String strDate = dateFormat.format(appointment.getDate());
+
+                    String[] array = strDate.toString().split(" ");
+                    String month = array[0];
+                    String time = array[1];
+                //    System.out.printf(String.format("\n%20s | %20s | %20s  | %20s | %20s | %20s \n","Name", "| Business Category", "| Date", "| Time", "| Appointment No."));
+                    System.out.println(appointment.getCustomer().getFullName() + "     | "  +  appointment.getBusinessCategory()+"     | " + month + "     | " + time + "  | " + appointment.getAppointmentNo() + " ");
+                    
                 }
             }
 
