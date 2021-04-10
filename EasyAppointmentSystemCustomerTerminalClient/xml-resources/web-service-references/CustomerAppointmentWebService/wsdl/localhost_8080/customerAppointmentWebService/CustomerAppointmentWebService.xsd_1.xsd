@@ -107,7 +107,7 @@
 <xs:element name="email" type="xs:string" minOccurs="0"/>
 <xs:element name="isCancelled" type="xs:boolean"/>
 <xs:element name="name" type="xs:string" minOccurs="0"/>
-<xs:element name="overallRating" type="xs:int"/>
+<xs:element name="overallRating" type="xs:decimal" minOccurs="0"/>
 <xs:element name="password" type="xs:string" minOccurs="0"/>
 <xs:element name="phone" type="xs:string" minOccurs="0"/>
 <xs:element name="providerId" type="xs:long" minOccurs="0"/>
@@ -168,6 +168,7 @@
 <xs:element name="lastName" type="xs:string" minOccurs="0"/>
 <xs:element name="password" type="xs:string" minOccurs="0"/>
 <xs:element name="phone" type="xs:string" minOccurs="0"/>
+<xs:element name="salt" type="xs:string" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 

@@ -47,8 +47,17 @@ public class CustomerModule {
             if (appointments.isEmpty()) {
                 System.out.println("No current appointments.");
             } else {
+<<<<<<< Updated upstream
                 for (AppointmentEntity appointment : appointments) {
                     System.out.println(appointment);
+=======
+                System.out.println(String.format("%20s | %20s | %20s | %10s | %20s", "Name", "Business Category", "Date", "Time", "Appointment no."));
+                for (AppointmentEntity a : appointments) {
+                    DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                    String strDate = dateFormat.format(a.getDate());
+                    System.out.println(String.format("%20s | %20s | %20s | %10s | %20s", a.getServiceProvider().getName(), a.getBusinessCategory(), String.format("%04d-%02d-%02d", a.getDate().getYear() + 1900, a.getDate().getMonth() + 1, a.getDate().getDate()), strDate, a.getAppointmentNo()));
+                    
+>>>>>>> Stashed changes
                 }
             }
 

@@ -91,7 +91,6 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
     public AppointmentEntity retrieveAppointmentEntityByAppointmentNo(Long appointmentNo) throws AppointmentNotFoundException {
         Query query = em.createQuery("SELECT a FROM AppointmentEntity a WHERE a.appointmentNo = :inAppointmentNo");
         query.setParameter("inAppointmentNo", appointmentNo);
-
         return (AppointmentEntity) query.getSingleResult();
     }
 
