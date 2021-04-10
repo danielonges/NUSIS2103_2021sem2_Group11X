@@ -11,6 +11,8 @@ import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.ServiceProviderEntity;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import static java.util.Calendar.LONG;
 import java.util.InputMismatchException;
 import util.exception.AppointmentNotFoundException;
@@ -51,9 +53,12 @@ public class AppointmentModule {
                 System.out.println("No current appointments.");
             } else {
                  System.out.println(String.format("%20s | %20s | %10s | %20s", "Name", "Date", "Time", "Appointment no."));
-                for (AppointmentEntity appointment : appointmentEntities) {
-                    System.out.println(appointment);
-                }
+                for (AppointmentEntity a : appointmentEntities) {
+                    DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                    String strDate = dateFormat.format(a.getDate());
+
+                    System.out.println(String.format("%20s | %20s | %10s | %20s", a.getServiceProvider().getName(), String.format("%04d-%02d-%02d", a.getDate().getYear() + 1900, a.getDate().getMonth() + 1, a.getDate().getDate()), strDate, a.getAppointmentNo()));
+            }
             }
             while (true) {
                 System.out.print("Enter 0 to go back to the previous menu> ");
