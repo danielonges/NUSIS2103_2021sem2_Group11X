@@ -23,6 +23,7 @@ import javax.persistence.Query;
 import util.enumeration.ServiceProviderStatus;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
 import util.exception.BusinessCategoryNotFoundException;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -77,7 +78,9 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     public ServiceProviderEntity ServiceProviderLogin(String email, String password) throws InvalidLoginException {
         try {
             ServiceProviderEntity serviceProviderEntity = retrieveServiceProviderByEmail(email);
-            if (serviceProviderEntity.getPassword().equals(password) && serviceProviderEntity.getStatus() == APPROVE) {
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + serviceProviderEntity.getSalt()));
+            
+            if (serviceProviderEntity.getPassword().equals(passwordHash) && serviceProviderEntity.getStatus() == APPROVE) {
                 return serviceProviderEntity;
             } else {
                 throw new InvalidLoginException("Email does not exist or invalid password!");

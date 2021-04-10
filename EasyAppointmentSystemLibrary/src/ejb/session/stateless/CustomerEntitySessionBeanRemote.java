@@ -25,4 +25,6 @@ public interface CustomerEntitySessionBeanRemote {
     public CustomerEntity customerLogin(String email, String password) throws InvalidLoginException;
     
     public CustomerEntity retrieveCustomerByEmail(String email) throws CustomerNotFoundException;
+
+    CustomerEntity customerLoginHash(String email, String hashPassword) throws InvalidLoginException;
 }

@@ -8,11 +8,14 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -26,23 +29,26 @@ public class AdminEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminId;
     private String name;
-    private String username;
-    private String password;
     
-
+    @Column(nullable = false)
+    @NotNull
+    private String password;
+    private String username;
+    @Column(columnDefinition = "CHAR(32) NOT NULL")
+    private String salt;
 
     public AdminEntity() {
-       
+        this.salt = CryptographicHelper.getInstance().generateRandomString(32);
     }
 
     public AdminEntity(String name, String username, String password) {
-        
+        this();
         this.name = name;
         this.username = username;
         this.password = password;
+
+        setPassword(password);
     }
-    
-    
 
     public Long getAdminId() {
         return adminId;
@@ -102,7 +108,11 @@ public class AdminEntity implements Serializable {
      * @param password the password to set
      */
     public void setPassword(String password) {
-        this.password = password;
+        if (password != null) {
+            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
+        } else {
+            this.password = null;
+        }
     }
 
     /**
@@ -119,6 +129,12 @@ public class AdminEntity implements Serializable {
         this.name = name;
     }
 
-   
-    
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
 }

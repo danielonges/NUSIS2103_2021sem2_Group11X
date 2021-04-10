@@ -17,8 +17,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -49,18 +51,24 @@ public class CustomerEntity implements Serializable {
     private String city;
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false, length = 6)
-    @Size(min = 6, max = 6)
+    @Column(nullable = false)
+    @NotNull
     private String password;
-    
+
+    @Column(columnDefinition = "CHAR(32) NOT NULL")
+    private String salt;
+
     @OneToMany(mappedBy = "customer")
     private List<AppointmentEntity> appointments;
-   
+
     public CustomerEntity() {
         appointments = new ArrayList<>();
+
+        this.salt = CryptographicHelper.getInstance().generateRandomString(32);
     }
 
     public CustomerEntity(String identityNum, String firstName, String lastName, Character gender, Integer age, String phone, String address, String city, String email, String password) {
+        this();
         this.identityNum = identityNum;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -72,6 +80,8 @@ public class CustomerEntity implements Serializable {
         this.email = email;
         this.password = password;
         this.appointments = new ArrayList<>();
+
+        setPassword(password);
     }
 
     public String getPassword() {
@@ -79,7 +89,11 @@ public class CustomerEntity implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (password != null) {
+            this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
+        } else {
+            this.password = null;
+        }
     }
 
     public Long getCustomerId() {
@@ -161,9 +175,17 @@ public class CustomerEntity implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public String getFullName() {
         return String.format("%s, %s", firstName, lastName);
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     @XmlTransient
@@ -181,7 +203,7 @@ public class CustomerEntity implements Serializable {
         hash += (customerId != null ? customerId.hashCode() : 0);
         return hash;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -200,5 +222,4 @@ public class CustomerEntity implements Serializable {
         return true;
     }
 
-    
 }

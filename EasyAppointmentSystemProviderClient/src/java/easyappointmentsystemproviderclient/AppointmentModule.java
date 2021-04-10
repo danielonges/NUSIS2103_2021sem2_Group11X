@@ -50,6 +50,7 @@ public class AppointmentModule {
             if (appointmentEntities.isEmpty()) {
                 System.out.println("No current appointments.");
             } else {
+                System.out.printf("\n%20s | %20s | %20s | %20s | %20s \n","Name", "| Date", "| Time", "| Appointment No.");
                 for (AppointmentEntity appointment : appointmentEntities) {
                     System.out.println(appointment);
                 }

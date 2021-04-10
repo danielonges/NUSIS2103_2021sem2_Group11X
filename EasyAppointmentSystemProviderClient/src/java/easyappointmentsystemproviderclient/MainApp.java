@@ -111,9 +111,9 @@ public class MainApp {
             List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
             int sizeOfBusinessCategoryList = businessCategoryEntities.size();
             for (int i = 0; i < sizeOfBusinessCategoryList - 1; i++) {
-                System.out.printf((i + 1) + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
+                System.out.printf(i + 1 + "  " + businessCategoryEntities.get(i).getCategory() + "  |  ");
             }
-            System.out.println(businessCategoryEntities.size() + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
+            System.out.println(sizeOfBusinessCategoryList + "  " + businessCategoryEntities.get(sizeOfBusinessCategoryList - 1).getCategory());
             System.out.print("Enter Business Category> ");
             int businessCategoryId = scanner.nextInt();
             scanner.nextLine();
@@ -131,6 +131,11 @@ public class MainApp {
             String email = scanner.nextLine().trim();
             System.out.print("Enter Password> ");
             String password = scanner.nextLine().trim();
+            while (password.length() != 6 || !password.matches("[0-9]+")) {
+                System.out.println("password must be a 6 digit number!");
+                System.out.print("Enter Password> ");
+                password = scanner.nextLine().trim();
+            }
             if (email.length() > 0 && password.length() > 0) {
                 ServiceProviderEntity newServiceProviderEntity = new ServiceProviderEntity();
                 newServiceProviderEntity.setName(name);
@@ -152,8 +157,7 @@ public class MainApp {
                 Integer goBack = scanner.nextInt();
                 while (goBack < 0 || goBack > 0) {
                     if (goBack != 0) {
-                        System.out.println("Enter 0 to go back to the previous menu. \n");
-                        System.out.print("> ");
+                        System.out.print("Enter 0 to go back to the previous menu> ");
                         goBack = scanner.nextInt();
                     } else {
                         break;
