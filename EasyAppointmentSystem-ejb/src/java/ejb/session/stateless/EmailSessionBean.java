@@ -23,12 +23,6 @@ public class EmailSessionBean implements EmailSessionBeanLocal, EmailSessionBean
         return result;
     }
 
-    @Override
-    public Boolean sendFreeEmail(String fromEmailAddress, String toEmailAddress) {
-        EmailManager emailManager = new EmailManager(GMAIL_USERNAME, GMAIL_PASSWORD);
-        Boolean result = emailManager.emailMe(fromEmailAddress, toEmailAddress);
-
-        return result;
-    }
+  
 
 }
