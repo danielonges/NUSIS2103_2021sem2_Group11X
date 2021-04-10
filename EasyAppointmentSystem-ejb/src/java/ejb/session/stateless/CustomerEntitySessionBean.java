@@ -1,8 +1,6 @@
 package ejb.session.stateless;
 
-import entity.AppointmentEntity;
 import entity.CustomerEntity;
-import java.util.List;
 import java.util.Set;
 import javax.ejb.Local;
 import javax.ejb.Remote;
@@ -17,7 +15,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import util.exception.AppointmentNotFoundException;
 import util.exception.CustomerAlreadyExistsException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
@@ -147,6 +144,20 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
             CustomerEntity customerEntity = retrieveCustomerByEmail(email);
                String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + customerEntity.getSalt()));
             if (customerEntity.getPassword().equals(passwordHash)) {
+                return customerEntity;
+            } else {
+                throw new InvalidLoginException("Email does not exist or invalid password!");
+            }
+        } catch (CustomerNotFoundException ex) {
+            throw new InvalidLoginException("Email does not exist or invalid password!");
+        }
+    }
+    
+    @Override
+    public CustomerEntity customerLoginHash(String email, String hashPassword) throws InvalidLoginException {
+        try{
+            CustomerEntity customerEntity = retrieveCustomerByEmail(email);
+            if (customerEntity.getPassword().equals(hashPassword)) {
                 return customerEntity;
             } else {
                 throw new InvalidLoginException("Email does not exist or invalid password!");

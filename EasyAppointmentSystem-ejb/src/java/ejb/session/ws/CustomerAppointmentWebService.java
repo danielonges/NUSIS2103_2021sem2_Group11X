@@ -72,7 +72,7 @@ public class CustomerAppointmentWebService {
             @WebParam(name = "password") String password)
             throws CustomerNotFoundException, InvalidLoginException {
         // authentication needs to be performed
-        CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
+        CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLoginHash(email, password);
         customerEntity = customerEntitySessionBeanLocal.retrieveCustomerAppointments(customerEntity.getCustomerId());
         return customerEntity.getAppointments();
     }
@@ -99,7 +99,7 @@ public class CustomerAppointmentWebService {
             @WebParam(name = "newAppointmentEntity") AppointmentEntity newAppointmentEntity)
             throws CustomerNotFoundException, InvalidLoginException, CreateNewAppointmentEntityException {
         // authentication needs to be performed
-        CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
+        CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLoginHash(email, password);
 
         Long appointmentId = appointmentEntitySessionBeanLocal.createAppointmentEntity(customerEntity.getCustomerId(), providerId, newAppointmentEntity);
         // update appointment no manually
@@ -122,7 +122,7 @@ public class CustomerAppointmentWebService {
             throws InvalidLoginException, CustomerNotFoundException, AppointmentNotFoundException, UnauthorisedOperationException {
         // authentication needs to be performed
 
-        CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
+        CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLoginHash(email, password);
 
         appointmentEntitySessionBeanLocal.cancelAppointmentByCustomerId(customerEntity.getCustomerId(), appointmentNo);
     }
@@ -134,7 +134,7 @@ public class CustomerAppointmentWebService {
             @WebParam(name = "providerId") Long providerId,
             @WebParam(name = "rating") Integer rating) throws InvalidLoginException, ServiceProviderNotFoundException {
         // authentication needs to be performed
-        CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLogin(email, password);
+        CustomerEntity customerEntity = customerEntitySessionBeanLocal.customerLoginHash(email, password);
 
         serviceProviderEntitySessionBeanLocal.updateServiceProviderRating(providerId, rating);
     }
