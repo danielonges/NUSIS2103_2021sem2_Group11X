@@ -7,6 +7,7 @@ package entity;
 
 import util.enumeration.ServiceProviderStatus;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +22,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
@@ -55,7 +58,10 @@ public class ServiceProviderEntity implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private ServiceProviderStatus status;
-    private int overallRating;
+    @Column(nullable = false, precision = 2, scale = 1)
+//    @DecimalMin("0.0")
+    @Digits(integer = 1, fraction = 1) // 11 - 2 digits to the left of the decimal point
+    private BigDecimal overallRating;
     @Column(nullable = false, unique = true)
     private String phone;
     private boolean isCancelled;
@@ -78,14 +84,14 @@ public class ServiceProviderEntity implements Serializable {
     public ServiceProviderEntity() {
         isCancelled = false;
         appointments = new ArrayList<>();
-        this.overallRating = 0;
+        this.overallRating = new BigDecimal(0);
         ratings = new ArrayList<>();
         
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
 
     }
 
-    public ServiceProviderEntity(String name, String address, String city, String email, String password, String businessRegNum, ServiceProviderStatus status, int overallRating, String phone) {
+    public ServiceProviderEntity(String name, String address, String city, String email, String password, String businessRegNum, ServiceProviderStatus status, BigDecimal overallRating, String phone) {
         this();
         this.name = name;
         this.address = address;
@@ -98,7 +104,6 @@ public class ServiceProviderEntity implements Serializable {
         this.phone = phone;
         isCancelled = false;
         status = ServiceProviderStatus.PENDING;
-        overallRating = 0;
         appointments = new ArrayList<>();
         ratings = new ArrayList<>();
         setPassword(password);
@@ -189,17 +194,11 @@ public class ServiceProviderEntity implements Serializable {
         this.status = status;
     }
 
-    public double getOverallRating() {
-        List<RatingEntity> ratingEntitys = this.getRatings();
-        double avgRating =0;
-        for(RatingEntity rating : ratingEntitys) {
-            avgRating += rating.getRating();
-        }
-        double size = ratingEntitys.size();
-        return (avgRating/size);
+    public BigDecimal getOverallRating() {
+        return overallRating;
     }
 
-    public void setOverallRating(int overallRating) {
+    public void setOverallRating(BigDecimal overallRating) {
         this.overallRating = overallRating;
     }
 

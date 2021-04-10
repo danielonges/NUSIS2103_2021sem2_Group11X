@@ -122,6 +122,11 @@ public class CustomerAppointmentModule {
             }
             if (!hasAvailableAppointment) {
                 System.out.print("\nNo available service providers found on " + new SimpleDateFormat("yyyy-MM-dd").format(dateToSearch) + ".");
+                System.out.println("\n");
+                if (doAddAppointment) {
+                    System.out.println("Returning to main menu now...\n");
+                }
+                return;
             }
             System.out.println("\n");
         } catch (ServiceProviderNotFoundException_Exception ex) {
@@ -149,7 +154,7 @@ public class CustomerAppointmentModule {
         List<Integer> availableTimings = getAvailableHoursInADay();
         List<AppointmentEntity> appointments = retrieveServiceProviderAppointments(serviceProvider.getProviderId());
 
-        System.out.println(appointments);
+//        System.out.println(appointments);
 
         for (AppointmentEntity a : appointments) {
 //            System.out.println(a.getDate().getMonth());
@@ -285,20 +290,20 @@ public class CustomerAppointmentModule {
             boolean hasAppointments = false;
             if (appointmentEntities.size() > 0) {
 
-                System.out.println(String.format("%20s | %20s | %10s | %20s", "Name", "Date", "Time", "Appointment no."));
+                System.out.println(String.format("%20s | %20s | %20s | %10s | %20s", "Name", "Business Category", "Date", "Time", "Appointment no."));
 
                 for (AppointmentEntity a : appointmentEntities) {
                     if (!a.isIsCancelled()) {
                         hasAppointments = true;
-                        System.out.println(String.format("%20s | %20s | %10s | %20s", a.getServiceProvider().getName(), String.format("%04d-%02d-%02d", a.getDate().getYear(), a.getDate().getMonth(), a.getDate().getDay()), String.format("%02d:%02d", a.getDate().getHour(), a.getDate().getMinute()), a.getAppointmentNo()));
+                        System.out.println(String.format("%20s | %20s | %20s | %10s | %20s", a.getServiceProvider().getName(), a.getBusinessCategory(), String.format("%04d-%02d-%02d", a.getDate().getYear(), a.getDate().getMonth(), a.getDate().getDay()), String.format("%02d:%02d", a.getDate().getHour(), a.getDate().getMinute()), a.getAppointmentNo()));
                     }
                 }
             }
-            
+
             if (!hasAppointments) {
                 System.out.println("You don't have any appointments!");
             }
-                     
+
             System.out.println();
 
         } catch (InvalidLoginException_Exception | CustomerNotFoundException_Exception ex) {
@@ -367,6 +372,7 @@ public class CustomerAppointmentModule {
         Integer rating = Integer.parseInt(ratingStr);
         try {
             rateServiceProvider(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), serviceProviderEntity.getProviderId(), rating);
+            System.out.println("Service provider rated successfully!\n");
         } catch (InvalidLoginException_Exception | ServiceProviderNotFoundException_Exception ex) {
             System.out.println("An error occured while performing the operation: " + ex.getMessage());
         }

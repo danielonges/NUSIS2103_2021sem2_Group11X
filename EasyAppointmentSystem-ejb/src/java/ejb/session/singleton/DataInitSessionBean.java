@@ -15,6 +15,7 @@ import entity.AppointmentEntity;
 import entity.BusinessCategoryEntity;
 import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
+import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -80,11 +81,11 @@ public class DataInitSessionBean {
             BusinessCategoryEntity healthCategory = businessCategorySessionBeanLocal.retrieveBusinessCategoryEntityByName("Health");
             BusinessCategoryEntity educationCategory = businessCategorySessionBeanLocal.retrieveBusinessCategoryEntityByName("Education");
             
-            ServiceProviderEntity mcDonalds = new ServiceProviderEntity("McDonalds", "1 Computing Drive", "Clementi", "mcd@gmail.com", "123456", "ABCD1234", ServiceProviderStatus.PENDING, 0, "999");
+            ServiceProviderEntity mcDonalds = new ServiceProviderEntity("McDonalds", "1 Computing Drive", "Clementi", "mcd@gmail.com", "123456", "ABCD1234", ServiceProviderStatus.PENDING, new BigDecimal(0), "999");
             mcDonalds.setBusinessCategory(healthCategory);
             serviceProviderEntitySessionBeanLocal.createServiceProviderEntity(mcDonalds);
 
-            ServiceProviderEntity nus = new ServiceProviderEntity("NUS", "100 Computing Drive", "Clementi", "nus@gmail.com", "123456", "NUSORWTV", ServiceProviderStatus.PENDING, 0, "12345678");
+            ServiceProviderEntity nus = new ServiceProviderEntity("NUS", "100 Computing Drive", "Clementi", "nus@gmail.com", "123456", "NUSORWTV", ServiceProviderStatus.PENDING, new BigDecimal(0), "12345678");
             nus.setBusinessCategory(educationCategory);
             serviceProviderEntitySessionBeanLocal.createServiceProviderEntity(nus);
             

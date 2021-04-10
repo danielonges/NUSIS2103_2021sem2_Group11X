@@ -2,8 +2,10 @@ package ejb.session.stateless;
 
 import entity.AppointmentEntity;
 import entity.BusinessCategoryEntity;
+import entity.RatingEntity;
 import entity.ServiceProviderEntity;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import util.exception.InvalidLoginException;
@@ -79,7 +81,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         try {
             ServiceProviderEntity serviceProviderEntity = retrieveServiceProviderByEmail(email);
             String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + serviceProviderEntity.getSalt()));
-            
+
             if (serviceProviderEntity.getPassword().equals(passwordHash) && serviceProviderEntity.getStatus() == APPROVE) {
                 return serviceProviderEntity;
             } else {
@@ -159,8 +161,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         if (currentServiceProviderEntity != null) {
             currentServiceProviderEntity.getAppointments().size();
             return currentServiceProviderEntity;
-        }
-        else{
+        } else {
             throw new ServiceProviderNotFoundException("not found!");
         }
     }
@@ -170,27 +171,43 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
 //        
 //        Query query = em.createQuery("SELECT a FROM AppointmentEntity a WHERE a.serviceProvider =: serviceProvider AND a.isCancelled = 'FALSE'")
 //    }
-    
     @Override
-    public List<AppointmentEntity> retrieveListOfPendingAppointments (Long serviceProviderId) throws ServiceProviderNotFoundException{
-        ServiceProviderEntity currentServiceProviderEntity = em.find(ServiceProviderEntity.class,serviceProviderId);
+    public List<AppointmentEntity> retrieveListOfPendingAppointments(Long serviceProviderId) throws ServiceProviderNotFoundException {
+        ServiceProviderEntity currentServiceProviderEntity = em.find(ServiceProviderEntity.class, serviceProviderId);
         List<AppointmentEntity> tempList = currentServiceProviderEntity.getAppointments();
         List<AppointmentEntity> newList = new ArrayList<>();
-        for(AppointmentEntity appointment : tempList) {
+        for (AppointmentEntity appointment : tempList) {
             Date currentDate = new Date();
             long diff_in_time = appointment.getDate().getTime() - currentDate.getTime();
-            long diff_in_hours = (diff_in_time / (1000 * 60 * 60 )) % 365;
-            if( diff_in_hours >= -1 && appointment.getIsCancelled() == false) {
+            long diff_in_hours = (diff_in_time / (1000 * 60 * 60)) % 365;
+            if (diff_in_hours >= -1 && appointment.getIsCancelled() == false) {
                 newList.add(appointment);
             }
         }
         return newList;
     }
-    
-    
+
     public void updateServiceProviderRating(Long providerId, Integer rating) throws ServiceProviderNotFoundException {
-        // TODO: implement logic
-        // need to update ServiceProvider such that the average rating is captured!
+        ServiceProviderEntity serviceProviderEntity = em.find(ServiceProviderEntity.class, providerId);
+        List<RatingEntity> ratings = serviceProviderEntity.getRatings();
+        RatingEntity ratingEntity = new RatingEntity(rating, serviceProviderEntity);
+        ratings.add(ratingEntity);
+
+        double avgRating = 0;
+        // update overall rating
+        for (RatingEntity r : ratings) {
+            avgRating += r.getRating();
+        }
+        double size = ratings.size();
+        BigDecimal overallRating = new BigDecimal(avgRating / size);
+        
+        serviceProviderEntity.setRatings(ratings);
+        serviceProviderEntity.setOverallRating(overallRating);
+        em.merge(serviceProviderEntity);
+        em.flush();
+//        
+        em.persist(ratingEntity);
+        em.flush();
     }
 
 }

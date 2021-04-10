@@ -11,6 +11,8 @@ import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.ServiceProviderEntity;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.InputMismatchException;
 import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
@@ -47,8 +49,15 @@ public class ServiceProviderModule {
             if (appointments.isEmpty()) {
                 System.out.println("No current appointments.");
             } else {
-                for (AppointmentEntity appointment : appointments) {
-                    System.out.println(appointment);
+                System.out.println(String.format("%20s | %20s | %10s | %20s", "Name", "Date", "Time", "Appointment no."));
+                for (AppointmentEntity a : appointments) {
+                    DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                    String strDate = dateFormat.format(a.getDate());
+
+//                    String[] array = strDate.toString().split(" ");
+//                    String month = array[0];
+//                    String time = array[1];
+                    System.out.println(String.format("%20s | %20s | %10s | %20s", a.getServiceProvider().getName(), String.format("%04d-%02d-%02d", a.getDate().getYear() + 1900, a.getDate().getMonth() + 1, a.getDate().getDate()), strDate, a.getAppointmentNo()));
                 }
             }
             while (true) {
@@ -122,10 +131,10 @@ public class ServiceProviderModule {
                 } else {
 
                     ServiceProviderEntity currentServiceProvider = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
-                    if (currentServiceProvider != null && currentServiceProvider.getStatus()==ServiceProviderStatus.PENDING) {
+                    if (currentServiceProvider != null && currentServiceProvider.getStatus() == ServiceProviderStatus.PENDING) {
                         currentServiceProvider.setStatus(ServiceProviderStatus.APPROVE);
                         serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
-                        System.out.println("Service provider with Id: "+serviceProviderId +" has been successfully approved!");      
+                        System.out.println("Service provider with Id: " + serviceProviderId + " has been successfully approved!");
                     } else {
                         System.out.println("Service provider Id is invalid or service provider has already been approved");
                     }
@@ -162,10 +171,10 @@ public class ServiceProviderModule {
                 } else {
 
                     ServiceProviderEntity currentServiceProvider = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderEntityByProviderId(serviceProviderId);
-                    if (currentServiceProvider != null && currentServiceProvider.getStatus()!=ServiceProviderStatus.BLOCK) {
+                    if (currentServiceProvider != null && currentServiceProvider.getStatus() != ServiceProviderStatus.BLOCK) {
                         currentServiceProvider.setStatus(ServiceProviderStatus.BLOCK);
                         serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProvider);
-                        System.out.println("Service provider with Id: "+serviceProviderId +" has been successfully blocked!");
+                        System.out.println("Service provider with Id: " + serviceProviderId + " has been successfully blocked!");
                     } else {
                         System.out.println("Service provider Id is invalid!");
                     }
