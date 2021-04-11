@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -155,7 +156,6 @@ public class CustomerAppointmentModule {
         List<AppointmentEntity> appointments = retrieveServiceProviderAppointments(serviceProvider.getProviderId());
 
 //        System.out.println(appointments);
-
         for (AppointmentEntity a : appointments) {
 //            System.out.println(a.getDate().getMonth());
 //            System.out.println(date.getMonth());
@@ -281,8 +281,7 @@ public class CustomerAppointmentModule {
 
     public void doViewAppointments() {
 
-        System.out.println(currentCustomerEntity);
-
+//        System.out.println(currentCustomerEntity);
         try {
             List<AppointmentEntity> appointmentEntities = retrieveCustomerAppointments(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword());
 
@@ -317,6 +316,8 @@ public class CustomerAppointmentModule {
         System.out.println("Enter 0 to go back to the previous menu.");
 
         while (true) {
+
+            // this is the appointment number
             System.out.print("Enter Appointment Id> ");
             String appointmentNo = sc.nextLine().trim();
 
@@ -331,9 +332,25 @@ public class CustomerAppointmentModule {
             }
 
             try {
-                cancelAppointment(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), input);
-                System.out.println("Appointment " + appointmentNo + " has been successfully cancelled.\n");
-                System.out.println("Enter 0 to go back to the previous menu.");
+                AppointmentEntity appointmentEntity = retrieveAppointmentByAppointmentNo(input);
+
+                Date oneDayBeforeNow = new Date();
+                oneDayBeforeNow.setDate(oneDayBeforeNow.getDate() - 1);
+
+                Date dateToday = new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate());
+
+                if (appointmentEntity.getDate().toGregorianCalendar().getTime().before(dateToday)) {
+                    System.out.println("Appointment is already over!\n");
+                } else if (appointmentEntity.getDate().toGregorianCalendar().getTime().after(oneDayBeforeNow)) {
+                    System.out.println("Cannot cancel appointment less than 24 hours before!\n");
+                } else if (appointmentEntity.isIsCancelled()) {
+                    System.out.println("Appointment has already been cancelled!\n");
+                } else {
+                    cancelAppointment(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), input);
+                    System.out.println("Appointment " + appointmentNo + " has been successfully cancelled.\n");
+                    System.out.println("Enter 0 to go back to the previous menu.");
+                }
+
             } catch (AppointmentNotFoundException_Exception | CustomerNotFoundException_Exception | InvalidLoginException_Exception | UnauthorisedOperationException_Exception ex) {
                 System.out.println("An error occured while performing the operation: " + ex.getMessage());
             }
@@ -343,37 +360,62 @@ public class CustomerAppointmentModule {
     public void doRateProvider() {
         System.out.print("Enter service provider Id> ");
         String providerIdStr = sc.nextLine();
-        ServiceProviderEntity serviceProviderEntity;
+        ServiceProviderEntity serviceProviderEntity = null;
 
         // check if service provider with id exists
         while (true) {
             while (!isValidDigitInput(providerIdStr)) {
-                System.out.println("Enter service provider Id> ");
+                System.out.print("Enter service provider Id> ");
                 providerIdStr = sc.nextLine();
             }
 
             Long providerId = Long.parseLong(providerIdStr);
+
             try {
                 serviceProviderEntity = retrieveServiceProviderByProviderId(providerId);
-                break;
+                if (serviceProviderEntity != null) {
+                    break;
+                }
+
             } catch (ServiceProviderNotFoundException_Exception ex) {
-                System.out.println("Service provider with Id" + providerId + " does not exist!");
+                System.out.println("Service provider with Id " + providerId + " does not exist!");
+                System.out.print("Enter service provider Id> ");
+                providerIdStr = sc.nextLine();
             }
         }
 
-        System.out.print("Enter rating (between 1 to 5) > ");
-        String ratingStr = sc.nextLine().trim();
-
-        while (!isValidIntegerInput(ratingStr, 5, "rating")) {
-            System.out.print("Enter rating (between 1 to 5) > ");
-            ratingStr = sc.nextLine().trim();
-        }
-
-        Integer rating = Integer.parseInt(ratingStr);
         try {
-            rateServiceProvider(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), serviceProviderEntity.getProviderId(), rating);
-            System.out.println("Service provider rated successfully!\n");
-        } catch (InvalidLoginException_Exception | ServiceProviderNotFoundException_Exception ex) {
+            List<AppointmentEntity> appointmentEntities = retrieveCustomerAppointments(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword());
+
+            final ServiceProviderEntity[] providerWrapper = new ServiceProviderEntity[]{serviceProviderEntity};
+            Date oneHourBeforeNow = new Date();
+            oneHourBeforeNow.setHours(oneHourBeforeNow.getHours() - 1);
+
+            // check whether appointment is not cancelled, appointment has completed (1 hr before now) and the service provider for that appt is the same as the one being rated now
+            boolean canRate = appointmentEntities.stream().anyMatch(a
+                    -> !a.isIsCancelled()
+                    && a.getDate().toGregorianCalendar().getTime().before(oneHourBeforeNow)
+                    && a.getServiceProvider().getProviderId() == providerWrapper[0].getProviderId());
+
+            if (canRate) {
+                System.out.print("Enter rating (between 1 to 5) > ");
+                String ratingStr = sc.nextLine().trim();
+
+                while (!isValidIntegerInput(ratingStr, 5, "rating")) {
+                    System.out.print("Enter rating (between 1 to 5) > ");
+                    ratingStr = sc.nextLine().trim();
+                }
+
+                Integer rating = Integer.parseInt(ratingStr);
+
+                rateServiceProvider(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), serviceProviderEntity.getProviderId(), rating);
+
+                System.out.println("Service provider rated successfully!\n");
+            } else {
+                System.out.println("You have not had an appointment with this service provider before; cannot rate!\n");
+            }
+
+        } catch (InvalidLoginException_Exception | ServiceProviderNotFoundException_Exception | CustomerNotFoundException_Exception ex) {
             System.out.println("An error occured while performing the operation: " + ex.getMessage());
         }
     }
@@ -397,7 +439,14 @@ public class CustomerAppointmentModule {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date date = df.parse(input);
-            if (date.before(new Date())) {
+            Date dateToday = new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate());
+//            System.out.println(dateToday);
+
+//            System.out.println(dateToday);
+//            System.out.println(date);
+//            System.out.println(date.before(dateToday));
+//            System.out.println(dateToday.before(date));
+            if (date.before(dateToday)) {
                 System.out.println("Invalid input! Date entered is in the past.");
                 return false;
             } else {
@@ -464,6 +513,12 @@ public class CustomerAppointmentModule {
         ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
         ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
         return port.retrieveServiceProviderAppointments(providerId);
+    }
+
+    private static AppointmentEntity retrieveAppointmentByAppointmentNo(java.lang.Long appointmentNo) throws AppointmentNotFoundException_Exception {
+        ws.client.CustomerAppointmentWebService_Service service = new ws.client.CustomerAppointmentWebService_Service();
+        ws.client.CustomerAppointmentWebService port = service.getCustomerAppointmentWebServicePort();
+        return port.retrieveAppointmentByAppointmentNo(appointmentNo);
     }
 
 }

@@ -81,7 +81,12 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
     public AppointmentEntity retrieveAppointmentEntityByAppointmentId(Long appointmentId) throws AppointmentNotFoundException {
         try {
             AppointmentEntity appointmentEntity = em.find(AppointmentEntity.class, appointmentId);
-            return appointmentEntity;
+            if (appointmentEntity != null) {
+                return appointmentEntity;
+            } else {
+                throw new AppointmentNotFoundException("Appointments not found!");
+            }
+            
         } catch (NoResultException | NonUniqueResultException ex) {
             throw new AppointmentNotFoundException("Appointments not found!");
         }

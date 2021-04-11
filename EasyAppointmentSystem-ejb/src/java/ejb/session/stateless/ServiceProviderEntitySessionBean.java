@@ -22,6 +22,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolationException;
 import util.enumeration.ServiceProviderStatus;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
 import util.exception.BusinessCategoryNotFoundException;
@@ -52,7 +53,11 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     public ServiceProviderEntity retrieveServiceProviderEntityByProviderId(Long providerId) throws ServiceProviderNotFoundException {
         try {
             ServiceProviderEntity serviceProviderEntity = em.find(ServiceProviderEntity.class, providerId);
-            return serviceProviderEntity;
+            if (serviceProviderEntity != null) {
+                return serviceProviderEntity;
+            } else {
+                throw new ServiceProviderNotFoundException("Service provider not found!");
+            }
         } catch (NoResultException ex) {
             throw new ServiceProviderNotFoundException("Service provider not found!");
         }
@@ -200,14 +205,20 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         }
         double size = ratings.size();
         BigDecimal overallRating = new BigDecimal(avgRating / size);
-        
+
         serviceProviderEntity.setRatings(ratings);
         serviceProviderEntity.setOverallRating(overallRating);
-        em.merge(serviceProviderEntity);
-        em.flush();
+
+//        try {
+            em.merge(serviceProviderEntity);
+//        em.flush();
 //        
-        em.persist(ratingEntity);
-        em.flush();
+            em.persist(ratingEntity);
+            em.flush();
+//        } catch (ConstraintViolationException e) {
+//            e.getConstraintViolations().forEach(err -> System.out.println(err));
+//        }
+
     }
 
 }

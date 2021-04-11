@@ -33,71 +33,61 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
 
     @PersistenceContext(unitName = "EasyAppointmentSystem-ejbPU")
     private EntityManager em;
-    
+
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-    
-    
-    
-    public CustomerEntitySessionBean()
-    {
+
+    public CustomerEntitySessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public Long createCustomerEntity(CustomerEntity newCustomerEntity) throws CustomerAlreadyExistsException, UnknownPersistenceException, InputDataValidationException {
 //        em.persist(newCustomerEntity);
 //        em.flush();
-            try
-        {
+        try {
             Set<ConstraintViolation<CustomerEntity>> constraintViolations = validator.validate(newCustomerEntity);
-        
-            if(constraintViolations.isEmpty())
-            {
+
+            if (constraintViolations.isEmpty()) {
                 em.persist(newCustomerEntity);
                 em.flush();
 
                 return newCustomerEntity.getCustomerId();
-            }
-            else
-            {
+            } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
-            }            
-        }
-        catch(PersistenceException ex)
-        {
-            if(ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException"))
-            {
-                if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
-                {
+            }
+        } catch (PersistenceException ex) {
+            if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
                     throw new CustomerAlreadyExistsException();
-                }
-                else
-                {
+                } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
-            }
-            else
-            {
+            } else {
                 throw new UnknownPersistenceException(ex.getMessage());
             }
         }
-        
+
     }
-    
+
     @Override
     public CustomerEntity retrieveCustomerEntityByCustomerId(Long customerId) throws CustomerNotFoundException {
         try {
-        CustomerEntity customerEntity = em.find(CustomerEntity.class, customerId);
-            return customerEntity;
+            CustomerEntity customerEntity = em.find(CustomerEntity.class, customerId);
+            if (customerEntity != null) {
+                return customerEntity;
+            } else {
+                throw new CustomerNotFoundException("Customer not found!");
+            }
+
         } catch (NoResultException ex) {
             throw new CustomerNotFoundException("Customer not found!");
         }
         // TODO: implement checking for null
-        
+
     }
-    
+
     @Override
     public CustomerEntity retrieveCustomerByEmail(String email) throws CustomerNotFoundException {
         Query query = em.createQuery("SELECT c FROM CustomerEntity c WHERE c.email = :inEmail");
@@ -109,40 +99,39 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
             throw new CustomerNotFoundException("Customer with Email " + email + " does not exist!");
         }
     }
-    
+
     @Override
     public void updateCustomerEntity(CustomerEntity customerEntity) {
         // TODO: implement checking for null
         em.merge(customerEntity);
     }
-    
+
     @Override
-    public void deleteCustomerEntity(Long customerId) throws CustomerNotFoundException{
+    public void deleteCustomerEntity(Long customerId) throws CustomerNotFoundException {
         try {
-        CustomerEntity customerEntity = retrieveCustomerEntityByCustomerId(customerId);
-        em.remove(customerEntity);
+            CustomerEntity customerEntity = retrieveCustomerEntityByCustomerId(customerId);
+            em.remove(customerEntity);
         } catch (CustomerNotFoundException ex) {
             throw new CustomerNotFoundException("Customer not found!");
         }
     }
-    
-    
+
     @Override
-    public CustomerEntity retrieveCustomerAppointments (Long customerId) throws CustomerNotFoundException {
+    public CustomerEntity retrieveCustomerAppointments(Long customerId) throws CustomerNotFoundException {
         try {
             CustomerEntity currentCustomerEntity = em.find(CustomerEntity.class, customerId);
             currentCustomerEntity.getAppointments().size();
             return currentCustomerEntity;
         } catch (NoResultException | NullPointerException ex) {
             throw new CustomerNotFoundException("Customer not found!");
-        } 
-    }    
-  
+        }
+    }
+
     @Override
     public CustomerEntity customerLogin(String email, String password) throws InvalidLoginException {
-        try{
+        try {
             CustomerEntity customerEntity = retrieveCustomerByEmail(email);
-               String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + customerEntity.getSalt()));
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + customerEntity.getSalt()));
             if (customerEntity.getPassword().equals(passwordHash)) {
                 return customerEntity;
             } else {
@@ -152,10 +141,10 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
             throw new InvalidLoginException("Email does not exist or invalid password!");
         }
     }
-    
+
     @Override
     public CustomerEntity customerLoginHash(String email, String hashPassword) throws InvalidLoginException {
-        try{
+        try {
             CustomerEntity customerEntity = retrieveCustomerByEmail(email);
             if (customerEntity.getPassword().equals(hashPassword)) {
                 return customerEntity;
@@ -166,17 +155,15 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
             throw new InvalidLoginException("Email does not exist or invalid password!");
         }
     }
-    
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<CustomerEntity>>constraintViolations)
-    {
+
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<CustomerEntity>> constraintViolations) {
         String msg = "Input data validation error!:";
-            
-        for(ConstraintViolation constraintViolation:constraintViolations)
-        {
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
             msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
         }
-        
+
         return msg;
     }
-    
+
 }

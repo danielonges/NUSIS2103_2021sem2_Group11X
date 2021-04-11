@@ -149,5 +149,10 @@ public class CustomerAppointmentWebService {
             throws ServiceProviderNotFoundException {
         return serviceProviderEntitySessionBeanLocal.retrieveServiceProviderEntityByProviderId(providerId);
     }
+    
+    @WebMethod(operationName = "retrieveAppointmentByAppointmentNo")
+    public AppointmentEntity retrieveAppointmentByAppointmentNo(@WebParam(name = "appointmentNo") Long appointmentNo) throws AppointmentNotFoundException {
+        return appointmentEntitySessionBeanLocal.retrieveAppointmentEntityByAppointmentNo(appointmentNo);
+    }
 
 }

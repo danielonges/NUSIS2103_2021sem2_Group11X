@@ -1,5 +1,6 @@
 package easyappointmentsystemcustomerterminalclient;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import ws.client.CustomerAlreadyExistsException_Exception;
 import ws.client.CustomerEntity;
@@ -26,42 +27,49 @@ public class MainApp {
         Integer response = 0;
 
         while (true) {
-            System.out.println("*** Welcome to Customer terminal ***\n");
-            System.out.println("1: Registration");
-            System.out.println("2: Login");
-            System.out.println("3: Exit\n");
+            try {
+                System.out.println("*** Welcome to Customer terminal ***\n");
+                System.out.println("1: Registration");
+                System.out.println("2: Login");
+                System.out.println("3: Exit\n");
 
-            response = 0;
+                response = 0;
 
-            while (response < 1 || response > 3) {
-                System.out.print("> ");
+                while (response < 1 || response > 3) {
+                    System.out.print("> ");
 
-                response = sc.nextInt();
+                    response = sc.nextInt();
 
-                if (response == 1) {
-                    // register
-                    doRegisterCustomer();
-                } else if (response == 2) {
-                    // login
-                    try {
-                        doLogin();
-                        System.out.println("Login successful!\n");
+                    if (response == 1) {
+                        // register
+                        doRegisterCustomer();
+                    } else if (response == 2) {
+                        // login
+                        try {
+                            doLogin();
+                            System.out.println("Login successful!\n");
 
-                        menuMain();
-                    } catch (InvalidLoginException_Exception ex) {
-                        System.out.println("Failed to login! " + ex.getMessage() + "\n");
+                            menuMain();
+                        } catch (InvalidLoginException_Exception ex) {
+                            System.out.println("Failed to login! " + ex.getMessage() + "\n");
+                        }
+
+                    } else if (response == 3) {
+                        break;
+                    } else {
+                        System.out.println("Invalid option, please try again!\n");
                     }
-
-                } else if (response == 3) {
-                    break;
-                } else {
-                    System.out.println("Invalid option, please try again!\n");
                 }
+
+                if (response == 3) {
+                    break;
+                }
+            } catch (InputMismatchException | NumberFormatException ex) {
+                System.out.println("Invalid input! Please try again.\n");
+                sc.nextLine();
+                continue;
             }
 
-            if (response == 3) {
-                break;
-            }
         }
     }
 
@@ -88,7 +96,7 @@ public class MainApp {
         System.out.print("Enter identity number (must be valid Singapore ID)> ");
         String identityNo = sc.nextLine().trim();
 
-     /*   while (!isValidIdentityNo(identityNo)) {
+        /*   while (!isValidIdentityNo(identityNo)) {
             System.out.print("Enter identity number (must be valid Singapore ID)> ");
             identityNo = sc.nextLine().trim();
         }*/
@@ -265,51 +273,58 @@ public class MainApp {
         Integer response = 0;
 
         while (true) {
-            System.out.println("*** Customer terminal :: Main ***\n");
-            System.out.println(String.format("You are login as %s %s.\n", currentCustomerEntity.getFirstName(), currentCustomerEntity.getLastName()));
-            System.out.println("1: Search Operation");
-            System.out.println("2: Add Appointment");
-            System.out.println("3: View Appointments");
-            System.out.println("4: Cancel Appointment");
-            System.out.println("5: Rate Service Provider");
-            System.out.println("6: Logout\n");
-            response = 0;
-            OUTER:
-            while (response < 1 || response > 6) {
-                System.out.print("> ");
-                response = sc.nextInt();
-                switch (response) {
-                    case 1:
-                        System.out.println("*** Customer terminal :: Search operation ***\n");
-                        customerAppointmentModule.doSearchOperation(false);
-                        break;
-                    case 2:
-                        System.out.println("*** Customer terminal :: Add appointment ***\n");
-                        customerAppointmentModule.doSearchOperation(true);
-                        break;
-                    case 3:
-                        System.out.println("*** Customer terminal :: View appointments ***\n");
-                        customerAppointmentModule.doViewAppointments();
-                        break;
-                    case 4:
-                        System.out.println("*** Customer terminal :: Cancel appointment ***\n");
-                        customerAppointmentModule.doCancelAppointment();
-                        break;
-                    case 5:
-                        System.out.println("*** Customer terminal :: Rate service provider ***\n");
-                        customerAppointmentModule.doRateProvider();
-                        break;
-                    case 6:
-                        break OUTER;
-                    default:
-                        System.out.println("Invalid option, please try again!\n");
-                        break;
+            try {
+                System.out.println("*** Customer terminal :: Main ***\n");
+                System.out.println(String.format("You are login as %s %s.\n", currentCustomerEntity.getFirstName(), currentCustomerEntity.getLastName()));
+                System.out.println("1: Search Operation");
+                System.out.println("2: Add Appointment");
+                System.out.println("3: View Appointments");
+                System.out.println("4: Cancel Appointment");
+                System.out.println("5: Rate Service Provider");
+                System.out.println("6: Logout\n");
+                response = 0;
+                OUTER:
+                while (response < 1 || response > 6) {
+                    System.out.print("> ");
+                    response = sc.nextInt();
+                    switch (response) {
+                        case 1:
+                            System.out.println("*** Customer terminal :: Search operation ***\n");
+                            customerAppointmentModule.doSearchOperation(false);
+                            break;
+                        case 2:
+                            System.out.println("*** Customer terminal :: Add appointment ***\n");
+                            customerAppointmentModule.doSearchOperation(true);
+                            break;
+                        case 3:
+                            System.out.println("*** Customer terminal :: View appointments ***\n");
+                            customerAppointmentModule.doViewAppointments();
+                            break;
+                        case 4:
+                            System.out.println("*** Customer terminal :: Cancel appointment ***\n");
+                            customerAppointmentModule.doCancelAppointment();
+                            break;
+                        case 5:
+                            System.out.println("*** Customer terminal :: Rate service provider ***\n");
+                            customerAppointmentModule.doRateProvider();
+                            break;
+                        case 6:
+                            break OUTER;
+                        default:
+                            System.out.println("Invalid option, please try again!\n");
+                            break;
+                    }
                 }
+                if (response == 6) {
+                    currentCustomerEntity = null;
+                    break;
+                }
+            } catch (InputMismatchException | NumberFormatException ex) {
+                System.out.println("Invalid option, please try again!\n");
+                sc.nextLine();
+                continue;
             }
-            if (response == 6) {
-                currentCustomerEntity = null;
-                break;
-            }
+
         }
     }
 
