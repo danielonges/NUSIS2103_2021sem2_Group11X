@@ -245,21 +245,32 @@ public class CustomerAppointmentModule {
                 }
             }
 
-            AppointmentEntity appointmentEntity = new AppointmentEntity();
-            appointmentEntity.setAppointmentNo(Long.parseLong(String.format("%02d%02d%02d%02d", dateToSearch.getMonth() + 1, dateToSearch.getDate(), hour, minute)));
-            appointmentEntity.setBusinessCategory(serviceProvider.getBusinessCategory().getCategory());
-            GregorianCalendar c = new GregorianCalendar();
+            Date now = new Date();
+            now.setSeconds(0);
 
-            try {
-                c.setTime(new Date(dateToSearch.getYear(), dateToSearch.getMonth(), dateToSearch.getDate(), hour, minute));
-                XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-                appointmentEntity.setDate(xmlDate);
-            } catch (DatatypeConfigurationException ex) {
-                ex.printStackTrace();
+            Date twoHoursBeforeAppointmentDate = dateToSearch;
+            twoHoursBeforeAppointmentDate.setHours(hour - 2);
+            twoHoursBeforeAppointmentDate.setMinutes(minute);
+
+            if (now.after(twoHoursBeforeAppointmentDate)) {
+                System.out.println("Appointments must be made at least two hours in advance!\n");
+            } else {
+                AppointmentEntity appointmentEntity = new AppointmentEntity();
+                appointmentEntity.setAppointmentNo(Long.parseLong(String.format("%02d%02d%02d%02d", dateToSearch.getMonth() + 1, dateToSearch.getDate(), hour, minute)));
+                appointmentEntity.setBusinessCategory(serviceProvider.getBusinessCategory().getCategory());
+                GregorianCalendar c = new GregorianCalendar();
+
+                try {
+                    c.setTime(new Date(dateToSearch.getYear(), dateToSearch.getMonth(), dateToSearch.getDate(), hour, minute));
+                    XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+                    appointmentEntity.setDate(xmlDate);
+                } catch (DatatypeConfigurationException ex) {
+                    ex.printStackTrace();
+                }
+
+                addAppointment(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), serviceProvider.getProviderId(), appointmentEntity);
+                System.out.println(String.format("The appointment with %s at %s on %s is confirmed.\n", serviceProvider.getName(), time, new SimpleDateFormat("yyyy-MM-dd").format(dateToSearch)));
             }
-
-            addAppointment(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), serviceProvider.getProviderId(), appointmentEntity);
-            System.out.println(String.format("The appointment with %s at %s on %s is confirmed.\n", serviceProvider.getName(), time, new SimpleDateFormat("yyyy-MM-dd").format(dateToSearch)));
 
         } catch (ServiceProviderNotFoundException_Exception ex) {
             System.out.println("Service provider with Id provided does not exist!\n");
