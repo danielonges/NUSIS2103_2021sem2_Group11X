@@ -47,8 +47,7 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     
     @Override
     public Long createCustomerEntity(CustomerEntity newCustomerEntity) throws CustomerAlreadyExistsException, UnknownPersistenceException, InputDataValidationException {
-//        em.persist(newCustomerEntity);
-//        em.flush();
+
             try
         {
             Set<ConstraintViolation<CustomerEntity>> constraintViolations = validator.validate(newCustomerEntity);

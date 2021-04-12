@@ -2,11 +2,14 @@ package ejb.session.stateless;
 
 import util.exception.AdminNotFoundException;
 import entity.AdminEntity;
+import util.exception.AdminAlreadyExistsException;
+import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginException;
+import util.exception.UnknownPersistenceException;
 
 public interface AdminEntitySessionBeanLocal {
     
-    public Long createAdminEntity(AdminEntity newAdminEntity);
+    public Long createAdminEntity(AdminEntity newAdminEntity) throws AdminAlreadyExistsException, UnknownPersistenceException,InputDataValidationException ;
     
     public AdminEntity retrieveAdminEntityByAdminId(Long adminId);
     

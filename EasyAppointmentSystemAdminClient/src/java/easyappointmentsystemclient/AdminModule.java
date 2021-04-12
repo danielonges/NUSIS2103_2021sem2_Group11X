@@ -28,8 +28,11 @@ import javax.jms.MapMessage;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
 import javax.jms.Session;
+import util.exception.BusinessCategoryAlreadyExistsException;
 import util.exception.BusinessCategoryNotFoundException;
 import util.exception.CustomerNotFoundException;
+import util.exception.InputDataValidationException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -80,6 +83,12 @@ public class AdminModule {
                 }
             } catch (InputMismatchException ex) {
                 System.out.println("Wrong Input! \n");
+            } catch (BusinessCategoryAlreadyExistsException ex) {
+                System.out.println("Business Category already exists!");
+            } catch (UnknownPersistenceException ex) {
+                Logger.getLogger(AdminModule.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InputDataValidationException ex) {
+                Logger.getLogger(AdminModule.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
