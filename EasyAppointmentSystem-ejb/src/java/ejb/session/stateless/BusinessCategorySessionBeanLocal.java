@@ -8,7 +8,10 @@ package ejb.session.stateless;
 import entity.BusinessCategoryEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.BusinessCategoryAlreadyExistsException;
 import util.exception.BusinessCategoryNotFoundException;
+import util.exception.InputDataValidationException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -17,7 +20,7 @@ import util.exception.BusinessCategoryNotFoundException;
 @Local
 public interface BusinessCategorySessionBeanLocal {
 
-    public Long createBusinessCategoryEntity(BusinessCategoryEntity newBusinessCategoryEntity);
+    public Long createBusinessCategoryEntity(BusinessCategoryEntity newBusinessCategoryEntity) throws BusinessCategoryAlreadyExistsException,UnknownPersistenceException,InputDataValidationException;
 
     public List<BusinessCategoryEntity> retrieveAllBusinessCategories();
 

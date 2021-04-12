@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
 <<<<<<< HEAD
             <file>file:/Users/danielonges/NetBeansProjects/EasyAppointmentSystem/EasyAppointmentSystemLibrary/src/entity/AppointmentEntity.java</file>
@@ -10,5 +11,8 @@
             <file>file:/C:/Users/leele/git/NUSIS2103_2021sem2_Group11X/EasyAppointmentSystemLibrary/src/util/email/EmailManager.java</file>
 >>>>>>> 0eb9f3145f38e17c42c470ffaf357246aa9649ad
         </group>
+=======
+        <group/>
+>>>>>>> 2a09da6a2d4c1c4214028405c414a963d7d8cf68
     </open-files>
 </project-private>
