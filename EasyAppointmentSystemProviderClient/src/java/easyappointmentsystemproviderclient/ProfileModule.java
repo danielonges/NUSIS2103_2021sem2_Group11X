@@ -45,7 +45,6 @@ public class ProfileModule {
         System.out.println("Business Address: " + currentServiceProviderEntity.getAddress());
         System.out.println("Email Address: " + currentServiceProviderEntity.getEmail());
         System.out.println("Phone Number: " + currentServiceProviderEntity.getPhone());
-        System.out.println("Password: " + currentServiceProviderEntity.getPassword());
         System.out.println("Overall Rating: " + currentServiceProviderEntity.getOverallRating());
         System.out.println("Status: " + currentServiceProviderEntity.getStatus() + "\n");
 

@@ -14,6 +14,8 @@ import ejb.session.stateless.EmailSessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.BusinessCategoryEntity;
 import entity.CustomerEntity;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -120,20 +122,28 @@ public class AdminModule {
                 System.out.println("Enter 0 to go back to the previous menu.");
                 System.out.print("Enter customer Id> ");
                 Long customerId = sc.nextLong();
-                
+
                 if (customerId == 0L) {
                     break;
                 } else {
                     CustomerEntity currentCustomerEntity = customerEntitySessionBeanRemote.retrieveCustomerAppointments(customerId);
                     List<AppointmentEntity> appointments = currentCustomerEntity.getAppointments();
                     String toEmailAddress = currentCustomerEntity.getEmail();
+                    List<AppointmentEntity> upcomingAppointments = new ArrayList<>();
                     if (appointments.isEmpty()) {
                         System.out.println("There are no new appointments to " + currentCustomerEntity.getFullName() + ".");
                     } else {
                         for (AppointmentEntity appointment : appointments) {
+                            Date currentDate = new Date();
+                            long diff_in_time = appointment.getDate().getTime() - currentDate.getTime();
+                            long diff_in_hours = (diff_in_time / (1000 * 60 * 60)) % 365;
+                            if (diff_in_hours >= -1 && appointment.getIsCancelled() == false) {
+                                upcomingAppointments.add(appointment);
+                            }
+                        }
+                        for (AppointmentEntity appointment : upcomingAppointments) {
                             if (toEmailAddress.length() > 0) {
                                 try {
-                                 
                                     // 03 - JMS Messaging with Message Driven Bean
                                     sendJMSMessageToQueueApplication(appointment.getAppointmentId(), "exleolee@gmail.com", toEmailAddress);
 
@@ -150,9 +160,9 @@ public class AdminModule {
                 System.out.println("Wrong Input! \n");
             } catch (CustomerNotFoundException ex) {
                 System.out.println("Customer Entity not found!");
-           
+
+            }
         }
-    }
     }
 
     private void sendJMSMessageToQueueApplication(Long appointmentId, String fromEmailAddress, String toEmailAddress) throws JMSException {
@@ -182,6 +192,5 @@ public class AdminModule {
             }
         }
     }
-
 
 }

@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.AppointmentEntity;
 import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
+import java.lang.reflect.InvocationTargetException;
 import util.exception.AppointmentNotFoundException;
 import util.exception.DeleteAppointmentException;
 import java.util.List;
@@ -94,6 +95,7 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
 
     @Override
     public AppointmentEntity retrieveAppointmentEntityByAppointmentNo(Long appointmentNo) throws AppointmentNotFoundException {
+   
         Query query = em.createQuery("SELECT a FROM AppointmentEntity a WHERE a.appointmentNo = :inAppointmentNo");
         query.setParameter("inAppointmentNo", appointmentNo);
         
