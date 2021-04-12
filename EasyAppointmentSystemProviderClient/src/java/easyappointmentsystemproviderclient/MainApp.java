@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -112,6 +113,11 @@ public class MainApp {
             System.out.println("* Service Provider Terminal :: Registration Operation *\n");
             System.out.print("Enter Name> ");
             String name = scanner.nextLine().trim();
+            while (name.length() == 0) {
+                System.out.println("Invalid input! Name field must be present.");
+                System.out.print("Enter Name> ");
+                name = scanner.nextLine().trim();
+            }
             List<BusinessCategoryEntity> businessCategoryEntities = businessCategorySessionBeanRemote.retrieveAllBusinessCategories();
             int sizeOfBusinessCategoryList = businessCategoryEntities.size();
             for (int i = 0; i < sizeOfBusinessCategoryList - 1; i++) {
@@ -125,14 +131,38 @@ public class MainApp {
             BusinessCategoryEntity businessCategory = businessCategoryEntities.get(businessCategoryId);
             System.out.print("Enter Business Registration Number> ");
             String businessRegistrationNum = scanner.nextLine().trim();
+            while (businessRegistrationNum.length() == 0) {
+                System.out.println("Invalid input! Business Regsitration Number field must be present.");
+                System.out.print("Enter Business Regsitration Number> ");
+                businessRegistrationNum = scanner.nextLine().trim();
+            }
             System.out.print("Enter City> ");
             String city = scanner.nextLine().trim();
+            while (city.length() == 0) {
+                System.out.println("Invalid input! City field must be present.");
+                System.out.print("Enter city> ");
+                city = scanner.nextLine().trim();
+            }
             System.out.print("Enter Phone> ");
             String phone = scanner.nextLine().trim();
+            while (!isValidDigitInput(phone)) {
+
+                System.out.print("Enter phone (digits only, without spaces or hyphens) > ");
+                phone = scanner.nextLine().trim();
+            }
             System.out.print("Enter Business Address> ");
             String businessAddress = scanner.nextLine().trim();
+            while (businessAddress.length() == 0) {
+                System.out.println("Invalid input! Business Address field must be present.");
+                System.out.print("Enter Business Address> ");
+                businessAddress = scanner.nextLine().trim();
+            }
             System.out.print("Enter Email> ");
             String email = scanner.nextLine().trim();
+            while (!isValidEmail(email)) {
+                System.out.print("Enter email> ");
+                email = scanner.nextLine().trim();
+            }
             System.out.print("Enter Password> ");
             String password = scanner.nextLine().trim();
             while (password.length() != 6 || !password.matches("[0-9]+")) {
@@ -178,6 +208,25 @@ public class MainApp {
             System.out.println("Service Provider already exists!");
         } catch (UnknownPersistenceException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private boolean isValidDigitInput(String input) {
+        if (!input.matches("\\d+")) {
+            System.out.println("Invalid input! Input must be all digits.");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean isValidEmail(String input) {
+        String validationRegex = "^[\\w!#$%&'*+/=?`{|}~^.-]+@[^\\W_][a-zA-Z0-9.-]*[^\\W_]$";
+        if (input.matches(validationRegex)) {
+            return true;
+        } else {
+            System.out.println("Invalid input! Invalid email entered.");
+            return false;
         }
     }
 

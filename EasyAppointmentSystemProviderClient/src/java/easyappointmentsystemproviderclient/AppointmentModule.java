@@ -100,8 +100,7 @@ public class AppointmentModule {
         System.out.println("* Service provider terminal :: Cancel Appointments *\n");
         // the following code is the same as viewAppointment()
         try {
-            ServiceProviderEntity newServiceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveListOfAppointments(currentServiceProviderEntity.getProviderId());
-            List<AppointmentEntity> appointmentEntities = newServiceProviderEntity.getAppointments();
+            List<AppointmentEntity> appointmentEntities = serviceProviderEntitySessionBeanRemote.retrieveListOfPendingAppointments(currentServiceProviderEntity.getProviderId());
 
             if (appointmentEntities.isEmpty()) {
                 System.out.println("No current appointments.");
@@ -130,7 +129,7 @@ public class AppointmentModule {
                             Date todayDate = new GregorianCalendar().getTime();
                             Date appointmentDate = currentAppointmentEntity.getDate();
                             long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
-                            boolean moreThanDay = todayDate.getTime() - appointmentDate.getTime() > MILLIS_PER_DAY;
+                            boolean moreThanDay = appointmentDate.getTime() - todayDate.getTime() > MILLIS_PER_DAY;
                             if (moreThanDay && currentAppointmentEntity.getIsCancelled() == false) {
                                 currentAppointmentEntity.setIsCancelled(Boolean.TRUE);
                                 appointmentEntitySessionBeanRemote.updateAppointmentEntity(currentAppointmentEntity);

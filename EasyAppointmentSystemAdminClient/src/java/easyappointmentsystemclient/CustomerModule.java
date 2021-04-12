@@ -49,16 +49,17 @@ public class CustomerModule {
             if (appointments.isEmpty()) {
                 System.out.println("No current appointments.");
             } else {
-                System.out.println(String.format("%20s | %20s | %20s | %10s | %20s", "Name", "Business Category", "Date", "Time", "Appointment no."));
+                System.out.println(String.format("%20s | %20s | %10s | %20s | %20s", "Name", "Date", "Time", "Appointment no.", "Status"));
                 for (AppointmentEntity a : appointments) {
                     DateFormat dateFormat = new SimpleDateFormat("hh:mm");
                     String strDate = dateFormat.format(a.getDate());
+                    String status = a.getIsCancelled() ? "Cancelled" : "Approved";
 
 //                    String[] array = strDate.toString().split(" ");
 //                    String month = array[0];
 //                    String time = array[1];
-                    System.out.println(String.format("%20s | %20s | %20s | %10s | %20s", a.getServiceProvider().getName(), a.getBusinessCategory(), String.format("%04d-%02d-%02d", a.getDate().getYear() + 1900, a.getDate().getMonth() + 1, a.getDate().getDate()), strDate, a.getAppointmentNo()));
-                    
+                    System.out.println(String.format("%20s | %20s | %10s | %20s | %20s", a.getServiceProvider().getName(), String.format("%04d-%02d-%02d", a.getDate().getYear() + 1900, a.getDate().getMonth() + 1, a.getDate().getDate()), strDate, a.getAppointmentNo(), status));
+
                 }
             }
 

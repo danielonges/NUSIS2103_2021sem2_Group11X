@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -73,13 +74,24 @@ public class ProfileModule {
                         case 1:
                             System.out.print("Enter new city> ");
                             String newCity = scanner.nextLine().trim();
+                            while (newCity.length() == 0) {
+                                System.out.println("Invalid input! City field must be present.");
+                                System.out.print("Enter city> ");
+                                newCity = scanner.nextLine().trim();
+                            }
                             currentServiceProviderEntity.setCity(newCity);
+
                             serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                             System.out.println("changed successfully!");
                             break;
                         case 2:
                             System.out.print("Enter new business address> ");
                             String newBusinessAddress = scanner.nextLine().trim();
+                            while (newBusinessAddress.length() == 0) {
+                                System.out.println("Invalid input! Business Address field must be present.");
+                                System.out.print("Enter new Business Address> ");
+                                newBusinessAddress = scanner.nextLine().trim();
+                            }
                             currentServiceProviderEntity.setAddress(newBusinessAddress);
                             serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                             System.out.println("changed successfully!");
@@ -87,6 +99,10 @@ public class ProfileModule {
                         case 3:
                             System.out.print("Enter new email address> ");
                             String newEmailAddress = scanner.nextLine().trim();
+                            while (!isValidEmail(newEmailAddress)) {
+                                System.out.print("Enter new email address> ");
+                                newEmailAddress = scanner.nextLine().trim();
+                            }
                             currentServiceProviderEntity.setEmail(newEmailAddress);
                             serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                             System.out.println("changed successfully!");
@@ -94,6 +110,10 @@ public class ProfileModule {
                         case 4:
                             System.out.print("Enter new phone number> ");
                             String newPhoneNumber = scanner.nextLine().trim();
+                            while (!isValidDigitInput(newPhoneNumber)) {
+                                System.out.print("Enter phone (digits only, without spaces or hyphens) > ");
+                                newPhoneNumber = scanner.nextLine().trim();
+                            }
                             currentServiceProviderEntity.setPhone(newPhoneNumber);
                             serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                             System.out.println("changed successfully!");
@@ -101,6 +121,12 @@ public class ProfileModule {
                         case 5:
                             System.out.print("Enter new password> ");
                             String newPassword = scanner.nextLine().trim();
+                            while (newPassword.length() != 6 || !newPassword.matches("[0-9]+")) {
+                                System.out.println("password must be a 6 digit number!");
+                                System.out.print("Enter new password> ");
+                                newPassword = scanner.nextLine().trim();
+                            }
+
                             currentServiceProviderEntity.setPassword(newPassword);
                             serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(currentServiceProviderEntity);
                             System.out.println("changed successfully!");
@@ -124,4 +150,22 @@ public class ProfileModule {
         }
     }
 
+    private boolean isValidDigitInput(String input) {
+        if (!input.matches("\\d+")) {
+            System.out.println("Invalid input! Input must be all digits.");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean isValidEmail(String input) {
+        String validationRegex = "^[\\w!#$%&'*+/=?`{|}~^.-]+@[^\\W_][a-zA-Z0-9.-]*[^\\W_]$";
+        if (input.matches(validationRegex)) {
+            return true;
+        } else {
+            System.out.println("Invalid input! Invalid email entered.");
+            return false;
+        }
+    }
 }
