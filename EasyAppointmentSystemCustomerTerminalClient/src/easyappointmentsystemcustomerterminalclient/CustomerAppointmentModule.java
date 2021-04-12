@@ -10,7 +10,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -109,10 +108,8 @@ public class CustomerAppointmentModule {
                             .filter(sp -> sp.getStatus() == ServiceProviderStatus.APPROVE)
                             .collect(Collectors.toList());
             boolean hasAvailableAppointment = false;
-//            availableServiceProvidersByDate = getAvailableServiceProvidersByDate(dateToSearch, approvedServiceProviders);
             System.out.printf("\n%20s | %20s | %20s | %20s | %20s \n", "Service Provider Id", "Name", "First available time", "Address", "Overall rating");
             for (ServiceProviderEntity sp : approvedServiceProviders) {
-//                System.out.println(sp);
                 List<Integer> availableTimings = findAvailableTimingsOnDate(sp, dateToSearch);
                 if (availableTimings.size() > 0) {
                     hasAvailableAppointment = true;
@@ -139,40 +136,20 @@ public class CustomerAppointmentModule {
         }
     }
 
-//    private List<ServiceProviderEntity> getAvailableServiceProvidersByDate(Date date, List<ServiceProviderEntity> serviceProviders) {
-//        return serviceProviders.stream()
-//                .filter(sp -> sp.getAppointments().stream().anyMatch(app -> {
-//            XMLGregorianCalendar appDate = app.getDate();
-//            int appDay = appDate.getDay();
-//            int appMonth = appDate.getMonth();
-//            int appYear = appDate.getYear();
-//            return date.getDate() == appDay && date.getMonth() == appMonth && date.getYear() == appYear;
-//        })).collect(Collectors.toList());
-//    }
     private List<Integer> findAvailableTimingsOnDate(ServiceProviderEntity serviceProvider, Date date) throws ServiceProviderNotFoundException_Exception {
         List<Integer> availableTimings = getAvailableHoursInADay();
         List<AppointmentEntity> appointments = retrieveServiceProviderAppointments(serviceProvider.getProviderId());
 
-//        System.out.println(appointments);
         for (AppointmentEntity a : appointments) {
-//            System.out.println(a.getDate().getMonth());
-//            System.out.println(date.getMonth());
-//            System.out.println(date.getDate() == a.getDate().getDay());
-//            System.out.println(date.getMonth() + 1 == a.getDate().getMonth());
-//            System.out.println(date.getYear() + 1900 == a.getDate().getYear());
-//            System.out.println(a.getDate().getHour());
-//            System.out.println(availableTimings.contains(a.getDate().getHour()));
-
             if (date.getDate() == a.getDate().getDay()
                     && date.getMonth() + 1 == a.getDate().getMonth()
                     && date.getYear() + 1900 == a.getDate().getYear()
-                    && availableTimings.contains(a.getDate().getHour())) {
+                    && availableTimings.contains(a.getDate().getHour())
+                    && !a.isIsCancelled()) {
                 int index = availableTimings.indexOf(a.getDate().getHour());
-//                System.out.println(index);
                 availableTimings.remove(index);
             }
         }
-//        System.out.println(availableTimings);
         Collections.sort(availableTimings);
         return availableTimings;
     }
@@ -203,10 +180,6 @@ public class CustomerAppointmentModule {
 
         try {
             ServiceProviderEntity serviceProvider = retrieveServiceProviderByProviderId(providerId);
-//            if (!approvedServiceProviders.contains(serviceProvider)) {
-//                System.out.println("Service provider with Id provided is not free on date " + new SimpleDateFormat("yyyy-MM-dd").format(dateToSearch) + ".\n");
-//                return;
-//            }
 
             List<Integer> availableTimings = findAvailableTimingsOnDate(serviceProvider, dateToSearch);
 
@@ -249,9 +222,6 @@ public class CustomerAppointmentModule {
             Date appointmentDate = new Date(dateToSearch.getTime());
             appointmentDate.setHours(hour);
             appointmentDate.setMinutes(minute);
-//            
-//            System.out.println(hour);
-//            System.out.println(minute);
 
             Date twoHoursBeforeAppointmentDate = new Date(dateToSearch.getTime());
             twoHoursBeforeAppointmentDate.setHours(hour - 2);
@@ -299,7 +269,6 @@ public class CustomerAppointmentModule {
 
     public void doViewAppointments() {
 
-//        System.out.println(currentCustomerEntity);
         try {
             List<AppointmentEntity> appointmentEntities = retrieveCustomerAppointments(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword());
 
@@ -459,12 +428,7 @@ public class CustomerAppointmentModule {
         try {
             Date date = df.parse(input);
             Date dateToday = new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate());
-//            System.out.println(dateToday);
 
-//            System.out.println(dateToday);
-//            System.out.println(date);
-//            System.out.println(date.before(dateToday));
-//            System.out.println(dateToday.before(date));
             if (date.before(dateToday)) {
                 System.out.println("Invalid input! Date entered is in the past.");
                 return false;

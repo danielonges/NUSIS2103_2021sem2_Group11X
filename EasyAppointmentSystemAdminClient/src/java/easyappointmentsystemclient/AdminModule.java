@@ -115,7 +115,7 @@ public class AdminModule {
 
     public void sendReminderEmail() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("*** Admin terminal :: Send reminder emai ***");
+        System.out.println("*** Admin terminal :: Send reminder email ***");
 
         while (true) {
             try {
