@@ -432,6 +432,9 @@ public class CustomerAppointmentModule {
             if (date.before(dateToday)) {
                 System.out.println("Invalid input! Date entered is in the past.");
                 return false;
+            } else if (date.getDay() == 0) {
+                System.out.println("Service providers don't operate on Sunday.");
+                return false;
             } else {
                 return true;
             }

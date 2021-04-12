@@ -146,7 +146,7 @@ public class AdminModule {
                             Date currentDate = new Date();
                             long diff_in_time = appointment.getDate().getTime() - currentDate.getTime();
                             long diff_in_hours = (diff_in_time / (1000 * 60 * 60)) % 365;
-                            if (diff_in_hours >= -1 && appointment.getIsCancelled() == false) {
+                            if (diff_in_hours >= 0 && appointment.getIsCancelled() == false) {
                                 upcomingAppointments.add(appointment);
                             }
                         }

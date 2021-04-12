@@ -108,15 +108,16 @@ public class DataInitSessionBean {
             appointmentWithMacsPast.setDate(new Date(121, 3, 4, 8, 30));
             Long macsPastAppointmentId = appointmentEntitySessionBeanLocal.createAppointmentEntity(johnDoe.getCustomerId(), mcDonalds.getProviderId(), appointmentWithMacsPast);
             appointmentWithMacsPast.setAppointmentNo(Long.parseLong(macsPastAppointmentId + String.format("%08d", appointmentWithMacsPast.getAppointmentNo())));
+            appointmentEntitySessionBeanLocal.updateAppointmentEntity(appointmentWithMacsPast);
             
             // John Doe appointment with NUS on 06 June 2021 at 12:30
             AppointmentEntity appointmentWithNusFuture = new AppointmentEntity();
             appointmentWithNusFuture.setAppointmentNo(Long.parseLong("06061230"));
             appointmentWithNusFuture.setBusinessCategory(educationCategory.getCategory());
             appointmentWithNusFuture.setDate(new Date(121, 5, 6, 12, 30));
-            appointmentEntitySessionBeanLocal.createAppointmentEntity(johnDoe.getCustomerId(), nus.getProviderId(), appointmentWithNusFuture);
             Long nusFutureAppointmentId = appointmentEntitySessionBeanLocal.createAppointmentEntity(johnDoe.getCustomerId(), nus.getProviderId(), appointmentWithNusFuture);
             appointmentWithNusFuture.setAppointmentNo(Long.parseLong(nusFutureAppointmentId + String.format("%08d", appointmentWithNusFuture.getAppointmentNo())));
+            appointmentEntitySessionBeanLocal.updateAppointmentEntity(appointmentWithNusFuture);
             
         } catch (Exception e) {
             e.printStackTrace();
