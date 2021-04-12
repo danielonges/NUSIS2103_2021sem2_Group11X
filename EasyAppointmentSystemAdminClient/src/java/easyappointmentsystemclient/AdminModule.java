@@ -132,7 +132,7 @@ public class AdminModule {
 
     public void sendReminderEmail() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("*** Admin terminal :: Send reminder email ***");
+        System.out.println("* Admin terminal :: Send reminder email *");
 
         while (true) {
             try {
@@ -147,6 +147,7 @@ public class AdminModule {
                     List<AppointmentEntity> appointments = currentCustomerEntity.getAppointments();
                     String toEmailAddress = currentCustomerEntity.getEmail();
                     List<AppointmentEntity> upcomingAppointments = new ArrayList<>();
+
                     if (appointments.isEmpty()) {
                         System.out.println("There are no new appointments to " + currentCustomerEntity.getFullName() + ".");
                     } else {
@@ -158,18 +159,23 @@ public class AdminModule {
                                 upcomingAppointments.add(appointment);
                             }
                         }
+                        AppointmentEntity earliestAppointment = upcomingAppointments.get(0);
                         for (AppointmentEntity appointment : upcomingAppointments) {
-                            if (toEmailAddress.length() > 0) {
-                                try {
-                                    // 03 - JMS Messaging with Message Driven Bean
-                                    sendJMSMessageToQueueApplication(appointment.getAppointmentId(), "exleolee@gmail.com", toEmailAddress);
-
-                                    System.out.println("An email is sent to " + currentCustomerEntity.getFullName() + " for the appointment " + appointment.getAppointmentNo());
-                                } catch (Exception ex) {
-                                    System.out.println("An error has occurred while sending the checkout notification email: " + ex.getMessage() + "\n");
-                                }
+                            if (earliestAppointment.getDate().getTime() > appointment.getDate().getTime()) {
+                                earliestAppointment = appointment;
                             }
                         }
+                        if (toEmailAddress.length() > 0) {
+                            try {
+                                // 03 - JMS Messaging with Message Driven Bean
+                                sendJMSMessageToQueueApplication(earliestAppointment.getAppointmentId(), "exleolee@gmail.com", toEmailAddress);
+
+                                System.out.println("An email is sent to " + currentCustomerEntity.getFullName() + " for the appointment " + earliestAppointment.getAppointmentNo());
+                            } catch (Exception ex) {
+                                System.out.println("An error has occurred while sending the checkout notification email: " + ex.getMessage() + "\n");
+                            }
+                        }
+
                     }
                 }
 
@@ -181,7 +187,7 @@ public class AdminModule {
             }
         }
     }
-
+    
     private void sendJMSMessageToQueueApplication(Long appointmentId, String fromEmailAddress, String toEmailAddress) throws JMSException {
         Connection connection = null;
         Session session = null;
