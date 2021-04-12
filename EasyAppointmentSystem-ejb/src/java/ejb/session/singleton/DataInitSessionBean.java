@@ -72,7 +72,7 @@ public class DataInitSessionBean {
     private void initializeData() {
         try {
             adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Leonard", "leonard@gmail.com", "123456"));
-            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Zikun", "em", "123456"));
+            adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Zikun", "zikun@gmail.com", "123456"));
             adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("Daniel", "daniel@gmail.com", "123456"));
 
             businessCategorySessionBeanLocal.createBusinessCategoryEntity(new BusinessCategoryEntity("Health"));
