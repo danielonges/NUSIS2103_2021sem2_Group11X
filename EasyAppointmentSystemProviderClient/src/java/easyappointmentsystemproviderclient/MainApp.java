@@ -21,8 +21,12 @@ import util.exception.ServiceProviderEmailExistException;
 import util.exception.UnknownPersistenceException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.enumeration.ServiceProviderStatus;
 import static util.enumeration.ServiceProviderStatus.APPROVE;
+import util.exception.InputDataValidationException;
+import util.exception.ServiceProviderAlreadyExistsException;
 //import util.exception.InvalidRegistrationException;
 
 /**
@@ -168,6 +172,12 @@ public class MainApp {
             }
         } catch (InputMismatchException | IndexOutOfBoundsException ex) {
             System.out.println("An error has occurred, please try again!");
+        } catch (InputDataValidationException ex) {
+            System.out.println(ex.getMessage());
+        } catch (ServiceProviderAlreadyExistsException ex) {
+            System.out.println("Service Provider already exists!");
+        } catch (UnknownPersistenceException ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

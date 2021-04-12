@@ -20,4 +20,5 @@ public interface AdminEntitySessionBeanLocal {
     public AdminEntity AdminLogin(String email, String password) throws InvalidLoginException;
 
     public AdminEntity retrieveAdminByEmail(String email) throws AdminNotFoundException;
+    
 }
