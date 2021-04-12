@@ -6,11 +6,14 @@ import util.exception.InvalidLoginException;
 import util.exception.ServiceProviderNotFoundException;
 import java.util.List;
 import util.exception.BusinessCategoryNotFoundException;
+import util.exception.InputDataValidationException;
+import util.exception.ServiceProviderAlreadyExistsException;
+import util.exception.UnknownPersistenceException;
 
 public interface ServiceProviderEntitySessionBeanLocal {
     
     
-    public void createServiceProviderEntity(ServiceProviderEntity newServiceProviderEntity);
+    public void createServiceProviderEntity(ServiceProviderEntity newServiceProviderEntity)  throws ServiceProviderAlreadyExistsException, UnknownPersistenceException, InputDataValidationException ;
 
     public ServiceProviderEntity retrieveServiceProviderEntityByProviderId(Long providerId) throws ServiceProviderNotFoundException ;
     
