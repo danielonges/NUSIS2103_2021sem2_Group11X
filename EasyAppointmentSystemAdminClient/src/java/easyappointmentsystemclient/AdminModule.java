@@ -14,6 +14,7 @@ import ejb.session.stateless.EmailSessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.BusinessCategoryEntity;
 import entity.CustomerEntity;
+import entity.ServiceProviderEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -109,8 +110,15 @@ public class AdminModule {
                 if (businessCategoryEntity.equals("0")) {
                     break;
                 } else {
-                    businessCategorySessionBeanRemote.deleteBusinessCategoryEntity(businessCategoryEntity);
-                    System.out.println("The business category \"" + businessCategoryEntity + "\" is removed. ");
+                    BusinessCategoryEntity businessCategory = businessCategorySessionBeanRemote.retrieveBusinessCategoryEntityByName(businessCategoryEntity);
+                    List<ServiceProviderEntity> serviceProviders = businessCategorySessionBeanRemote.retrieveServiceProviders(businessCategory.getCategoryId()).getServiceProviders();
+
+                    if (serviceProviders.size() > 0) {
+                        System.out.println("Cannot delete business category; some service providers still fall under that category.\n");
+                    } else {
+                        businessCategorySessionBeanRemote.deleteBusinessCategoryEntity(businessCategoryEntity);
+                        System.out.println("The business category \"" + businessCategoryEntity + "\" is removed. ");
+                    }
 
                 }
             } catch (InputMismatchException ex) {
