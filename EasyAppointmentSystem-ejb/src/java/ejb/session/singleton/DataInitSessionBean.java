@@ -97,7 +97,7 @@ public class DataInitSessionBean {
             serviceProviderEntitySessionBeanLocal.updateServiceProviderEntity(nus);
             
             customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("S1234567A", "John", "Doe", 'M', 20, "62353535", "10 Heng Mui Keng Terrace", "Singapore", "leeleonard_98@yahoo.com.sg", "123456"));
-            customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("T1234567A", "Ching", "Chong", 'F', 20, "999", "1 Stack Overflow Drive", "Singapore", "chingchong@gmail.com", "123456"));
+            customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("T1234567A", "Ching", "Chong", 'F', 20, "999", "1 Stack Overflow Drive", "Singapore", "ongfishh@gmail.com", "123456"));
             
             CustomerEntity johnDoe = customerEntitySessionBeanLocal.retrieveCustomerByEmail("leeleonard_98@yahoo.com.sg");
             
