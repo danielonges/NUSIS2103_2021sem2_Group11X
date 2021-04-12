@@ -247,13 +247,22 @@ public class CustomerAppointmentModule {
 
             Date now = new Date();
             now.setSeconds(0);
+            
+            Date appointmentDate = new Date(dateToSearch.getTime());
+            appointmentDate.setHours(hour);
+            appointmentDate.setMinutes(minute);
+//            
+//            System.out.println(hour);
+//            System.out.println(minute);
 
-            Date twoHoursBeforeAppointmentDate = dateToSearch;
+            Date twoHoursBeforeAppointmentDate = new Date(dateToSearch.getTime());
             twoHoursBeforeAppointmentDate.setHours(hour - 2);
             twoHoursBeforeAppointmentDate.setMinutes(minute);
 
-            if (now.after(twoHoursBeforeAppointmentDate)) {
+            if (now.before(appointmentDate) && now.after(twoHoursBeforeAppointmentDate)) {
                 System.out.println("Appointments must be made at least two hours in advance!\n");
+            } else if (now.after(appointmentDate)) {
+                System.out.println("Appointment time has already past!\n");
             } else {
                 AppointmentEntity appointmentEntity = new AppointmentEntity();
                 appointmentEntity.setAppointmentNo(Long.parseLong(String.format("%02d%02d%02d%02d", dateToSearch.getMonth() + 1, dateToSearch.getDate(), hour, minute)));
@@ -324,11 +333,12 @@ public class CustomerAppointmentModule {
 
     public void doCancelAppointment() {
         doViewAppointments();
-        System.out.println("Enter 0 to go back to the previous menu.");
+        
 
         while (true) {
 
             // this is the appointment number
+            System.out.println("Enter 0 to go back to the previous menu.");
             System.out.print("Enter Appointment Id> ");
             String appointmentNo = sc.nextLine().trim();
 
@@ -345,25 +355,25 @@ public class CustomerAppointmentModule {
             try {
                 AppointmentEntity appointmentEntity = retrieveAppointmentByAppointmentNo(input);
 
-                Date oneDayBeforeNow = new Date();
-                oneDayBeforeNow.setDate(oneDayBeforeNow.getDate() - 1);
+                Date oneDayAfterNow = new Date();
+                oneDayAfterNow.setDate(oneDayAfterNow.getDate() + 1);
 
                 Date dateToday = new Date(new Date().getYear(), new Date().getMonth(), new Date().getDate());
 
                 if (appointmentEntity.getDate().toGregorianCalendar().getTime().before(dateToday)) {
                     System.out.println("Appointment is already over!\n");
-                } else if (appointmentEntity.getDate().toGregorianCalendar().getTime().after(oneDayBeforeNow)) {
+                } else if (appointmentEntity.getDate().toGregorianCalendar().getTime().before(oneDayAfterNow)) {
                     System.out.println("Cannot cancel appointment less than 24 hours before!\n");
                 } else if (appointmentEntity.isIsCancelled()) {
                     System.out.println("Appointment has already been cancelled!\n");
                 } else {
                     cancelAppointment(currentCustomerEntity.getEmail(), currentCustomerEntity.getPassword(), input);
                     System.out.println("Appointment " + appointmentNo + " has been successfully cancelled.\n");
-                    System.out.println("Enter 0 to go back to the previous menu.");
+                    
                 }
 
             } catch (AppointmentNotFoundException_Exception | CustomerNotFoundException_Exception | InvalidLoginException_Exception | UnauthorisedOperationException_Exception ex) {
-                System.out.println("An error occured while performing the operation: " + ex.getMessage());
+                System.out.println("An error occured while performing the operation: " + ex.getMessage() + "\n");
             }
         }
     }
@@ -423,7 +433,7 @@ public class CustomerAppointmentModule {
 
                 System.out.println("Service provider rated successfully!\n");
             } else {
-                System.out.println("You have not had an appointment with this service provider before; cannot rate!\n");
+                System.out.println("You have not had a past appointment with this service provider before; cannot rate!\n");
             }
 
         } catch (InvalidLoginException_Exception | ServiceProviderNotFoundException_Exception | CustomerNotFoundException_Exception ex) {

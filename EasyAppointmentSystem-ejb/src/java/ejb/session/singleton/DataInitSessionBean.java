@@ -16,6 +16,7 @@ import entity.BusinessCategoryEntity;
 import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -84,13 +85,39 @@ public class DataInitSessionBean {
             ServiceProviderEntity mcDonalds = new ServiceProviderEntity("McDonalds", "1 Computing Drive", "Clementi", "mcd@gmail.com", "123456", "ABCD1234", ServiceProviderStatus.PENDING, new BigDecimal(0), "999");
             mcDonalds.setBusinessCategory(healthCategory);
             serviceProviderEntitySessionBeanLocal.createServiceProviderEntity(mcDonalds);
+            mcDonalds = serviceProviderEntitySessionBeanLocal.retrieveServiceProviderByEmail("mcd@gmail.com");
+            mcDonalds.setStatus(ServiceProviderStatus.APPROVE);
+            serviceProviderEntitySessionBeanLocal.updateServiceProviderEntity(mcDonalds);
 
             ServiceProviderEntity nus = new ServiceProviderEntity("NUS", "100 Computing Drive", "Clementi", "nus@gmail.com", "123456", "NUSORWTV", ServiceProviderStatus.PENDING, new BigDecimal(0), "12345678");
             nus.setBusinessCategory(educationCategory);
             serviceProviderEntitySessionBeanLocal.createServiceProviderEntity(nus);
+            nus = serviceProviderEntitySessionBeanLocal.retrieveServiceProviderByEmail("nus@gmail.com");
+            nus.setStatus(ServiceProviderStatus.APPROVE);
+            serviceProviderEntitySessionBeanLocal.updateServiceProviderEntity(nus);
             
             customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("S1234567A", "John", "Doe", 'M', 20, "62353535", "10 Heng Mui Keng Terrace", "Singapore", "leeleonard_98@yahoo.com.sg", "123456"));
             customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("T1234567A", "Ching", "Chong", 'F', 20, "999", "1 Stack Overflow Drive", "Singapore", "chingchong@gmail.com", "123456"));
+            
+            CustomerEntity johnDoe = customerEntitySessionBeanLocal.retrieveCustomerByEmail("leeleonard_98@yahoo.com.sg");
+            
+            // John Doe appointment with Macs on 04 Apr 2021 at 8:30 - already past
+            AppointmentEntity appointmentWithMacsPast = new AppointmentEntity();
+            appointmentWithMacsPast.setAppointmentNo(Long.parseLong("04040830"));
+            appointmentWithMacsPast.setBusinessCategory(healthCategory.getCategory());
+            appointmentWithMacsPast.setDate(new Date(121, 3, 4, 8, 30));
+            Long macsPastAppointmentId = appointmentEntitySessionBeanLocal.createAppointmentEntity(johnDoe.getCustomerId(), mcDonalds.getProviderId(), appointmentWithMacsPast);
+            appointmentWithMacsPast.setAppointmentNo(Long.parseLong(macsPastAppointmentId + String.format("%08d", appointmentWithMacsPast.getAppointmentNo())));
+            
+            // John Doe appointment with NUS on 06 June 2021 at 12:30
+            AppointmentEntity appointmentWithNusFuture = new AppointmentEntity();
+            appointmentWithNusFuture.setAppointmentNo(Long.parseLong("06061230"));
+            appointmentWithNusFuture.setBusinessCategory(educationCategory.getCategory());
+            appointmentWithNusFuture.setDate(new Date(121, 5, 6, 12, 30));
+            appointmentEntitySessionBeanLocal.createAppointmentEntity(johnDoe.getCustomerId(), nus.getProviderId(), appointmentWithNusFuture);
+            Long nusFutureAppointmentId = appointmentEntitySessionBeanLocal.createAppointmentEntity(johnDoe.getCustomerId(), nus.getProviderId(), appointmentWithNusFuture);
+            appointmentWithNusFuture.setAppointmentNo(Long.parseLong(nusFutureAppointmentId + String.format("%08d", appointmentWithNusFuture.getAppointmentNo())));
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
