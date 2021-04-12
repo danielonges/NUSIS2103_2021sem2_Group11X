@@ -82,7 +82,12 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
     public AppointmentEntity retrieveAppointmentEntityByAppointmentId(Long appointmentId) throws AppointmentNotFoundException {
         try {
             AppointmentEntity appointmentEntity = em.find(AppointmentEntity.class, appointmentId);
-            return appointmentEntity;
+            if (appointmentEntity != null) {
+                return appointmentEntity;
+            } else {
+                throw new AppointmentNotFoundException("Appointments not found!");
+            }
+            
         } catch (NoResultException | NonUniqueResultException ex) {
             throw new AppointmentNotFoundException("Appointments not found!");
         }
@@ -90,15 +95,16 @@ public class AppointmentEntitySessionBean implements AppointmentEntitySessionBea
 
     @Override
     public AppointmentEntity retrieveAppointmentEntityByAppointmentNo(Long appointmentNo) throws AppointmentNotFoundException {
-        try{
+   
         Query query = em.createQuery("SELECT a FROM AppointmentEntity a WHERE a.appointmentNo = :inAppointmentNo");
         query.setParameter("inAppointmentNo", appointmentNo);
-
-        return (AppointmentEntity) query.getSingleResult();
+        
+        try {
+            return (AppointmentEntity) query.getSingleResult();
+        } catch (NoResultException ex) {
+            throw new AppointmentNotFoundException("Appointment with AppointmentNo " + appointmentNo + " does not exist.");
         }
-        catch(NoResultException ex){
-        }
-        return null;
+        
     }
 
     @Override

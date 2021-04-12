@@ -88,7 +88,12 @@ public class BusinessCategorySessionBean implements BusinessCategorySessionBeanR
     public BusinessCategoryEntity retrieveBusinessCategoryEntityByBusinessCategoryId(Long businessCategoryId) throws BusinessCategoryNotFoundException {
         try {
             BusinessCategoryEntity businessCategoryEntity = em.find(BusinessCategoryEntity.class, businessCategoryId);
-            return businessCategoryEntity;
+            if (businessCategoryEntity != null) {
+                return businessCategoryEntity;
+            } else {
+                throw new BusinessCategoryNotFoundException("Customer not found!");
+            }
+            
         } catch (NoResultException ex) {
             throw new BusinessCategoryNotFoundException("Customer not found!");
         }

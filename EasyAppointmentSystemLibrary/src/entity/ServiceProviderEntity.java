@@ -60,7 +60,7 @@ public class ServiceProviderEntity implements Serializable {
     private ServiceProviderStatus status;
     @Column(nullable = false, precision = 2, scale = 1)
 //    @DecimalMin("0.0")
-    @Digits(integer = 1, fraction = 1) // 11 - 2 digits to the left of the decimal point
+//    @Digits(integer = 2, fraction = 1) // 11 - 2 digits to the left of the decimal point
     private BigDecimal overallRating;
     @Column(nullable = false, unique = true)
     private String phone;
@@ -237,18 +237,12 @@ public class ServiceProviderEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        if (!(object instanceof ServiceProviderEntity)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ServiceProviderEntity other = (ServiceProviderEntity) obj;
-        if (!Objects.equals(this.providerId, other.providerId)) {
+        ServiceProviderEntity other = (ServiceProviderEntity) object;
+        if ((this.getProviderId() == null && other.getProviderId() != null) || (this.getProviderId() != null && !this.getProviderId().equals(other.getProviderId()))) {
             return false;
         }
         return true;
